@@ -1,0 +1,62 @@
+// Get all movies
+GET http://localhost:5000/movies
+
+###
+
+// Get movie by id
+GET http://localhost:5000/movies/3
+
+###
+
+// Create movie
+POST http://localhost:5000/movies HTTP/1.1
+content-type: application/json
+
+{ 
+    "id": 5,
+    "title": "New movie",
+    "release_year": 2003,
+    "genre": "Movie genre",
+    "directors": ["Movie director"],
+    "actors": [
+      "Actor 1",
+      "Actor 2",
+      "Actor 3",
+      "Actor 4",
+      "Actor 5"
+    ],
+    "studios": ["Studio name"],
+    "poster": "",
+    "trailer": "",
+    "storyline": ""
+}
+
+###
+
+// Update movie
+PUT http://localhost:5000/movies/1 HTTP/1.1
+content-type: application/json
+
+{
+    "id": 1,
+    "title": "Updated movie",
+    "release_year": 2004,
+    "genre": "Updated movie genre",
+    "directors": ["Updated movie director"],
+    "actors": [
+      "Updated Actor 1",
+      "Updated Actor 2",
+      "Updated Actor 3",
+      "Updated Actor 4",
+      "Updated Actor 5"
+    ],
+    "studios": ["Updated studio name"],
+    "poster": "",
+    "trailer": "",
+    "storyline": ""
+}
+
+###
+
+// Delete movie
+DELETE  http://localhost:5000/movies/2 HTTP/1.1

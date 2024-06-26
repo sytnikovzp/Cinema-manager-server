@@ -11,6 +11,14 @@ const {
   deleteActor,
 } = require('./controllers/actorController');
 
+const {
+  getDirectors,
+  getDirectorById,
+  createDirector,
+  updateDirector,
+  deleteDirector,
+} = require('./controllers/directorController');
+
 const app = express();
 
 app.use(express.static(path.resolve('public')));
@@ -64,5 +72,11 @@ app.get('/actors/:actorId', getActorById);
 app.post('/actors/', createActor);
 app.put('/actors/:actorId', updateActor);
 app.delete('/actors/:actorId', deleteActor);
+
+app.get('/directors', getDirectors);
+app.get('/directors/:directorId', getDirectorById);
+app.post('/directors/', createDirector);
+app.put('/directors/:directorId', updateDirector);
+app.delete('/directors/:directorId', deleteDirector);
 
 module.exports = app;

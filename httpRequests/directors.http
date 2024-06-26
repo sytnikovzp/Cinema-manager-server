@@ -1,0 +1,44 @@
+// Get all directors
+GET http://localhost:5000/directors
+
+###
+
+// Get director by id
+GET http://localhost:5000/directors/3
+
+###
+
+// Create director
+POST http://localhost:5000/directors HTTP/1.1
+content-type: application/json
+
+{ 
+    "id": 5,
+    "full_name": "New director",
+    "nationality": "United States of America",
+    "photo": "",
+    "biography": "Info about director",
+    "birth_date": "1970-01-01",
+    "death_date": ""
+}
+
+###
+
+// Update director
+PUT http://localhost:5000/directors/1 HTTP/1.1
+content-type: application/json
+
+{
+    "id": 1,
+    "full_name": "Updated director",
+    "nationality": "United States of America",
+    "photo": "",
+    "biography": "Updated info about director",
+    "birth_date": "1970-01-01",
+    "death_date": "2024-01-01"
+}
+
+###
+
+// Delete director
+DELETE  http://localhost:5000/directors/2 HTTP/1.1

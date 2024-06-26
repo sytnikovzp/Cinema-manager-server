@@ -38,7 +38,7 @@ const {
 const app = express();
 
 app.use(express.static(path.resolve('public')));
-app.use(express.json()); 
+app.use(express.json());
 
 app.get('/', (req, res) => {
   fs.readFile('./public/index.html', 'utf8', (err, data) => {
@@ -48,35 +48,6 @@ app.get('/', (req, res) => {
     }
     res.set('Content-Type', 'text/html; charset=utf-8').send(data);
   });
-});
-
-app.get('/contact', (req, res) => {
-  fs.readFile('./public/contact.html', 'utf8', (err, data) => {
-    if (err) {
-      res.status(404);
-      throw err;
-    }
-    res.set('Content-Type', 'text/html; charset=utf-8').send(data);
-  });
-});
-
-app.get('/download', (req, res) => {
-  console.log('Download');
-  console.log(__dirname);
-  res.download(path.join(__dirname, 'test', 'text'));
-});
-
-app.get('/phones', (req, res) => {
-  res.redirect('/contact');
-});
-
-app.get('/codes', (req, res) => {
-  console.log(req.query);
-  const id = req.query.id;
-  const code = req.query.code;
-  console.log(`Id is ${id}, codes is ${code}`);
-
-  res.send(`Id is ${id}, codes is ${code}`);
 });
 
 // ============================

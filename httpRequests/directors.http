@@ -17,7 +17,7 @@ content-type: application/json
     "full_name": "New director",
     "nationality": "United States of America",
     "photo": "",
-    "biography": "Info about director",
+    "biography": "Info about the director",
     "birth_date": "1970-01-01",
     "death_date": ""
 }
@@ -33,7 +33,7 @@ content-type: application/json
     "full_name": "Updated director",
     "nationality": "United States of America",
     "photo": "",
-    "biography": "Updated info about director",
+    "biography": "Updated info about the director",
     "birth_date": "1970-01-01",
     "death_date": "2024-01-01"
 }

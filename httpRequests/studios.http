@@ -1,0 +1,42 @@
+// Get all studios
+GET http://localhost:5000/studios
+
+###
+
+// Get studio by id
+GET http://localhost:5000/studios/3
+
+###
+
+// Create studio
+POST http://localhost:5000/studios HTTP/1.1
+content-type: application/json
+
+{ 
+    "id": 5,
+    "title": "Studio name",
+    "location": "San Francisco",
+    "foundation_year": 1971,
+    "logo": "",
+    "about": "Info about the studio"
+}
+
+###
+
+// Update studio
+PUT http://localhost:5000/studios/1 HTTP/1.1
+content-type: application/json
+
+{
+    "id": 1,
+    "title": "Updated studio name",
+    "location": "San Francisco",
+    "foundation_year": 1972,
+    "logo": "",
+    "about": "Updated info about the studio"
+}
+
+###
+
+// Delete studio
+DELETE  http://localhost:5000/studios/2 HTTP/1.1

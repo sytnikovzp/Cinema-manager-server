@@ -2,13 +2,19 @@ const fs = require('fs');
 const path = require('path');
 // ============================
 const express = require('express');
+// ============================
+const {
+  getActors,
+  getActorById,
+  createActor,
+  updateActor,
+  deleteActor,
+} = require('./controllers/actorController');
 
 const app = express();
 
-// Middleware (use)
-// app.use(express.static('./public'));
-// app.use(express.static(path.join(__dirname, '..', 'public')));
-app.use(express.static(path.resolve('public'))); // сразу попадаем в корень приложения
+app.use(express.static(path.resolve('public')));
+app.use(express.json()); 
 
 app.get('/', (req, res) => {
   fs.readFile('./public/index.html', 'utf8', (err, data) => {
@@ -30,23 +36,6 @@ app.get('/contact', (req, res) => {
   });
 });
 
-// app.get('/img/*', (req, res) => {
-//   const url = req.url;
-//   fs.readFile(`./public${url}`, (err, data) => {
-//     if (err) {
-//       res.status(404);
-//       throw err;
-//     }
-//     res
-//       .set({
-//         'Content-Type': 'image/jpeg',
-//         'Content-Type': 'image/png',
-//         'Content-Type': 'image/gif',
-//       })
-//       .send(data);
-//   });
-// });
-
 app.get('/download', (req, res) => {
   console.log('Download');
   console.log(__dirname);
@@ -65,5 +54,15 @@ app.get('/codes', (req, res) => {
 
   res.send(`Id is ${id}, codes is ${code}`);
 });
+
+// ============================
+//  Cinema APP
+// ============================
+
+app.get('/actors', getActors);
+app.get('/actors/:actorId', getActorById);
+app.post('/actors/', createActor);
+app.put('/actors/:actorId', updateActor);
+app.delete('/actors/:actorId', deleteActor);
 
 module.exports = app;

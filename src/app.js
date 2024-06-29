@@ -3,6 +3,8 @@ const path = require('path');
 // ============================
 const express = require('express');
 // ============================
+const {getTime, showTime} = require('./middleware/time.mw.js');
+// ============================
 const {
   getActors,
   getActorById,
@@ -40,15 +42,13 @@ const app = express();
 app.use(express.static(path.resolve('public')));
 app.use(express.json());
 
-app.get('/', (req, res) => {
-  fs.readFile('./public/index.html', 'utf8', (err, data) => {
-    if (err) {
-      res.status(404);
-      throw err;
-    }
-    res.set('Content-Type', 'text/html; charset=utf-8').send(data);
-  });
-});
+// ============================
+// Get show time
+// ============================
+
+// app.use(getTime);
+// app.use(showTime);
+app.use('/time', getTime, showTime);
 
 // ============================
 //  Cinema APP

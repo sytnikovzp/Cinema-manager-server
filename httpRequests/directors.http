@@ -12,33 +12,26 @@ GET http://localhost:5000/directors/3
 POST http://localhost:5000/directors HTTP/1.1
 content-type: application/json
 
-{ 
-    "id": 5,
-    "full_name": "New director",
-    "nationality": "United States of America",
-    "photo": "",
-    "biography": "Info about the director",
-    "birth_date": "1970-01-01",
-    "death_date": ""
+{
+  "full_name": "Test director",
+  "birth_year": "2000-01-01",
+  "nationality": "USA"
 }
 
 ###
 
 // Update director
-PUT http://localhost:5000/directors/1 HTTP/1.1
+PUT http://localhost:5000/directors HTTP/1.1
 content-type: application/json
 
 {
-    "id": 1,
-    "full_name": "Updated director",
-    "nationality": "United States of America",
-    "photo": "",
-    "biography": "Updated info about the director",
-    "birth_date": "1970-01-01",
-    "death_date": "2024-01-01"
+  "full_name": "Updated director",
+  "birth_year": "2000-01-01",
+  "nationality": "UA",
+  "director_id": 1
 }
 
 ###
 
 // Delete director
-DELETE  http://localhost:5000/directors/2 HTTP/1.1
+DELETE  http://localhost:5000/directors/12 HTTP/1.1

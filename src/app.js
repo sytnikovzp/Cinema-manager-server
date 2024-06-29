@@ -3,7 +3,7 @@ const path = require('path');
 // ============================
 const express = require('express');
 // ============================
-const {getTime, showTime} = require('./middleware/time.mw.js');
+const {getTime, showTime} = require('./middleware/time.mw');
 // ============================
 const {
   getActors,
@@ -43,11 +43,8 @@ app.use(express.static(path.resolve('public')));
 app.use(express.json());
 
 // ============================
-// Get show time
+// Get-Show time
 // ============================
-
-// app.use(getTime);
-// app.use(showTime);
 app.use('/time', getTime, showTime);
 
 // ============================
@@ -56,14 +53,14 @@ app.use('/time', getTime, showTime);
 
 app.get('/actors', getActors);
 app.get('/actors/:actorId', getActorById);
-app.post('/actors/', createActor);
-app.put('/actors/:actorId', updateActor);
+app.post('/actors', createActor);
+app.put('/actors', updateActor);
 app.delete('/actors/:actorId', deleteActor);
 
 app.get('/directors', getDirectors);
 app.get('/directors/:directorId', getDirectorById);
-app.post('/directors/', createDirector);
-app.put('/directors/:directorId', updateDirector);
+app.post('/directors', createDirector);
+app.put('/directors', updateDirector);
 app.delete('/directors/:directorId', deleteDirector);
 
 app.get('/studios', getStudios);

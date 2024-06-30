@@ -13,9 +13,10 @@ POST http://localhost:5000/api/actors HTTP/1.1
 content-type: application/json
 
 {
-  "full_name": "Test actor",
+  "full_name": "Test actor validate",
   "birth_year": "2000-01-01",
-  "nationality": "USA"
+  "death_year": null,
+  "nationality": "GB"
 }
 
 ###

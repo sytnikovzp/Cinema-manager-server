@@ -1,6 +1,7 @@
 const { Router } = require('express');
 // ============================
 const actorController = require('../controllers/actorController');
+const { validatePerson } = require('../middleware/validate.mw');
 // ============================
 
 const router = new Router();
@@ -8,7 +9,7 @@ const router = new Router();
 router
   .route('/')
   .get(actorController.getActors)
-  .post(actorController.createActor)
+  .post(validatePerson, actorController.createActor)
   .put(actorController.updateActor);
 
 router

@@ -1,14 +1,10 @@
-const fs = require('fs');
+// const fs = require('fs');
 const path = require('path');
 // ============================
 const express = require('express');
 // ============================
 const { getTime, showTime } = require('./middleware/time.mw');
 // ============================
-
-// const actorRouter = require('./routers/actorRouters');
-// const directorRouter = require('./routers/directorRouters');
-
 const router = require('./routers');
 
 const {
@@ -40,9 +36,6 @@ app.use('/time', getTime, showTime);
 // ============================
 //  Cinema APP
 // ============================
-
-// app.use(actorRouter);
-// app.use(directorRouter);
 
 app.use('/api', router);
 

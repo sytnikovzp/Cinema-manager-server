@@ -12,7 +12,7 @@ router
   .put(directorController.updateDirector);
 
 router
-  .route('/:directoriId')
+  .route('/:directorId')
   .get(directorController.getDirectorById)
   .delete(directorController.deleteDirector);
 

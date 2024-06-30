@@ -1,6 +1,5 @@
 const { Router } = require('express');
 // ============================
-
 const actorRouter = require('./actorRouters');
 const directorRouter = require('./directorRouters');
 

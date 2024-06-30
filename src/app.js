@@ -3,23 +3,13 @@ const path = require('path');
 // ============================
 const express = require('express');
 // ============================
-const {getTime, showTime} = require('./middleware/time.mw');
+const { getTime, showTime } = require('./middleware/time.mw');
 // ============================
-const {
-  getActors,
-  getActorById,
-  createActor,
-  updateActor,
-  deleteActor,
-} = require('./controllers/actorController');
 
-const {
-  getDirectors,
-  getDirectorById,
-  createDirector,
-  updateDirector,
-  deleteDirector,
-} = require('./controllers/directorController');
+// const actorRouter = require('./routers/actorRouters');
+// const directorRouter = require('./routers/directorRouters');
+
+const router = require('./routers');
 
 const {
   getStudios,
@@ -51,17 +41,10 @@ app.use('/time', getTime, showTime);
 //  Cinema APP
 // ============================
 
-app.get('/actors', getActors);
-app.get('/actors/:actorId', getActorById);
-app.post('/actors', createActor);
-app.put('/actors', updateActor);
-app.delete('/actors/:actorId', deleteActor);
+// app.use(actorRouter);
+// app.use(directorRouter);
 
-app.get('/directors', getDirectors);
-app.get('/directors/:directorId', getDirectorById);
-app.post('/directors', createDirector);
-app.put('/directors', updateDirector);
-app.delete('/directors/:directorId', deleteDirector);
+app.use('/api', router);
 
 app.get('/studios', getStudios);
 app.get('/studios/:studioId', getStudioById);

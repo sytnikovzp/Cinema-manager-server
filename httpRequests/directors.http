@@ -1,15 +1,15 @@
 // Get all directors
-GET http://localhost:5000/directors
+GET http://localhost:5000/api/directors
 
 ###
 
 // Get director by id
-GET http://localhost:5000/directors/3
+GET http://localhost:5000/api/directors/3
 
 ###
 
 // Create director
-POST http://localhost:5000/directors HTTP/1.1
+POST http://localhost:5000/api/directors HTTP/1.1
 content-type: application/json
 
 {
@@ -21,7 +21,7 @@ content-type: application/json
 ###
 
 // Update director
-PUT http://localhost:5000/directors HTTP/1.1
+PUT http://localhost:5000/api/directors HTTP/1.1
 content-type: application/json
 
 {
@@ -34,4 +34,4 @@ content-type: application/json
 ###
 
 // Delete director
-DELETE  http://localhost:5000/directors/12 HTTP/1.1
+DELETE  http://localhost:5000/api/directors/12 HTTP/1.1

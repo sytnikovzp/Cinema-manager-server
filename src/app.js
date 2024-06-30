@@ -2,7 +2,10 @@ const path = require('path');
 // ============================
 const express = require('express');
 // ============================
-const { getTime, showTime } = require('./middleware/time.mw');
+const {
+  errorHandlers: { validationErrorHandler, errorHandler },
+  time: { getTime, showTime },
+} = require('./middleware');
 // ============================
 const router = require('./routers');
 
@@ -35,6 +38,7 @@ app.use('/time', getTime, showTime);
 // ============================
 //  Cinema APP
 // ============================
+app.use(validationErrorHandler, errorHandler);
 
 app.use('/api', router);
 

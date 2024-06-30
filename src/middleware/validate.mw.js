@@ -5,13 +5,13 @@ module.exports.validatePerson = async (req, res, next) => {
 
   try {
     const validatedPerson = await PERSON_VALIDATION_SCHEMA.validate(body, {
-      abortEarly: true,
+      abortEarly: false,
     });
     req.body = validatedPerson;
     next();
   } catch (error) {
-    console.log(error);
-    next(`Error IS: ${error}`);
+    console.log(error.errors);
+    next(`Error IS: ${error.errors}`);
   }
 
   // Promise style

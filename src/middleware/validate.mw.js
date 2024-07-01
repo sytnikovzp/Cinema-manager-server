@@ -7,7 +7,6 @@ const {
 
 module.exports.validatePerson = async (req, res, next) => {
   const { body } = req;
-
   try {
     const validatedPerson = await PERSON_VALIDATION_SCHEMA.validate(body, {
       abortEarly: false,
@@ -22,7 +21,6 @@ module.exports.validatePerson = async (req, res, next) => {
 
 module.exports.validateMovie = async (req, res, next) => {
   const { body } = req;
-
   try {
     const validatedMovie = await MOVIE_VALIDATION_SCHEMA.validate(body, {
       abortEarly: false,

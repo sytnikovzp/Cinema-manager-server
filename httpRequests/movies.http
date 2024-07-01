@@ -8,13 +8,27 @@ GET http://localhost:5000/api/movies/3
 
 ###
 
-// Create movie
+// Create movie (Success)
 POST http://localhost:5000/api/movies HTTP/1.1
 content-type: application/json
 
 { 
     "title": "New movie",
-    "release_year": "2026-01-01",
+    "release_year": "2023-01-01",
+    "poster": null,
+    "genre": "Fantazy",
+    "studio": "Universal Studio"
+}
+
+###
+
+// Create movie (With error)
+POST http://localhost:5000/api/movies HTTP/1.1
+content-type: application/json
+
+{ 
+    "title": "N",
+    "release_year": "2025-01-01",
     "poster": null,
     "genre": "Fantazy",
     "studio": "Universal Studio"

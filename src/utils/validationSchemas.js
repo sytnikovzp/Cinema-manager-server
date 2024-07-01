@@ -12,7 +12,7 @@ const PERSON_VALIDATION_SCHEMA = yup.object().shape({
 
 const MOVIE_VALIDATION_SCHEMA = yup.object().shape({
   title: yup.string().trim().min(2).max(30).required(),
-  releare_year: yup
+  release_year: yup
     .date('This field must be date!')
     .min('1870-01-01')
     .max('2024-07-01')

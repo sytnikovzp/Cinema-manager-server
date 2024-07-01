@@ -18,14 +18,6 @@ const {
   deleteStudio,
 } = require('./controllers/studioController');
 
-const {
-  getMovies,
-  getMovieById,
-  createMovie,
-  updateMovie,
-  deleteMovie,
-} = require('./controllers/movieController');
-
 const app = express();
 
 app.use(cors());
@@ -50,11 +42,5 @@ app.get('/studios/:studioId', getStudioById);
 app.post('/studios/', createStudio);
 app.put('/studios/:studioId', updateStudio);
 app.delete('/studios/:studioId', deleteStudio);
-
-app.get('/movies', getMovies);
-app.get('/movies/:movieId', getMovieById);
-app.post('/movies/', createMovie);
-app.put('/movies/:movieId', updateMovie);
-app.delete('/movies/:movieId', deleteMovie);
 
 module.exports = app;

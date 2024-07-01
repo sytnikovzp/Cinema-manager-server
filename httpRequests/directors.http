@@ -8,7 +8,7 @@ GET http://localhost:5000/api/directors/3
 
 ###
 
-// Create director
+// Create director (Success)
 POST http://localhost:5000/api/directors HTTP/1.1
 content-type: application/json
 
@@ -16,6 +16,19 @@ content-type: application/json
   "full_name": "Test director",
   "birth_year": "2000-01-01",
   "nationality": "USA"
+}
+
+###
+
+// Create director (With errors)
+POST http://localhost:5000/api/directors HTTP/1.1
+content-type: application/json
+
+{
+  "full_name": "T",
+  "birth_year": "1850-01-01",
+  "death_year": "null",
+  "nationality": "GB"
 }
 
 ###

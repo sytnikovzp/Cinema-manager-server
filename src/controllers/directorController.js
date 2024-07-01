@@ -6,10 +6,15 @@ class DirectorController {
       const directors = await db.query(
         `SELECT full_name, birth_year, director_id FROM directors ORDER BY director_id`
       );
-      console.log(directors.rows);
-      res.status(200).json(directors.rows);
+
+      if (directors.rows.length > 0) {
+        res.status(200).json(directors.rows);
+      } else {
+        res.status(404).send('Directors not found');
+      }
     } catch (error) {
       console.log(error);
+      res.status(500).json({ error: 'Internal server error' });
     }
   }
 
@@ -26,10 +31,15 @@ class DirectorController {
         WHERE director_id=$1`,
         [directorId]
       );
-      console.log(director.rows[0]);
-      res.status(200).json(director.rows[0]);
+
+      if (director.rows.length > 0) {
+        res.status(200).json(director.rows[0]);
+      } else {
+        res.status(404).send('Director not found');
+      }
     } catch (error) {
       console.log(error);
+      res.status(500).json({ error: 'Internal server error' });
     }
   }
 
@@ -41,26 +51,43 @@ class DirectorController {
         VALUES ($1, $2, $3, $4, (SELECT nationality_id FROM nationalities WHERE title=$5)) RETURNING *`,
         [full_name, birth_year, death_year, foto, nationality]
       );
-      console.log(newDirector);
-      res.status(201).json(newDirector.rows[0]);
+
+      if (newDirector.rows.length > 0) {
+        res.status(201).json(newDirector.rows[0]);
+      } else {
+        res.status(404).send('The director has not been created');
+      }
     } catch (error) {
       console.log(error);
+      res.status(500).json({ error: 'Internal server error' });
     }
   }
 
   async updateDirector(req, res) {
     try {
-      const { full_name, birth_year, death_year, foto, nationality, director_id } =
-        req.body;
+      const {
+        full_name,
+        birth_year,
+        death_year,
+        foto,
+        nationality,
+        director_id,
+      } = req.body;
       const updatedDirector = await db.query(
         `UPDATE directors
         SET full_name=$1, birth_year=$2, death_year=$3, foto=$4, 
         nationality_id=(SELECT nationality_id FROM nationalities WHERE title=$5) WHERE director_id=$6 RETURNING *`,
         [full_name, birth_year, death_year, foto, nationality, director_id]
       );
-      res.status(201).json(updatedDirector.rows[0]);
+
+      if (updatedDirector.rows.length > 0) {
+        res.status(201).json(updatedDirector.rows[0]);
+      } else {
+        res.status(404).send('Director not found');
+      }
     } catch (error) {
       console.log(error);
+      res.status(500).json({ error: 'Internal server error' });
     }
   }
 
@@ -73,6 +100,7 @@ class DirectorController {
         `DELETE FROM directors WHERE director_id=$1 RETURNING full_name, director_id`,
         [directorId]
       );
+
       if (delDirector.rows.length > 0) {
         res.status(204).json(delDirector.rows[0]);
       } else {
@@ -80,6 +108,7 @@ class DirectorController {
       }
     } catch (error) {
       console.log(error);
+      res.status(500).json({ error: 'Internal server error' });
     }
   }
 }

@@ -6,6 +6,7 @@ class MovieController {
       const movies = await db.query(
         `SELECT title, release_year, movie_id FROM movies ORDER BY movie_id`
       );
+
       if (movies.rows.length > 0) {
         res.status(200).json(movies.rows);
       } else {
@@ -32,6 +33,7 @@ class MovieController {
         WHERE movie_id = $1`,
         [movieId]
       );
+
       if (movie.rows.length > 0) {
         res.status(200).json(movie.rows[0]);
       } else {
@@ -52,6 +54,7 @@ class MovieController {
           (SELECT studio_id FROM studios WHERE title = $5)) RETURNING *;`,
         [title, release_year, poster, genre, studio]
       );
+
       if (newMovie.rows.length > 0) {
         res.status(201).json(newMovie.rows[0]);
       } else {
@@ -72,6 +75,7 @@ class MovieController {
         studio_id = (SELECT studio_id FROM studios WHERE title = $5) WHERE movie_id=$6 RETURNING *`,
         [title, release_year, poster, genre, studio, movie_id]
       );
+
       if (updatedMovie.rows.length > 0) {
         res.status(201).json(updatedMovie.rows[0]);
       } else {
@@ -92,6 +96,7 @@ class MovieController {
         `DELETE FROM movies WHERE movie_id=$1 RETURNING title, movie_id`,
         [movieId]
       );
+
       if (delMovie.rows.length > 0) {
         res.status(204).json(delMovie.rows[0]);
       } else {

@@ -6,10 +6,15 @@ class ActorController {
       const actors = await db.query(
         `SELECT full_name, birth_year, actor_id FROM actors ORDER BY actor_id`
       );
-      console.log(actors.rows);
-      res.status(200).json(actors.rows);
+
+      if (actors.rows.length > 0) {
+        res.status(200).json(actors.rows);
+      } else {
+        res.status(404).send('Actors not found');
+      }
     } catch (error) {
       console.log(error);
+      res.status(500).json({ error: 'Internal server error' });
     }
   }
 
@@ -26,10 +31,15 @@ class ActorController {
         WHERE actor_id=$1`,
         [actorId]
       );
-      console.log(actor.rows[0]);
-      res.status(200).json(actor.rows[0]);
+
+      if (actor.rows.length > 0) {
+        res.status(200).json(actor.rows[0]);
+      } else {
+        res.status(404).send('Actor not found');
+      }
     } catch (error) {
       console.log(error);
+      res.status(500).json({ error: 'Internal server error' });
     }
   }
 
@@ -41,10 +51,15 @@ class ActorController {
         VALUES ($1, $2, $3, $4, (SELECT nationality_id FROM nationalities WHERE title=$5)) RETURNING *`,
         [full_name, birth_year, death_year, foto, nationality]
       );
-      console.log(newActor);
-      res.status(201).json(newActor.rows[0]);
+
+      if (newActor.rows.length > 0) {
+        res.status(201).json(newActor.rows[0]);
+      } else {
+        res.status(404).send('The actor has not been created');
+      }
     } catch (error) {
       console.log(error);
+      res.status(500).json({ error: 'Internal server error' });
     }
   }
 
@@ -58,9 +73,15 @@ class ActorController {
         nationality_id=(SELECT nationality_id FROM nationalities WHERE title=$5) WHERE actor_id=$6 RETURNING *`,
         [full_name, birth_year, death_year, foto, nationality, actor_id]
       );
-      res.status(201).json(updatedActor.rows[0]);
+
+      if (updatedActor.rows.length > 0) {
+        res.status(201).json(updatedActor.rows[0]);
+      } else {
+        res.status(404).send('Actor not found');
+      }
     } catch (error) {
       console.log(error);
+      res.status(500).json({ error: 'Internal server error' });
     }
   }
 
@@ -73,6 +94,7 @@ class ActorController {
         `DELETE FROM actors WHERE actor_id=$1 RETURNING full_name, actor_id`,
         [actorId]
       );
+
       if (delActor.rows.length > 0) {
         res.status(204).json(delActor.rows[0]);
       } else {
@@ -80,6 +102,7 @@ class ActorController {
       }
     } catch (error) {
       console.log(error);
+      res.status(500).json({ error: 'Internal server error' });
     }
   }
 }

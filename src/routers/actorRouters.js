@@ -10,7 +10,7 @@ router
   .route('/')
   .get(actorController.getActors)
   .post(validatePerson, actorController.createActor)
-  .put(actorController.updateActor);
+  .put(validatePerson, actorController.updateActor);
 
 router
   .route('/:actorId')

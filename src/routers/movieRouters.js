@@ -10,7 +10,7 @@ router
   .route('/')
   .get(movieController.getMovies)
   .post(validateMovie, movieController.createMovie)
-  .put(movieController.updateMovie);
+  .put(validateMovie, movieController.updateMovie);
 
 router
   .route('/:movieId')

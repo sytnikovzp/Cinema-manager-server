@@ -10,7 +10,7 @@ router
   .route('/')
   .get(directorController.getDirectors)
   .post(validatePerson, directorController.createDirector)
-  .put(directorController.updateDirector);
+  .put(validatePerson, directorController.updateDirector);
 
 router
   .route('/:directorId')

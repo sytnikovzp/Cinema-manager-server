@@ -10,7 +10,7 @@ router
   .route('/')
   .get(studioController.getStudios)
   .post(validateStudio, studioController.createStudio)
-  .put(studioController.updateStudio);
+  .put(validateStudio, studioController.updateStudio);
 
 router
   .route('/:studioId')

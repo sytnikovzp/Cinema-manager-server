@@ -10,14 +10,6 @@ const {
 // ============================
 const router = require('./routers');
 
-const {
-  getStudios,
-  getStudioById,
-  createStudio,
-  updateStudio,
-  deleteStudio,
-} = require('./controllers/studioController');
-
 const app = express();
 
 app.use(cors());
@@ -36,11 +28,5 @@ app.use('/time', getTime, showTime);
 app.use(validationErrorHandler, errorHandler);
 
 app.use('/api', router);
-
-app.get('/studios', getStudios);
-app.get('/studios/:studioId', getStudioById);
-app.post('/studios/', createStudio);
-app.put('/studios/:studioId', updateStudio);
-app.delete('/studios/:studioId', deleteStudio);
 
 module.exports = app;

@@ -20,4 +20,18 @@ const MOVIE_VALIDATION_SCHEMA = yup.object().shape({
   poster: yup.string().url().nullable(),
 });
 
-module.exports = { PERSON_VALIDATION_SCHEMA, MOVIE_VALIDATION_SCHEMA };
+const STUDIO_VALIDATION_SCHEMA = yup.object().shape({
+  title: yup.string().trim().min(2).max(30).required(),
+  found_year: yup
+    .date('This field must be date!')
+    .min('1870-01-01')
+    .max('2024-07-01')
+    .nullable(),
+  logo: yup.string().url().nullable(),
+});
+
+module.exports = {
+  PERSON_VALIDATION_SCHEMA,
+  MOVIE_VALIDATION_SCHEMA,
+  STUDIO_VALIDATION_SCHEMA,
+};

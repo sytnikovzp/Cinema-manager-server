@@ -1,6 +1,7 @@
 const path = require('path');
 // ============================
 const express = require('express');
+const cors = require('cors');
 // ============================
 const {
   errorHandlers: { validationErrorHandler, errorHandler },
@@ -26,6 +27,8 @@ const {
 } = require('./controllers/movieController');
 
 const app = express();
+
+app.use(cors());
 
 app.use(express.static(path.resolve('public')));
 app.use(express.json());

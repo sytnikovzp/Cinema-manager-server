@@ -16,6 +16,10 @@ module.exports = {
       },
       location_id: {
         type: Sequelize.INTEGER,
+        references: {
+          model: 'locations',
+          key: 'id',
+        },
       },
       foundation_year: {
         type: Sequelize.INTEGER,

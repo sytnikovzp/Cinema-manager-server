@@ -9,6 +9,23 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      Country.hasMany(models.Actor, {
+        foreignKey: 'countryId',
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE',
+      });
+
+      Country.hasMany(models.Director, {
+        foreignKey: 'countryId',
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE',
+      });
+
+      Country.hasMany(models.Location, {
+        foreignKey: 'countryId',
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE',
+      });
     }
   }
   Country.init(

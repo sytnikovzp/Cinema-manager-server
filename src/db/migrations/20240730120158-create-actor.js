@@ -16,6 +16,10 @@ module.exports = {
       },
       country_id: {
         type: Sequelize.INTEGER,
+        references: {
+          model: 'countries',
+          key: 'id',
+        },
       },
       birth_date: {
         type: Sequelize.DATE,

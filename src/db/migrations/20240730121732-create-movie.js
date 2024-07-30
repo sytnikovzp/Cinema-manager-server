@@ -16,6 +16,10 @@ module.exports = {
       },
       genre_id: {
         type: Sequelize.INTEGER,
+        references: {
+          model: 'genres',
+          key: 'id',
+        },
       },
       release_year: {
         type: Sequelize.INTEGER,

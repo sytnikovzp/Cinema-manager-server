@@ -9,6 +9,13 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      Location.belongsTo(models.Country, { foreignKey: 'countryId' });
+
+      Location.hasMany(models.Studio, {
+        foreignKey: 'locationId',
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE',
+      });
     }
   }
   Location.init(

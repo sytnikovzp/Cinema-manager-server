@@ -9,6 +9,8 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      Studio.belongsTo(models.Location, { foreignKey: 'locationId' });
+      Studio.belongsToMany(models.Movie, { through: models.MovieStudio });
     }
   }
   Studio.init(

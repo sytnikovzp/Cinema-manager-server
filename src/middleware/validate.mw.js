@@ -9,10 +9,9 @@ const {
 module.exports.validatePerson = async (req, res, next) => {
   const { body } = req;
   try {
-    const validatedPerson = await PERSON_VALIDATION_SCHEMA.validate(body, {
+    await PERSON_VALIDATION_SCHEMA.validate(body, {
       abortEarly: false,
     });
-    req.body = validatedPerson;
     next();
   } catch (error) {
     console.log(error.errors);
@@ -23,10 +22,9 @@ module.exports.validatePerson = async (req, res, next) => {
 module.exports.validateMovie = async (req, res, next) => {
   const { body } = req;
   try {
-    const validatedMovie = await MOVIE_VALIDATION_SCHEMA.validate(body, {
+    await MOVIE_VALIDATION_SCHEMA.validate(body, {
       abortEarly: false,
     });
-    req.body = validatedMovie;
     next();
   } catch (error) {
     console.log(error.errors);
@@ -37,10 +35,9 @@ module.exports.validateMovie = async (req, res, next) => {
 module.exports.validateStudio = async (req, res, next) => {
   const { body } = req;
   try {
-    const validatedStudio = await STUDIO_VALIDATION_SCHEMA.validate(body, {
+    await STUDIO_VALIDATION_SCHEMA.validate(body, {
       abortEarly: false,
     });
-    req.body = validatedStudio;
     next();
   } catch (error) {
     console.log(error.errors);

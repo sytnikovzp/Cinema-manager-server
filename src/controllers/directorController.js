@@ -1,4 +1,9 @@
-const db = require('../../db');
+const createError = require('http-errors');
+
+const {
+  Sequelize: { Op },
+  sequelize,
+} = require('../db/models');
 
 class DirectorController {
   async getDirectors(req, res) {

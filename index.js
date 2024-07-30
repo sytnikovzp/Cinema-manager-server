@@ -43,7 +43,7 @@ const syncModel = async (model) => {
   }
 };
 
-// syncModel(db.customers);
+// syncModel(db.genres);
 
 const syncModels = async () => {
   try {

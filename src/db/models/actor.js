@@ -1,5 +1,5 @@
 'use strict';
-const { Model } = require('sequelize');
+const { Model, Sequelize } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class Actor extends Model {
     /**
@@ -21,17 +21,19 @@ module.exports = (sequelize, DataTypes) => {
         unique: true,
       },
       country_id: DataTypes.INTEGER,
-      birth_date: DataTypes.DATE,
-      death_date: DataTypes.DATE,
+      birth_date: DataTypes.DATEONLY,
+      death_date: DataTypes.DATEONLY,
       photo: DataTypes.TEXT,
       biography: DataTypes.TEXT,
       createdAt: {
-        allowNull: true,
+        allowNull: false,
         type: DataTypes.DATE,
+        defaultValue: Sequelize.literal('NOW()'),
       },
       updatedAt: {
-        allowNull: true,
+        allowNull: false,
         type: DataTypes.DATE,
+        defaultValue: Sequelize.literal('NOW()'),
       },
     },
     {

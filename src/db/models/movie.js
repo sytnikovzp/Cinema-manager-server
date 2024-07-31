@@ -1,5 +1,5 @@
 'use strict';
-const { Model } = require('sequelize');
+const { Model, Sequelize } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class Movie extends Model {
     /**
@@ -25,14 +25,17 @@ module.exports = (sequelize, DataTypes) => {
       genre_id: DataTypes.INTEGER,
       release_year: DataTypes.INTEGER,
       poster: DataTypes.TEXT,
-      trailer: DataTypes.TEXT,
+      trailer: DataTypes.STRING,
+      storyline: DataTypes.TEXT,
       createdAt: {
-        allowNull: true,
+        allowNull: false,
         type: DataTypes.DATE,
+        defaultValue: Sequelize.literal('NOW()'),
       },
       updatedAt: {
-        allowNull: true,
+        allowNull: false,
         type: DataTypes.DATE,
+        defaultValue: Sequelize.literal('NOW()'),
       },
     },
     {

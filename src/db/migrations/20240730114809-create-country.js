@@ -14,8 +14,9 @@ module.exports = {
         allowNull: false,
         unique: true,
       },
-      description: {
-        type: Sequelize.TEXT,
+      code: {
+        type: Sequelize.STRING(3),
+        unique: true,
       },
     });
   },

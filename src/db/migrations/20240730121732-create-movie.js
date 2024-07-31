@@ -28,15 +28,20 @@ module.exports = {
         type: Sequelize.TEXT,
       },
       trailer: {
+        type: Sequelize.STRING,
+      },
+      storyline: {
         type: Sequelize.TEXT,
       },
       created_at: {
-        allowNull: true,
         type: Sequelize.DATE,
+        allowNull: false,
+        defaultValue: Sequelize.literal('NOW()'),
       },
       updated_at: {
-        allowNull: true,
         type: Sequelize.DATE,
+        allowNull: false,
+        defaultValue: Sequelize.literal('NOW()'),
       },
     });
   },

@@ -22,10 +22,10 @@ module.exports = {
         },
       },
       birth_date: {
-        type: Sequelize.DATE,
+        type: Sequelize.DATEONLY,
       },
       death_date: {
-        type: Sequelize.DATE,
+        type: Sequelize.DATEONLY,
       },
       photo: {
         type: Sequelize.TEXT,
@@ -35,11 +35,13 @@ module.exports = {
       },
       created_at: {
         type: Sequelize.DATE,
-        allowNull: true,
+        allowNull: false,
+        defaultValue: Sequelize.literal('NOW()'),
       },
       updated_at: {
         type: Sequelize.DATE,
-        allowNull: true,
+        allowNull: false,
+        defaultValue: Sequelize.literal('NOW()'),
       },
     });
   },

@@ -1,51 +1,38 @@
-// Get all actors
+### Get all actors (default pagination)
 GET http://localhost:5000/api/actors
 
-###
+### Get all actors (custom pagination)
+GET http://localhost:5000/api/actors?page=2&limit=10
 
-// Get actor by id
-GET http://localhost:5000/api/actors/4
+### Get actor by id
+GET http://localhost:5000/api/actors/3
 
-###
-
-// Create actor (Success)
+### Create actor
 POST http://localhost:5000/api/actors HTTP/1.1
 content-type: application/json
 
 {
-  "full_name": "Test actor validate",
-  "birth_year": "2000-01-01",
-  "death_year": null,
-  "nationality": "GB"
+  "full_name": "Test actor",
+  "country": "United States of America",
+  "birth_date": "2000-01-01",
+  "death_date": null,
+  "photo": null,
+  "biography": null
 }
 
-###
-
-// Create actor (With errors)
-POST http://localhost:5000/api/actors HTTP/1.1
-content-type: application/json
-
-{
-  "full_name": "T",
-  "birth_year": "1850-01-01",
-  "death_year": "null",
-  "nationality": "GB"
-}
-
-###
-
-// Update actor
+### Update actor
 PUT http://localhost:5000/api/actors HTTP/1.1
 content-type: application/json
 
 {
+  "id": 238,
   "full_name": "Updated actor",
-  "birth_year": "2000-01-01",
-  "nationality": "FR",
-  "actor_id": 1
+  "country": "United States of America",
+  "birth_date": "2000-01-01",
+  "death_date": "2000-01-01",
+  "photo": null,
+  "biography": null
 }
 
-###
-
-// Delete actor
-DELETE  http://localhost:5000/api/actors/108 HTTP/1.1
+### Delete actor
+DELETE  http://localhost:5000/api/actors/238 HTTP/1.1

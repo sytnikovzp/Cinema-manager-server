@@ -106,6 +106,7 @@ class LocationController {
 
     try {
       const { id, title, country } = req.body;
+
       const countryId = await Country.findOne({
         where: {
           title: country,
@@ -115,6 +116,7 @@ class LocationController {
       });
       const { id: country_id } = countryId;
       console.log(`Country ID is: ${country_id}`);
+      
       const newBody = { title, country_id };
       const updatedLocation = await Location.update(newBody, {
         where: {

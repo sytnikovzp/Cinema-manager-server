@@ -1,113 +1,212 @@
 const createError = require('http-errors');
 
-const {
-  Sequelize: { Op },
-  sequelize,
-} = require('../db/models');
+const { Actor, Country, sequelize } = require('../db/models');
 
 class ActorController {
-  async getActors(req, res) {
+  async getActors(req, res, next) {
     try {
-      const actors = await db.query(
-        `SELECT full_name, birth_year, actor_id FROM actors ORDER BY actor_id`
-      );
+      const { limit, offset } = req.pagination;
+      const actors = await Actor.findAll({
+        attributes: [
+          'id',
+          'full_name',
+          'birth_date',
+          'death_date',
+          'photo',
+          'biography',
+        ],
+        include: [
+          {
+            model: Country,
+            attributes: ['title'],
+          },
+        ],
+        raw: true,
+        limit,
+        offset,
+        order: [['id', 'DESC']],
+      });
 
-      if (actors.rows.length > 0) {
-        res.status(200).json(actors.rows);
+      if (actors.length > 0) {
+        console.log(`Result is: ${JSON.stringify(actors, null, 2)}`);
+        res.status(200).json(actors);
       } else {
-        res.status(404).send('Actors not found');
+        next(createError(404, 'Actors not found'));
       }
     } catch (error) {
-      console.log(error);
-      res.status(500).json({ error: 'Internal server error' });
+      console.log(error.message);
+      next(error.message);
     }
   }
 
-  async getActorById(req, res) {
+  async getActorById(req, res, next) {
     try {
       const {
         params: { actorId },
       } = req;
-      const actor = await db.query(
-        `SELECT actor_id, full_name, birth_year, death_year, foto, nat.description as country
-        FROM actors
-        JOIN nationalities as nat
-        USING (nationality_id)
-        WHERE actor_id=$1`,
-        [actorId]
-      );
 
-      if (actor.rows.length > 0) {
-        res.status(200).json(actor.rows[0]);
+      const actorById = await Actor.findByPk(actorId, {
+        attributes: {
+          exclude: ['createdAt', 'updatedAt', 'countryId'],
+        },
+        include: [
+          {
+            model: Country,
+            attributes: ['title'],
+          },
+        ],
+        raw: true,
+      });
+
+      if (actorById) {
+        console.log(`Result is: ${JSON.stringify(actorById, null, 2)}`);
+        res.status(200).json(actorById);
       } else {
-        res.status(404).send('Actor not found');
+        console.log('Actor not found!');
+        next(createError(404, 'Actor not found!'));
       }
     } catch (error) {
-      console.log(error);
-      res.status(500).json({ error: 'Internal server error' });
+      console.log(error.message);
+      next(error);
     }
   }
 
-  async createActor(req, res) {
-    try {
-      const { full_name, birth_year, death_year, foto, nationality } = req.body;
-      const newActor = await db.query(
-        `INSERT INTO actors (full_name, birth_year, death_year, foto, nationality_id)
-        VALUES ($1, $2, $3, $4, (SELECT nationality_id FROM nationalities WHERE title=$5)) RETURNING *`,
-        [full_name, birth_year, death_year, foto, nationality]
-      );
+  async createActor(req, res, next) {
+    const t = await sequelize.transaction();
 
-      if (newActor.rows.length > 0) {
-        res.status(201).json(newActor.rows[0]);
-      } else {
-        res.status(404).send('The actor has not been created');
-      }
-    } catch (error) {
-      console.log(error);
-      res.status(500).json({ error: 'Internal server error' });
-    }
-  }
-
-  async updateActor(req, res) {
     try {
-      const { full_name, birth_year, death_year, foto, nationality, actor_id } =
+      const { full_name, country, birth_date, death_date, photo, biography } =
         req.body;
-      const updatedActor = await db.query(
-        `UPDATE actors
-        SET full_name=$1, birth_year=$2, death_year=$3, foto=$4, 
-        nationality_id=(SELECT nationality_id FROM nationalities WHERE title=$5) WHERE actor_id=$6 RETURNING *`,
-        [full_name, birth_year, death_year, foto, nationality, actor_id]
-      );
 
-      if (updatedActor.rows.length > 0) {
-        res.status(201).json(updatedActor.rows[0]);
+      const countryId = await Country.findOne({
+        where: {
+          title: country,
+        },
+        attributes: ['id'],
+        raw: true,
+      });
+      const { id: country_id } = countryId;
+      console.log(`Country ID is: ${country_id}`);
+
+      const newBody = {
+        full_name,
+        country_id,
+        birth_date,
+        death_date,
+        photo,
+        biography,
+      };
+      const newActor = await Actor.create(newBody, {
+        returning: ['id'],
+        transaction: t,
+      });
+
+      if (newActor) {
+        console.log(`Result is: ${JSON.stringify(newActor, null, 2)}`);
+        res.status(201).json(newActor);
       } else {
-        res.status(404).send('Actor not found');
+        console.log(`Bad request.`);
+        next(createError(400, 'The actor has not been created!'));
       }
+      await t.commit();
+    } catch (error) {
+      console.log(error.message);
+      await t.rollback();
+      next(error);
+    }
+  }
+
+  async updateActor(req, res, next) {
+    const t = await sequelize.transaction();
+
+    try {
+      const {
+        id,
+        full_name,
+        country,
+        birth_date,
+        death_date,
+        photo,
+        biography,
+      } = req.body;
+
+      const countryId = await Country.findOne({
+        where: {
+          title: country,
+        },
+        attributes: ['id'],
+        raw: true,
+      });
+      const { id: country_id } = countryId;
+      console.log(`Country ID is: ${country_id}`);
+
+      const newBody = {
+        full_name,
+        country_id,
+        birth_date,
+        death_date,
+        photo,
+        biography,
+      };
+      const updatedActor = await Actor.update(newBody, {
+        where: {
+          id: id,
+        },
+        raw: true,
+        returning: [
+          'id',
+          'full_name',
+          'country_id',
+          'birth_date',
+          'death_date',
+          'photo',
+          'biography',
+        ],
+        transaction: t,
+      });
+
+      if (updatedActor) {
+        console.log(`Result is: ${JSON.stringify(updatedActor, null, 2)}`);
+        res.status(201).json(updatedActor);
+      } else {
+        console.log(`Bad request.`);
+        next(createError(400, 'The actor has not been updated!'));
+      }
+      await t.commit();
     } catch (error) {
       console.log(error);
+      await t.rollback();
       res.status(500).json({ error: 'Internal server error' });
     }
   }
 
-  async deleteActor(req, res) {
+  async deleteActor(req, res, next) {
+    const t = await sequelize.transaction();
+
     try {
       const {
         params: { actorId },
       } = req;
-      const delActor = await db.query(
-        `DELETE FROM actors WHERE actor_id=$1 RETURNING full_name, actor_id`,
-        [actorId]
-      );
 
-      if (delActor.rows.length > 0) {
-        res.status(204).json(delActor.rows[0]);
+      const delActor = await Actor.destroy({
+        where: {
+          id: actorId,
+        },
+        transaction: t,
+      });
+
+      if (delActor) {
+        console.log(res.statusCode);
+        res.sendStatus(res.statusCode);
       } else {
-        res.status(404).send('Actor not found');
+        console.log(`Bad request.`);
+        next(createError(400, 'The actor has not been deleted!'));
       }
+      await t.commit();
     } catch (error) {
-      console.log(error);
-      res.status(500).json({ error: 'Internal server error' });
+      console.log(error.message);
+      await t.rollback();
+      next(error);
     }
   }
 }

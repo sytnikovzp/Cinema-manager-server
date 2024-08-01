@@ -20,6 +20,8 @@ module.exports = {
           model: 'genres',
           key: 'id',
         },
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE',
       },
       release_year: {
         type: Sequelize.INTEGER,

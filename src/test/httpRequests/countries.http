@@ -21,10 +21,10 @@ PUT http://localhost:5000/api/countries HTTP/1.1
 content-type: application/json
 
 {
-  "id": 44,
+  "id": 40,
   "title": "Updated country",
   "code": "UPD"
 }
 
 ### Delete country
-DELETE  http://localhost:5000/api/countries/44 HTTP/1.1
+DELETE  http://localhost:5000/api/countries/40 HTTP/1.1

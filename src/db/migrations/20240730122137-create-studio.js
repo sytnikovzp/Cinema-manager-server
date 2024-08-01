@@ -20,6 +20,8 @@ module.exports = {
           model: 'locations',
           key: 'id',
         },
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE',
       },
       foundation_year: {
         type: Sequelize.INTEGER,

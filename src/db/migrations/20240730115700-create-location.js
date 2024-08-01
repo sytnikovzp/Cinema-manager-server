@@ -20,6 +20,8 @@ module.exports = {
           model: 'countries',
           key: 'id',
         },
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE',
       },
     });
   },

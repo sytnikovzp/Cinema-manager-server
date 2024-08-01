@@ -1,55 +1,48 @@
-// Get all movies
+### Get all movies (default pagination)
 GET http://localhost:5000/api/movies
 
-###
+### Get all movies (custom pagination)
+GET http://localhost:5000/api/movies?page=2&limit=10
 
-// Get movie by id
+### Get movie by id
 GET http://localhost:5000/api/movies/3
 
-###
-
-// Create movie (Success)
+### Create movie
 POST http://localhost:5000/api/movies HTTP/1.1
 content-type: application/json
 
-{ 
-    "title": "New movie",
-    "release_year": "2023-01-01",
-    "poster": null,
-    "genre": "Fantazy",
-    "studio": "Universal Studio"
+{
+  "title": "Test movie",
+  "genre": "Action",
+  "release_year": 2024,
+  "poster": null,
+  "trailer": null,
+  "storyline": null
 }
 
-###
-
-// Create movie (With error)
-POST http://localhost:5000/api/movies HTTP/1.1
-content-type: application/json
-
-{ 
-    "title": "N",
-    "release_year": "2025-01-01",
-    "poster": null,
-    "genre": "Fantazy",
-    "studio": "Universal Studio"
-}
-
-###
-
-// Update movie
+### Update movie (full)
 PUT http://localhost:5000/api/movies HTTP/1.1
 content-type: application/json
 
 {
-    "movie_id": 20,
-    "title": "Updated movie",
-    "release_year": "2010-01-01",
-    "poster": null,
-    "genre": "Action",
-    "studio": "Universal Studio"
+  "id": 51,
+  "title": "Updated movie",
+  "genre": "Action",
+  "release_year": 2023,
+  "poster": null,
+  "trailer": null,
+  "storyline": null
 }
 
-###
+### Update movie (patch)
+PATCH http://localhost:5000/api/movies/1 HTTP/1.1
+content-type: application/json
 
-// Delete movie
-DELETE  http://localhost:5000/api/movies/20 HTTP/1.1
+{
+  "title": "Patched movie",
+  "genre": "Adventure",
+  "release_year": 1800
+}
+
+### Delete movie
+DELETE  http://localhost:5000/api/movies/1 HTTP/1.1

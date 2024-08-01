@@ -7,7 +7,7 @@ GET http://localhost:5000/api/genres?page=2&limit=10
 ### Get genre by id
 GET http://localhost:5000/api/genres/3
 
-### Create genre (Success)
+### Create genre
 POST http://localhost:5000/api/genres HTTP/1.1
 content-type: application/json
 

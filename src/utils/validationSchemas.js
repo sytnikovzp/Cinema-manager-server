@@ -39,7 +39,7 @@ const GENRE_VALIDATION_SCHEMA = yup.object().shape({
 });
 
 const COUNTRY_VALIDATION_SCHEMA = yup.object().shape({
-  full_name: TITLE_NAME_SCHEMA.required(),
+  title: TITLE_NAME_SCHEMA.required(),
   code: yup.string().nullable(),
 });
 

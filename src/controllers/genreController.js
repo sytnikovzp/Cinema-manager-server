@@ -33,9 +33,6 @@ class GenreController {
       } = req;
 
       const genreById = await Genre.findByPk(genreId, {
-        attributes: {
-          exclude: ['createdAt', 'updatedAt'],
-        },
         raw: true,
       });
 
@@ -57,9 +54,7 @@ class GenreController {
 
     try {
       const { title } = req.body;
-
       const newBody = { title };
-
       const newGenre = await Genre.create(newBody, {
         returning: ['id'],
         transaction: t,
@@ -85,7 +80,6 @@ class GenreController {
 
     try {
       const { body } = req;
-
       const updatedGenre = await Genre.update(body, {
         where: {
           id: body.id,
@@ -102,7 +96,6 @@ class GenreController {
         console.log(`Bad request.`);
         next(createError(400, 'The genre has not been updated!'));
       }
-
       await t.commit();
     } catch (error) {
       console.log(error);

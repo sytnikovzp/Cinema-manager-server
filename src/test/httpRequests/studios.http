@@ -1,53 +1,46 @@
-// Get all studios
+### Get all studios (default pagination)
 GET http://localhost:5000/api/studios
 
-###
+### Get all studios (custom pagination)
+GET http://localhost:5000/api/studios?page=2&limit=10
 
-// Get studio by id
+### Get studio by id
 GET http://localhost:5000/api/studios/3
 
-###
-
-// Create studio 
+### Create studio
 POST http://localhost:5000/api/studios HTTP/1.1
 content-type: application/json
 
-{ 
-    "title": "Studio name3",
-    "location": "San Francisco",
-    "found_year": "1992-01-01",
-    "logo": null
+{
+  "title": "Test studio",
+  "location": "California",
+  "foundation_year": 2024,
+  "logo": null,
+  "about": null
 }
 
-###
-
-// Update studio (Success)
+### Update studio (full)
 PUT http://localhost:5000/api/studios HTTP/1.1
 content-type: application/json
 
 {
-    "studio_id": 31,
-    "title": "Updated studio name",
-    "location": "San Francisco",
-    "found_year": "1962-01-01",
-    "logo": null 
+  "id": 37,
+  "title": "Updated studio",
+  "location": "California",
+  "foundation_year": 2023,
+  "logo": null,
+  "about": null
 }
 
-###
-
-// Update studio (With error)
-PUT http://localhost:5000/api/studios HTTP/1.1
+### Update studio (patch)
+PATCH http://localhost:5000/api/studios/1 HTTP/1.1
 content-type: application/json
 
 {
-    "studio_id": 31,
-    "title": "U",
-    "location": "San Francisco",
-    "found_year": "1862-01-01",
-    "logo": null 
+  "title": "Patched studio",
+  "location": "Toronto",
+  "foundation_year": 1800
 }
 
-###
-
-// Delete studio
-DELETE  http://localhost:5000/api/studios/29 HTTP/1.1
+### Delete studio
+DELETE  http://localhost:5000/api/studios/1 HTTP/1.1

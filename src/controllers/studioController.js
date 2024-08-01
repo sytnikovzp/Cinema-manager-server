@@ -1,112 +1,262 @@
 const createError = require('http-errors');
 
-const {
-  Sequelize: { Op },
-  sequelize,
-} = require('../db/models');
+const { Studio, Location, sequelize } = require('../db/models');
 
 class StudioController {
-  async getStudios(req, res) {
+  async getStudios(req, res, next) {
     try {
-      const studios = await db.query(
-        `SELECT title, found_year, logo, location_id FROM studios ORDER BY studio_id`
-      );
+      const { limit, offset } = req.pagination;
+      const studios = await Studio.findAll({
+        attributes: ['id', 'title', 'foundation_year', 'logo', 'about'],
+        include: [
+          {
+            model: Location,
+            attributes: ['title'],
+          },
+        ],
+        raw: true,
+        limit,
+        offset,
+        order: [['id', 'DESC']],
+      });
 
-      if (studios.rows.length > 0) {
-        res.status(200).json(studios.rows);
+      if (studios.length > 0) {
+        console.log(`Result is: ${JSON.stringify(studios, null, 2)}`);
+        res.status(200).json(studios);
       } else {
-        res.status(404).send('Studios not found');
+        next(createError(404, 'Studios not found'));
       }
     } catch (error) {
-      console.log(error);
-      res.status(500).json({ error: 'Internal server error' });
+      console.log(error.message);
+      next(error.message);
     }
   }
 
-  async getStudioById(req, res) {
+  async getStudioById(req, res, next) {
     try {
       const {
         params: { studioId },
       } = req;
-      const studio = await db.query(
-        `SELECT studio_id, studios.title, found_year, logo, loc.title as location
-        FROM studios
-        JOIN locations as loc
-        USING (location_id)
-        WHERE studio_id=$1`,
-        [studioId]
-      );
 
-      if (studio.rows.length > 0) {
-        res.status(200).json(studio.rows[0]);
+      const studioById = await Studio.findByPk(studioId, {
+        attributes: {
+          exclude: ['createdAt', 'updatedAt', 'locationId'],
+        },
+        include: [
+          {
+            model: Location,
+            attributes: ['title'],
+          },
+        ],
+        raw: true,
+      });
+
+      if (studioById) {
+        console.log(`Result is: ${JSON.stringify(studioById, null, 2)}`);
+        res.status(200).json(studioById);
       } else {
-        res.status(404).send('Studio not found');
+        console.log('Studio not found!');
+        next(createError(404, 'Studio not found!'));
       }
     } catch (error) {
-      console.log(error);
-      res.status(500).json({ error: 'Internal server error' });
+      console.log(error.message);
+      next(error);
     }
   }
 
-  async createStudio(req, res) {
+  async createStudio(req, res, next) {
+    const t = await sequelize.transaction();
+
     try {
-      const { title, found_year, logo, location } = req.body;
-      const newStudio = await db.query(
-        `INSERT INTO studios (title, found_year, logo, location_id)
-        VALUES ($1, $2, $3, (SELECT location_id FROM locations WHERE title=$4)) RETURNING *`,
-        [title, found_year, logo, location]
-      );
+      const { title, location, foundation_year, logo, about } = req.body;
 
-      if (newStudio.rows.length > 0) {
-        res.status(201).json(newStudio.rows[0]);
+      const locationId = await Location.findOne({
+        where: {
+          title: location,
+        },
+        attributes: ['id'],
+        raw: true,
+      });
+      const { id: location_id } = locationId;
+      console.log(`Location ID is: ${location_id}`);
+
+      const newBody = {
+        title,
+        location_id,
+        foundation_year,
+        logo,
+        about,
+      };
+      const newStudio = await Studio.create(newBody, {
+        returning: ['id'],
+        transaction: t,
+      });
+
+      if (newStudio) {
+        console.log(`Result is: ${JSON.stringify(newStudio, null, 2)}`);
+        res.status(201).json(newStudio);
       } else {
-        res.status(404).send('The studio has not been created');
+        console.log(`Bad request.`);
+        next(createError(400, 'The studio has not been created!'));
       }
+      await t.commit();
     } catch (error) {
-      console.log(error);
-      res.status(500).json({ error: 'Internal server error' });
+      console.log(error.message);
+      await t.rollback();
+      next(error);
     }
   }
 
-  async updateStudio(req, res) {
+  async updateStudio(req, res, next) {
+    const t = await sequelize.transaction();
+
     try {
-      const { title, found_year, logo, location, studio_id } = req.body;
-      const updatedStudio = await db.query(
-        `UPDATE studios
-        SET title=$1, found_year=$2, logo=$3,  
-        location_id=(SELECT location_id FROM locations WHERE title=$4) WHERE studio_id=$5 RETURNING *`,
-        [title, found_year, logo, location, studio_id]
-      );
+      const { id, title, location, foundation_year, logo, about } = req.body;
 
-      if (updatedStudio.rows.length > 0) {
-        res.status(201).json(updatedStudio.rows[0]);
+      const locationId = await Location.findOne({
+        where: {
+          title: location,
+        },
+        attributes: ['id'],
+        raw: true,
+      });
+      const { id: location_id } = locationId;
+      console.log(`Location ID is: ${location_id}`);
+
+      const newBody = {
+        title,
+        location_id,
+        foundation_year,
+        logo,
+
+        about,
+      };
+      const updatedStudio = await Studio.update(newBody, {
+        where: {
+          id: id,
+        },
+        raw: true,
+        returning: [
+          'id',
+          'title',
+          'location_id',
+          'foundation_year',
+          'logo',
+          'about',
+        ],
+        transaction: t,
+      });
+
+      if (updatedStudio) {
+        console.log(`Result is: ${JSON.stringify(updatedStudio, null, 2)}`);
+        res.status(201).json(updatedStudio);
       } else {
-        res.status(404).send('Studio not found');
+        console.log(`Bad request.`);
+        next(createError(400, 'The studio has not been updated!'));
       }
+      await t.commit();
     } catch (error) {
       console.log(error);
+      await t.rollback();
       res.status(500).json({ error: 'Internal server error' });
     }
   }
 
-  async deleteStudio(req, res) {
+  async patchStudio(req, res, next) {
+    const t = await sequelize.transaction();
+
+    try {
+      const {
+        params: { studioId },
+        body: { title, location, foundation_year, logo, about },
+      } = req;
+
+      let location_id;
+      if (location) {
+        const locationRecord = await Location.findOne({
+          where: {
+            title: location,
+          },
+          attributes: ['id'],
+          raw: true,
+        });
+
+        if (!locationRecord) {
+          throw createError(404, 'Location not found');
+        }
+
+        location_id = locationRecord.id;
+        console.log(`Location ID is: ${location_id}`);
+      }
+
+      const newBody = {
+        ...(title && { title }),
+        ...(location_id && { location_id }),
+        ...(foundation_year && { foundation_year }),
+        ...(logo && { logo }),
+        ...(about && { about }),
+      };
+
+      const [count, [updatedStudios]] = await Studio.update(newBody, {
+        where: {
+          id: studioId,
+        },
+        returning: [
+          'id',
+          'title',
+          'location_id',
+          'foundation_year',
+          'logo',
+          'about',
+        ],
+        raw: true,
+        transaction: t,
+      });
+      console.log(count);
+      console.log(updatedStudios);
+
+      if (count > 0) {
+        console.log(`Result is: ${JSON.stringify(updatedStudios, null, 2)}`);
+        res.status(200).json(updatedStudios);
+      } else {
+        console.log('Studios not found');
+        next(createError(404, 'Studios not found'));
+      }
+      await t.commit();
+    } catch (error) {
+      console.log(error.message);
+      await t.rollback();
+      next(error);
+    }
+  }
+
+  async deleteStudio(req, res, next) {
+    const t = await sequelize.transaction();
+
     try {
       const {
         params: { studioId },
       } = req;
-      const delStudio = await db.query(
-        `DELETE FROM studios WHERE studio_id=$1 RETURNING title, studio_id`,
-        [studioId]
-      );
 
-      if (delStudio.rows.length > 0) {
-        res.status(204).json(delStudio.rows[0]);
+      const delStudio = await Studio.destroy({
+        where: {
+          id: studioId,
+        },
+        transaction: t,
+      });
+
+      if (delStudio) {
+        console.log(res.statusCode);
+        res.sendStatus(res.statusCode);
       } else {
-        res.status(404).send('Studio not found');
+        console.log(`Bad request.`);
+        next(createError(400, 'The studio has not been deleted!'));
       }
+      await t.commit();
     } catch (error) {
-      console.log(error);
-      res.status(500).json({ error: 'Internal server error' });
+      console.log(error.message);
+      await t.rollback();
+      next(error);
     }
   }
 }

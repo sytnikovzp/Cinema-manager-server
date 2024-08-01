@@ -20,7 +20,7 @@ content-type: application/json
   "biography": null
 }
 
-### Update actor
+### Update actor (full)
 PUT http://localhost:5000/api/actors HTTP/1.1
 content-type: application/json
 
@@ -32,6 +32,15 @@ content-type: application/json
   "death_date": "2000-01-01",
   "photo": null,
   "biography": null
+}
+
+### Update actor (patch)
+PATCH http://localhost:5000/api/actors/1 HTTP/1.1
+content-type: application/json
+
+{
+  "full_name": "Patched actor",
+  "country": "Great Britain (England)"
 }
 
 ### Delete actor

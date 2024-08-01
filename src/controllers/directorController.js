@@ -180,6 +180,76 @@ class DirectorController {
     }
   }
 
+  async patchDirector(req, res, next) {
+    const t = await sequelize.transaction();
+
+    try {
+      const {
+        params: { directorId },
+        body: { full_name, country, birth_date, death_date, photo, biography },
+      } = req;
+
+      let country_id;
+      if (country) {
+        const countryRecord = await Country.findOne({
+          where: {
+            title: country,
+          },
+          attributes: ['id'],
+          raw: true,
+        });
+
+        if (!countryRecord) {
+          throw createError(404, 'Country not found');
+        }
+
+        country_id = countryRecord.id;
+        console.log(`Country ID is: ${country_id}`);
+      }
+
+      const newBody = {
+        ...(full_name && { full_name }),
+        ...(country_id && { country_id }),
+        ...(birth_date && { birth_date }),
+        ...(death_date && { death_date }),
+        ...(photo && { photo }),
+        ...(biography && { biography }),
+      };
+
+      const [count, [updatedDirectors]] = await Director.update(newBody, {
+        where: {
+          id: directorId,
+        },
+        returning: [
+          'id',
+          'full_name',
+          'country_id',
+          'birth_date',
+          'death_date',
+          'photo',
+          'biography',
+        ],
+        raw: true,
+        transaction: t,
+      });
+      console.log(count);
+      console.log(updatedDirectors);
+
+      if (count > 0) {
+        console.log(`Result is: ${JSON.stringify(updatedDirectors, null, 2)}`);
+        res.status(200).json(updatedDirectors);
+      } else {
+        console.log('Directors not found');
+        next(createError(404, 'Directors not found'));
+      }
+      await t.commit();
+    } catch (error) {
+      console.log(error.message);
+      await t.rollback();
+      next(error);
+    }
+  }
+
   async deleteDirector(req, res, next) {
     const t = await sequelize.transaction();
 

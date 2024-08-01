@@ -180,6 +180,76 @@ class ActorController {
     }
   }
 
+  async patchActor(req, res, next) {
+    const t = await sequelize.transaction();
+
+    try {
+      const {
+        params: { actorId },
+        body: { full_name, country, birth_date, death_date, photo, biography },
+      } = req;
+
+      let country_id;
+      if (country) {
+        const countryRecord = await Country.findOne({
+          where: {
+            title: country,
+          },
+          attributes: ['id'],
+          raw: true,
+        });
+
+        if (!countryRecord) {
+          throw createError(404, 'Country not found');
+        }
+
+        country_id = countryRecord.id;
+        console.log(`Country ID is: ${country_id}`);
+      }
+
+      const newBody = {
+        ...(full_name && { full_name }),
+        ...(country_id && { country_id }),
+        ...(birth_date && { birth_date }),
+        ...(death_date && { death_date }),
+        ...(photo && { photo }),
+        ...(biography && { biography }),
+      };
+
+      const [count, [updatedActors]] = await Actor.update(newBody, {
+        where: {
+          id: actorId,
+        },
+        returning: [
+          'id',
+          'full_name',
+          'country_id',
+          'birth_date',
+          'death_date',
+          'photo',
+          'biography',
+        ],
+        raw: true,
+        transaction: t,
+      });
+      console.log(count);
+      console.log(updatedActors);
+
+      if (count > 0) {
+        console.log(`Result is: ${JSON.stringify(updatedActors, null, 2)}`);
+        res.status(200).json(updatedActors);
+      } else {
+        console.log('Actors not found');
+        next(createError(404, 'Actors not found'));
+      }
+      await t.commit();
+    } catch (error) {
+      console.log(error.message);
+      await t.rollback();
+      next(error);
+    }
+  }
+
   async deleteActor(req, res, next) {
     const t = await sequelize.transaction();
 

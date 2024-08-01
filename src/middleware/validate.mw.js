@@ -4,9 +4,12 @@ const {
   GENRE_VALIDATION_SCHEMA,
   COUNTRY_VALIDATION_SCHEMA,
   LOCATION_VALIDATION_SCHEMA,
-  PERSON_VALIDATION_SCHEMA,
-  MOVIE_VALIDATION_SCHEMA,
-  STUDIO_VALIDATION_SCHEMA,
+  NEW_PERSON_VALIDATION_SCHEMA,
+  PATCH_PERSON_VALIDATION_SCHEMA,
+  NEW_MOVIE_VALIDATION_SCHEMA,
+  PATCH_MOVIE_VALIDATION_SCHEMA,
+  NEW_STUDIO_VALIDATION_SCHEMA,
+  PATCH_STUDIO_VALIDATION_SCHEMA,
 } = require('../utils/validationSchemas');
 
 module.exports.validateGenre = async (req, res, next) => {
@@ -51,7 +54,20 @@ module.exports.validateLocation = async (req, res, next) => {
 module.exports.validatePerson = async (req, res, next) => {
   const { body } = req;
   try {
-    await PERSON_VALIDATION_SCHEMA.validate(body, {
+    await NEW_PERSON_VALIDATION_SCHEMA.validate(body, {
+      abortEarly: false,
+    });
+    next();
+  } catch (error) {
+    console.log(error.errors);
+    next(error);
+  }
+};
+
+module.exports.validatePatchPerson = async (req, res, next) => {
+  const { body } = req;
+  try {
+    await PATCH_PERSON_VALIDATION_SCHEMA.validate(body, {
       abortEarly: false,
     });
     next();
@@ -64,7 +80,20 @@ module.exports.validatePerson = async (req, res, next) => {
 module.exports.validateMovie = async (req, res, next) => {
   const { body } = req;
   try {
-    await MOVIE_VALIDATION_SCHEMA.validate(body, {
+    await NEW_MOVIE_VALIDATION_SCHEMA.validate(body, {
+      abortEarly: false,
+    });
+    next();
+  } catch (error) {
+    console.log(error.errors);
+    next(error);
+  }
+};
+
+module.exports.validatePatchMovie = async (req, res, next) => {
+  const { body } = req;
+  try {
+    await PATCH_MOVIE_VALIDATION_SCHEMA.validate(body, {
       abortEarly: false,
     });
     next();
@@ -77,7 +106,20 @@ module.exports.validateMovie = async (req, res, next) => {
 module.exports.validateStudio = async (req, res, next) => {
   const { body } = req;
   try {
-    await STUDIO_VALIDATION_SCHEMA.validate(body, {
+    await NEW_STUDIO_VALIDATION_SCHEMA.validate(body, {
+      abortEarly: false,
+    });
+    next();
+  } catch (error) {
+    console.log(error.errors);
+    next(error);
+  }
+};
+
+module.exports.validatePatchStudio = async (req, res, next) => {
+  const { body } = req;
+  try {
+    await PATCH_STUDIO_VALIDATION_SCHEMA.validate(body, {
       abortEarly: false,
     });
     next();

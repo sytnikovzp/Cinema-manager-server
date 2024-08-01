@@ -1,7 +1,10 @@
 const { Router } = require('express');
 // ============================
 const actorController = require('../controllers/actorController');
-const { validatePerson } = require('../middleware/validate.mw');
+const {
+  validatePerson,
+  validatePatchPerson,
+} = require('../middleware/validate.mw');
 const { paginate } = require('../middleware');
 
 // ============================
@@ -17,6 +20,7 @@ router
 router
   .route('/:actorId')
   .get(actorController.getActorById)
-  .delete(actorController.deleteActor);
+  .delete(actorController.deleteActor)
+  .patch(validatePatchPerson, actorController.patchActor);
 
 module.exports = router;

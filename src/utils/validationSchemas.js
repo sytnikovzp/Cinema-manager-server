@@ -1,7 +1,5 @@
 const yup = require('yup');
 
-// ======================================================
-
 const TITLE_NAME_SCHEMA = yup
   .string()
   .trim()
@@ -32,6 +30,8 @@ const RELEASE_FOUNDATION_YEAR_SCHEMA = yup
 
 const PHOTO_LOGO_POSTER_TRAILER_SCHEMA = yup.string().url().nullable();
 
+const STRING_NULLABLE_SCHEMA = yup.string().nullable();
+
 // ======================================================
 
 const GENRE_VALIDATION_SCHEMA = yup.object().shape({
@@ -40,7 +40,7 @@ const GENRE_VALIDATION_SCHEMA = yup.object().shape({
 
 const COUNTRY_VALIDATION_SCHEMA = yup.object().shape({
   title: TITLE_NAME_SCHEMA.required(),
-  code: yup.string().nullable(),
+  code: STRING_NULLABLE_SCHEMA,
 });
 
 const LOCATION_VALIDATION_SCHEMA = yup.object().shape({
@@ -48,16 +48,25 @@ const LOCATION_VALIDATION_SCHEMA = yup.object().shape({
   country_id: ID_SCHEMA,
 });
 
-const PERSON_VALIDATION_SCHEMA = yup.object().shape({
+const NEW_PERSON_VALIDATION_SCHEMA = yup.object().shape({
   full_name: TITLE_NAME_SCHEMA.required(),
   country_id: ID_SCHEMA,
   birth_date: BIRTH_DATE_SCHEMA,
   death_date: DEATH_DATE_SCHEMA,
   photo: PHOTO_LOGO_POSTER_TRAILER_SCHEMA,
-  biography: yup.string().nullable(),
+  biography: STRING_NULLABLE_SCHEMA,
 });
 
-const MOVIE_VALIDATION_SCHEMA = yup.object().shape({
+const PATCH_PERSON_VALIDATION_SCHEMA = yup.object().shape({
+  full_name: TITLE_NAME_SCHEMA,
+  country_id: ID_SCHEMA,
+  birth_date: BIRTH_DATE_SCHEMA,
+  death_date: DEATH_DATE_SCHEMA,
+  photo: PHOTO_LOGO_POSTER_TRAILER_SCHEMA,
+  biography: STRING_NULLABLE_SCHEMA,
+});
+
+const NEW_MOVIE_VALIDATION_SCHEMA = yup.object().shape({
   title: TITLE_NAME_SCHEMA.required(),
   genre_id: ID_SCHEMA,
   release_year: RELEASE_FOUNDATION_YEAR_SCHEMA,
@@ -65,27 +74,30 @@ const MOVIE_VALIDATION_SCHEMA = yup.object().shape({
   trailer: PHOTO_LOGO_POSTER_TRAILER_SCHEMA,
 });
 
-const STUDIO_VALIDATION_SCHEMA = yup.object().shape({
+const PATCH_MOVIE_VALIDATION_SCHEMA = yup.object().shape({
+  title: TITLE_NAME_SCHEMA,
+  genre_id: ID_SCHEMA,
+  release_year: RELEASE_FOUNDATION_YEAR_SCHEMA,
+  poster: PHOTO_LOGO_POSTER_TRAILER_SCHEMA,
+  trailer: PHOTO_LOGO_POSTER_TRAILER_SCHEMA,
+  storyline: STRING_NULLABLE_SCHEMA,
+});
+
+const NEW_STUDIO_VALIDATION_SCHEMA = yup.object().shape({
   title: TITLE_NAME_SCHEMA.required(),
+  location_id: ID_SCHEMA,
+  foundation_year: RELEASE_FOUNDATION_YEAR_SCHEMA,
+  logo: PHOTO_LOGO_POSTER_TRAILER_SCHEMA,
+  about: STRING_NULLABLE_SCHEMA,
+});
+
+const PATCH_STUDIO_VALIDATION_SCHEMA = yup.object().shape({
+  title: TITLE_NAME_SCHEMA,
   location_id: ID_SCHEMA,
   foundation_year: RELEASE_FOUNDATION_YEAR_SCHEMA,
   logo: PHOTO_LOGO_POSTER_TRAILER_SCHEMA,
   about: yup.string().nullable(),
 });
-
-// ======================================================
-
-// const NEW_BOOK_VALIDATION_SCHEMA = yup.object().shape({
-//   title: TITLE_NAME_SCHEMA.required(),
-//   genre_id: ID_SCHEMA,
-//   shelf_id: ID_SCHEMA,
-// });
-
-// const PATCH_BOOK_VALIDATION_SCHEMA = yup.object().shape({
-//   title: TITLE_NAME_SCHEMA,
-//   genre_id: ID_SCHEMA,
-//   shelf_id: ID_SCHEMA,
-// });
 
 const PAGINATION_SCHEMA = yup.object().shape({
   limit: yup.number().min(1).max(100).required(),
@@ -96,8 +108,11 @@ module.exports = {
   GENRE_VALIDATION_SCHEMA,
   COUNTRY_VALIDATION_SCHEMA,
   LOCATION_VALIDATION_SCHEMA,
-  PERSON_VALIDATION_SCHEMA,
-  MOVIE_VALIDATION_SCHEMA,
-  STUDIO_VALIDATION_SCHEMA,
+  NEW_PERSON_VALIDATION_SCHEMA,
+  PATCH_PERSON_VALIDATION_SCHEMA,
+  NEW_MOVIE_VALIDATION_SCHEMA,
+  PATCH_MOVIE_VALIDATION_SCHEMA,
+  NEW_STUDIO_VALIDATION_SCHEMA,
+  PATCH_STUDIO_VALIDATION_SCHEMA,
   PAGINATION_SCHEMA,
 };

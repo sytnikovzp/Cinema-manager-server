@@ -5,7 +5,6 @@ const { Location, Country, sequelize } = require('../db/models');
 class LocationController {
   async getLocations(req, res, next) {
     try {
-      const { limit, offset } = req.pagination;
       const locations = await Location.findAll({
         attributes: ['id', 'title'],
         include: [
@@ -15,9 +14,7 @@ class LocationController {
           },
         ],
         raw: true,
-        limit,
-        offset,
-        order: [['id', 'DESC']],
+        order: [['id', 'ASC']],
       });
 
       if (locations.length > 0) {
@@ -116,7 +113,7 @@ class LocationController {
       });
       const { id: country_id } = countryId;
       console.log(`Country ID is: ${country_id}`);
-      
+
       const newBody = { title, country_id };
       const updatedLocation = await Location.update(newBody, {
         where: {

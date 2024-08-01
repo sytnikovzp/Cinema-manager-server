@@ -1,50 +1,38 @@
-// Get all directors
+### Get all directors (default pagination)
 GET http://localhost:5000/api/directors
 
-###
+### Get all directors (custom pagination)
+GET http://localhost:5000/api/directors?page=2&limit=10
 
-// Get director by id
+### Get director by id
 GET http://localhost:5000/api/directors/3
 
-###
-
-// Create director (Success)
+### Create director
 POST http://localhost:5000/api/directors HTTP/1.1
 content-type: application/json
 
 {
   "full_name": "Test director",
-  "birth_year": "2000-01-01",
-  "nationality": "USA"
+  "country": "United States of America",
+  "birth_date": "2000-01-01",
+  "death_date": null,
+  "photo": null,
+  "biography": null
 }
 
-###
-
-// Create director (With errors)
-POST http://localhost:5000/api/directors HTTP/1.1
-content-type: application/json
-
-{
-  "full_name": "T",
-  "birth_year": "1850-01-01",
-  "death_year": "null",
-  "nationality": "GB"
-}
-
-###
-
-// Update director
+### Update director
 PUT http://localhost:5000/api/directors HTTP/1.1
 content-type: application/json
 
 {
+  "id": 29,
   "full_name": "Updated director",
-  "birth_year": "2000-01-01",
-  "nationality": "UA",
-  "director_id": 1
+  "country": "United States of America",
+  "birth_date": "2000-01-01",
+  "death_date": "2000-01-01",
+  "photo": null,
+  "biography": null
 }
 
-###
-
-// Delete director
-DELETE  http://localhost:5000/api/directors/12 HTTP/1.1
+### Delete director
+DELETE  http://localhost:5000/api/directors/29 HTTP/1.1

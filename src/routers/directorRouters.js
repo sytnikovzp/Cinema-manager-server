@@ -2,13 +2,15 @@ const { Router } = require('express');
 // ============================
 const directorController = require('../controllers/directorController');
 const { validatePerson } = require('../middleware/validate.mw');
+const { paginate } = require('../middleware');
+
 // ============================
 
 const router = new Router();
 
 router
   .route('/')
-  .get(directorController.getDirectors)
+  .get(paginate.paginateElements, directorController.getDirectors)
   .post(validatePerson, directorController.createDirector)
   .put(validatePerson, directorController.updateDirector);
 

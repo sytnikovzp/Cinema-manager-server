@@ -2,7 +2,6 @@ const { Router } = require('express');
 // ============================
 const countryController = require('../controllers/countryController');
 const { validateCountry } = require('../middleware/validate.mw');
-const { paginate } = require('../middleware');
 
 // ============================
 
@@ -10,7 +9,7 @@ const router = new Router();
 
 router
   .route('/')
-  .get(paginate.paginateElements, countryController.getCountries)
+  .get(countryController.getCountries)
   .post(validateCountry, countryController.createCountry)
   .put(validateCountry, countryController.updateCountry);
 

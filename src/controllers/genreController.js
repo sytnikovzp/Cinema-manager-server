@@ -5,13 +5,13 @@ const { Genre, sequelize } = require('../db/models');
 class GenreController {
   async getGenres(req, res, next) {
     try {
-      const { limit, offset } = req.pagination;
+      // const { limit, offset } = req.pagination;
       const genres = await Genre.findAll({
         attributes: ['id', 'title'],
         raw: true,
-        limit,
-        offset,
-        order: [['id', 'DESC']],
+        // limit,
+        // offset,
+        // order: [['id', 'DESC']],
       });
 
       if (genres.length > 0) {

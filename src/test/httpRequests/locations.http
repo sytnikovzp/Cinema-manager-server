@@ -1,9 +1,6 @@
 ### Get all locations (default pagination)
 GET http://localhost:5000/api/locations
 
-### Get all locations (custom pagination)
-GET http://localhost:5000/api/locations?page=2&limit=10
-
 ### Get location by id
 GET http://localhost:5000/api/locations/3
 

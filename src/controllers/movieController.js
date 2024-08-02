@@ -120,15 +120,8 @@ class MovieController {
     const t = await sequelize.transaction();
 
     try {
-      const {
-        id,
-        title,
-        genre,
-        release_year,
-        poster,
-        trailer,
-        storyline,
-      } = req.body;
+      const { id, title, genre, release_year, poster, trailer, storyline } =
+        req.body;
 
       const genreId = await Genre.findOne({
         where: {
@@ -174,9 +167,9 @@ class MovieController {
       }
       await t.commit();
     } catch (error) {
-      console.log(error);
+      console.log(error.message);
       await t.rollback();
-      res.status(500).json({ error: 'Internal server error' });
+      next(error);
     }
   }
 

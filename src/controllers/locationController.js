@@ -133,9 +133,9 @@ class LocationController {
       }
       await t.commit();
     } catch (error) {
-      console.log(error);
+      console.log(error.message);
       await t.rollback();
-      res.status(500).json({ error: 'Internal server error' });
+      next(error);
     }
   }
 

@@ -5,13 +5,9 @@ const { Genre, sequelize } = require('../db/models');
 class GenreController {
   async getGenres(req, res, next) {
     try {
-      // const { limit, offset } = req.pagination;
       const genres = await Genre.findAll({
         attributes: ['id', 'title'],
         raw: true,
-        // limit,
-        // offset,
-        // order: [['id', 'DESC']],
       });
 
       if (genres.length > 0) {
@@ -98,9 +94,9 @@ class GenreController {
       }
       await t.commit();
     } catch (error) {
-      console.log(error);
+      console.log(error.message);
       await t.rollback();
-      res.status(500).json({ error: 'Internal server error' });
+      next(error);
     }
   }
 

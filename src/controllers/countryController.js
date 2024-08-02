@@ -5,13 +5,9 @@ const { Country, sequelize } = require('../db/models');
 class CountryController {
   async getCountries(req, res, next) {
     try {
-      // const { limit, offset } = req.pagination;
       const countries = await Country.findAll({
         attributes: ['id', 'title', 'code'],
         raw: true,
-        // limit,
-        // offset,
-        // order: [['id', 'DESC']],
       });
 
       if (countries.length > 0) {
@@ -99,9 +95,9 @@ class CountryController {
       }
       await t.commit();
     } catch (error) {
-      console.log(error);
+      console.log(error.message);
       await t.rollback();
-      res.status(500).json({ error: 'Internal server error' });
+      next(error);
     }
   }
 

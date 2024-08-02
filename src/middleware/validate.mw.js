@@ -10,6 +10,9 @@ const {
   PATCH_MOVIE_VALIDATION_SCHEMA,
   NEW_STUDIO_VALIDATION_SCHEMA,
   PATCH_STUDIO_VALIDATION_SCHEMA,
+  MOVIE_ACTOR_VALIDATION_SCHEMA,
+  MOVIE_DIRECTOR_VALIDATION_SCHEMA,
+  MOVIE_STUDIO_VALIDATION_SCHEMA,
 } = require('../utils/validationSchemas');
 
 module.exports.validateGenre = async (req, res, next) => {
@@ -120,6 +123,45 @@ module.exports.validatePatchStudio = async (req, res, next) => {
   const { body } = req;
   try {
     await PATCH_STUDIO_VALIDATION_SCHEMA.validate(body, {
+      abortEarly: false,
+    });
+    next();
+  } catch (error) {
+    console.log(error.errors);
+    next(error);
+  }
+};
+
+module.exports.validateMovieActor = async (req, res, next) => {
+  const { body } = req;
+  try {
+    await MOVIE_ACTOR_VALIDATION_SCHEMA.validate(body, {
+      abortEarly: false,
+    });
+    next();
+  } catch (error) {
+    console.log(error.errors);
+    next(error);
+  }
+};
+
+module.exports.validateMovieDirector = async (req, res, next) => {
+  const { body } = req;
+  try {
+    await MOVIE_DIRECTOR_VALIDATION_SCHEMA.validate(body, {
+      abortEarly: false,
+    });
+    next();
+  } catch (error) {
+    console.log(error.errors);
+    next(error);
+  }
+};
+
+module.exports.validateMovieStudio = async (req, res, next) => {
+  const { body } = req;
+  try {
+    await MOVIE_STUDIO_VALIDATION_SCHEMA.validate(body, {
       abortEarly: false,
     });
     next();

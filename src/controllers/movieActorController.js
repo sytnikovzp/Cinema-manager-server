@@ -1,10 +1,19 @@
 const createError = require('http-errors');
-const { MovieActor, Movie, Actor, sequelize } = require('../db/models');
+const {
+  MovieActor,
+  Movie,
+  Actor,
+  Director,
+  sequelize,
+} = require('../db/models');
 
 class MovieActorController {
   async getMovieActors(req, res, next) {
     try {
       const movieActors = await MovieActor.findAll({
+        attributes: {
+          exclude: ['movie_id', 'actor_id', 'ActorId', 'MovieId'],
+        },
         include: [
           { model: Movie, attributes: ['title'] },
           { model: Actor, attributes: ['full_name'] },
@@ -17,6 +26,72 @@ class MovieActorController {
         res.status(200).json(movieActors);
       } else {
         next(createError(404, 'MovieActors not found'));
+      }
+    } catch (error) {
+      console.log(error.message);
+      next(error);
+    }
+  }
+
+  async getMovieActorById(req, res, next) {
+    try {
+      const {
+        params: { movieActorId },
+      } = req;
+
+      const movieWithDetails = await Movie.findByPk(movieActorId, {
+        attributes: {
+          exclude: ['ActorId', 'genreId'],
+        },
+        include: [
+          {
+            model: Actor,
+            attributes: ['full_name'],
+            through: { attributes: [] },
+          },
+        ],
+        raw: true,
+      });
+
+      if (movieWithDetails) {
+        console.log(`Result is: ${JSON.stringify(movieWithDetails, null, 2)}`);
+        res.status(200).json(movieWithDetails);
+      } else {
+        console.log('Movie not found!');
+        next(createError(404, 'Movie not found!'));
+      }
+    } catch (error) {
+      console.log(error.message);
+      next(error);
+    }
+  }
+
+  async getActorMoviesById(req, res, next) {
+    try {
+      const {
+        params: { actorId },
+      } = req;
+
+      console.log(req.params);
+
+      const actorWithMovies = await Actor.findByPk(actorId, {
+        attributes: ['full_name'],
+        include: [
+          {
+            model: Movie,
+            attributes: ['title'],
+            through: { attributes: [] },
+          },
+        ],
+        raw: true,
+      });
+
+      if (actorWithMovies) {
+        console.log(`Result is: ${JSON.stringify(actorWithMovies, null, 2)}`);
+        res.status(200).json(actorWithMovies);
+      } else {
+        console.log('Actor not found!');
+        next(createError(404, 'Actor not found!'));
       }
     } catch (error) {
       console.log(error.message);

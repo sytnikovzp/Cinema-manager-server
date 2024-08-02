@@ -1,4 +1,4 @@
-### Get all genres (default pagination)
+### Get all genres 
 GET http://localhost:5000/api/genres
 
 ### Get genre by id
@@ -9,7 +9,7 @@ POST http://localhost:5000/api/genres HTTP/1.1
 content-type: application/json
 
 {
-  "title": "New test genre"
+  "title": "New genre"
 }
 
 ### Update genre

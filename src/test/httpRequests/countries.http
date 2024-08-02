@@ -1,4 +1,4 @@
-### Get all countries (default pagination)
+### Get all countries
 GET http://localhost:5000/api/countries
 
 ### Get country by id
@@ -9,7 +9,7 @@ POST http://localhost:5000/api/countries HTTP/1.1
 content-type: application/json
 
 {
-  "title": "New test country",
+  "title": "New country",
   "code": "TST"
 }
 

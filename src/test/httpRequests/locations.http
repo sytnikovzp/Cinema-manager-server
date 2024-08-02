@@ -1,4 +1,4 @@
-### Get all locations (default pagination)
+### Get all locations 
 GET http://localhost:5000/api/locations
 
 ### Get location by id
@@ -9,7 +9,7 @@ POST http://localhost:5000/api/locations HTTP/1.1
 content-type: application/json
 
 {
-  "title": "New test location",
+  "title": "New location",
   "country": "United States of America"
 }
 
@@ -20,8 +20,8 @@ content-type: application/json
 {
   "id": 13,
   "title": "Updated location",
-  "country": "United States of America"
+  "country": "France"
 }
 
 ### Delete location
-DELETE  http://localhost:5000/api/locations/10 HTTP/1.1
+DELETE  http://localhost:5000/api/locations/13 HTTP/1.1

@@ -2,7 +2,7 @@
 GET http://localhost:5000/api/actors
 
 ### Get all actors (custom pagination)
-GET http://localhost:5000/api/actors?_page=2&_limit=10
+GET http://localhost:5000/api/actors?_page=1&_limit=10
 
 ### Get actor by id
 GET http://localhost:5000/api/actors/3
@@ -12,7 +12,7 @@ POST http://localhost:5000/api/actors HTTP/1.1
 content-type: application/json
 
 {
-  "full_name": "Test actor",
+  "full_name": "New actor",
   "country": "United States of America",
   "birth_date": "2000-01-01",
   "death_date": null,
@@ -35,7 +35,7 @@ content-type: application/json
 }
 
 ### Update actor (patch)
-PATCH http://localhost:5000/api/actors/1 HTTP/1.1
+PATCH http://localhost:5000/api/actors/238 HTTP/1.1
 content-type: application/json
 
 {

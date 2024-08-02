@@ -1,6 +1,6 @@
 const createError = require('http-errors');
 
-const { Movie, Studio, Location, sequelize } = require('../db/models');
+const { Movie, Studio, Location, Country, sequelize } = require('../db/models');
 
 class StudioController {
   async getStudios(req, res, next) {
@@ -40,6 +40,12 @@ class StudioController {
           {
             model: Location,
             attributes: ['id', 'title'],
+            include: [
+              {
+                model: Country,
+                attributes: ['id', 'title'],
+              },
+            ],
           },
           {
             model: Movie,

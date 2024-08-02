@@ -1,26 +1,20 @@
 const createError = require('http-errors');
 
-const { Movie, Genre, sequelize } = require('../db/models');
+const {
+  Actor,
+  Director,
+  Movie,
+  Studio,
+  Genre,
+  sequelize,
+} = require('../db/models');
 
 class MovieController {
   async getMovies(req, res, next) {
     try {
       const { limit, offset } = req.pagination;
       const movies = await Movie.findAll({
-        attributes: [
-          'id',
-          'title',
-          'release_year',
-          'poster',
-          'trailer',
-          'storyline',
-        ],
-        include: [
-          {
-            model: Genre,
-            attributes: ['title'],
-          },
-        ],
+        attributes: ['id', 'title', 'release_year', 'poster'],
         raw: true,
         limit,
         offset,
@@ -52,10 +46,30 @@ class MovieController {
         include: [
           {
             model: Genre,
-            attributes: ['title'],
+            attributes: ['id', 'title'],
+          },
+          {
+            model: Actor,
+            attributes: ['id', 'full_name'],
+            through: {
+              attributes: [],
+            },
+          },
+          {
+            model: Director,
+            attributes: ['id', 'full_name'],
+            through: {
+              attributes: [],
+            },
+          },
+          {
+            model: Studio,
+            attributes: ['id', 'title'],
+            through: {
+              attributes: [],
+            },
           },
         ],
-        raw: true,
       });
 
       if (movieById) {

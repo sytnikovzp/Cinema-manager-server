@@ -1,20 +1,13 @@
 const createError = require('http-errors');
 
-const { Director, Country, sequelize } = require('../db/models');
+const { Director, Movie, Country, sequelize } = require('../db/models');
 
 class DirectorController {
   async getDirectors(req, res, next) {
     try {
       const { limit, offset } = req.pagination;
       const directors = await Director.findAll({
-        attributes: [
-          'id',
-          'full_name',
-          'birth_date',
-          'death_date',
-          'photo',
-          'biography',
-        ],
+        attributes: ['id', 'full_name', 'photo'],
         include: [
           {
             model: Country,
@@ -52,10 +45,16 @@ class DirectorController {
         include: [
           {
             model: Country,
-            attributes: ['title'],
+            attributes: ['id', 'title'],
+          },
+          {
+            model: Movie,
+            attributes: ['id', 'title'],
+            through: {
+              attributes: [],
+            },
           },
         ],
-        raw: true,
       });
 
       if (directorById) {

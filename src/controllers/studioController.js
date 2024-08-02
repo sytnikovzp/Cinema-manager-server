@@ -1,19 +1,13 @@
 const createError = require('http-errors');
 
-const { Studio, Location, sequelize } = require('../db/models');
+const { Movie, Studio, Location, sequelize } = require('../db/models');
 
 class StudioController {
   async getStudios(req, res, next) {
     try {
       const { limit, offset } = req.pagination;
       const studios = await Studio.findAll({
-        attributes: ['id', 'title', 'foundation_year', 'logo', 'about'],
-        include: [
-          {
-            model: Location,
-            attributes: ['title'],
-          },
-        ],
+        attributes: ['id', 'title', 'foundation_year', 'logo'],
         raw: true,
         limit,
         offset,
@@ -45,10 +39,16 @@ class StudioController {
         include: [
           {
             model: Location,
-            attributes: ['title'],
+            attributes: ['id', 'title'],
+          },
+          {
+            model: Movie,
+            attributes: ['id', 'title'],
+            through: {
+              attributes: [],
+            },
           },
         ],
-        raw: true,
       });
 
       if (studioById) {

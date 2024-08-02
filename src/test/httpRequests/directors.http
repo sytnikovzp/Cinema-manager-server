@@ -2,7 +2,7 @@
 GET http://localhost:5000/api/directors
 
 ### Get all directors (custom pagination)
-GET http://localhost:5000/api/directors?page=2&limit=10
+GET http://localhost:5000/api/directors?_page=2&_limit=10
 
 ### Get director by id
 GET http://localhost:5000/api/directors/3

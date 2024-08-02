@@ -2,7 +2,7 @@
 GET http://localhost:5000/api/movies
 
 ### Get all movies (custom pagination)
-GET http://localhost:5000/api/movies?page=2&limit=10
+GET http://localhost:5000/api/movies?_page=2&_limit=10
 
 ### Get movie by id
 GET http://localhost:5000/api/movies/3

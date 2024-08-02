@@ -47,7 +47,7 @@ class DirectorController {
 
       const directorById = await Director.findByPk(directorId, {
         attributes: {
-          exclude: ['createdAt', 'updatedAt', 'countryId'],
+          exclude: ['countryId', 'country_id'],
         },
         include: [
           {

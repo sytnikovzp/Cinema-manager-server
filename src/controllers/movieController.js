@@ -47,7 +47,7 @@ class MovieController {
 
       const movieById = await Movie.findByPk(movieId, {
         attributes: {
-          exclude: ['createdAt', 'updatedAt', 'genreId'],
+          exclude: ['genreId', 'genre_id'],
         },
         include: [
           {

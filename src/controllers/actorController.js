@@ -47,7 +47,7 @@ class ActorController {
 
       const actorById = await Actor.findByPk(actorId, {
         attributes: {
-          exclude: ['createdAt', 'updatedAt', 'countryId'],
+          exclude: ['countryId', 'country_id'],
         },
         include: [
           {

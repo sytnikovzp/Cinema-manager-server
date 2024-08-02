@@ -40,7 +40,7 @@ class StudioController {
 
       const studioById = await Studio.findByPk(studioId, {
         attributes: {
-          exclude: ['createdAt', 'updatedAt', 'locationId'],
+          exclude: ['locationId', 'location_id'],
         },
         include: [
           {

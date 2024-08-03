@@ -85,22 +85,73 @@ class MovieController {
     }
   }
 
+  // async createMovie(req, res, next) {
+  //   const t = await sequelize.transaction();
+
+  //   try {
+  //     const { title, genre, release_year, poster, trailer, storyline } =
+  //       req.body;
+
+  //     const genreId = await Genre.findOne({
+  //       where: {
+  //         title: genre,
+  //       },
+  //       attributes: ['id'],
+  //       raw: true,
+  //     });
+  //     const { id: genre_id } = genreId;
+  //     console.log(`Genre ID is: ${genre_id}`);
+
+  //     const newBody = {
+  //       title,
+  //       genre_id,
+  //       release_year,
+  //       poster,
+  //       trailer,
+  //       storyline,
+  //     };
+  //     const newMovie = await Movie.create(newBody, {
+  //       returning: ['id'],
+  //       transaction: t,
+  //     });
+
+  //     if (newMovie) {
+  //       console.log(`Result is: ${JSON.stringify(newMovie, null, 2)}`);
+  //       res.status(201).json(newMovie);
+  //     } else {
+  //       console.log(`Bad request.`);
+  //       next(createError(400, 'The movie has not been created!'));
+  //     }
+  //     await t.commit();
+  //   } catch (error) {
+  //     console.log(error.message);
+  //     await t.rollback();
+  //     next(error);
+  //   }
+  // }
+
   async createMovie(req, res, next) {
     const t = await sequelize.transaction();
 
     try {
-      const { title, genre, release_year, poster, trailer, storyline } =
-        req.body;
+      const {
+        title,
+        genre,
+        release_year,
+        poster,
+        trailer,
+        storyline,
+        actors = [],
+        directors = [],
+        studios = [],
+      } = req.body;
 
       const genreId = await Genre.findOne({
-        where: {
-          title: genre,
-        },
+        where: { title: genre },
         attributes: ['id'],
         raw: true,
       });
       const { id: genre_id } = genreId;
-      console.log(`Genre ID is: ${genre_id}`);
 
       const newBody = {
         title,
@@ -110,19 +161,77 @@ class MovieController {
         trailer,
         storyline,
       };
+
       const newMovie = await Movie.create(newBody, {
         returning: ['id'],
         transaction: t,
       });
 
       if (newMovie) {
+        const movieId = newMovie.id;
+
+        const actorIds = await Promise.all(
+          actors.map(async (name) => {
+            const actor = await Actor.findOne({
+              where: { full_name: name },
+              attributes: ['id'],
+              raw: true,
+            });
+            return actor ? actor.id : null;
+          })
+        );
+
+        const directorIds = await Promise.all(
+          directors.map(async (name) => {
+            const director = await Director.findOne({
+              where: { full_name: name },
+              attributes: ['id'],
+              raw: true,
+            });
+            return director ? director.id : null;
+          })
+        );
+
+        const studioIds = await Promise.all(
+          studios.map(async (title) => {
+            const studio = await Studio.findOne({
+              where: { title },
+              attributes: ['id'],
+              raw: true,
+            });
+            return studio ? studio.id : null;
+          })
+        );
+
+        if (actorIds.length > 0) {
+          await newMovie.addActors(
+            actorIds.filter((id) => id !== null),
+            { transaction: t }
+          );
+        }
+
+        // if (directorIds.length > 0) {
+        //   await newMovie.addDirectors(
+        //     directorIds.filter((id) => id !== null),
+        //     { transaction: t }
+        //   );
+        // }
+
+        // if (studioIds.length > 0) {
+        //   await newMovie.addStudios(
+        //     studioIds.filter((id) => id !== null),
+        //     { transaction: t }
+        //   );
+        // }
+
         console.log(`Result is: ${JSON.stringify(newMovie, null, 2)}`);
+        await t.commit();
         res.status(201).json(newMovie);
       } else {
         console.log(`Bad request.`);
+        await t.rollback();
         next(createError(400, 'The movie has not been created!'));
       }
-      await t.commit();
     } catch (error) {
       console.log(error.message);
       await t.rollback();

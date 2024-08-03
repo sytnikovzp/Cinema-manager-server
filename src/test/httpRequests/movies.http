@@ -17,7 +17,10 @@ content-type: application/json
   "release_year": 2024,
   "poster": null,
   "trailer": null,
-  "storyline": null
+  "storyline": null,
+  "actors": ["Harrison Ford", "Johnny Depp", "Sigourney Weaver"], 
+  "directors": ["Steven Spielberg"],  
+  "studios": ["Lucasfilm Ltd."]     
 }
 
 ### Update movie (full)

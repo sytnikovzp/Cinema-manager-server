@@ -152,6 +152,43 @@ class MovieController {
         raw: true,
       });
       const { id: genre_id } = genreId;
+      console.log('Genre Id:', genreId);
+
+      const actorIds = await Promise.all(
+        actors.map(async (name) => {
+          const actor = await Actor.findOne({
+            where: { full_name: name },
+            attributes: ['id'],
+            raw: true,
+          });
+          return actor ? actor.id : null;
+        })
+      );
+      console.log('Actors Id`s:', actorIds);
+
+      const directorIds = await Promise.all(
+        directors.map(async (name) => {
+          const director = await Director.findOne({
+            where: { full_name: name },
+            attributes: ['id'],
+            raw: true,
+          });
+          return director ? director.id : null;
+        })
+      );
+      console.log('Directors Id`s:', directorIds);
+
+      const studioIds = await Promise.all(
+        studios.map(async (title) => {
+          const studio = await Studio.findOne({
+            where: { title },
+            attributes: ['id'],
+            raw: true,
+          });
+          return studio ? studio.id : null;
+        })
+      );
+      console.log('Studios Id`s:', studioIds);
 
       const newBody = {
         title,
@@ -170,39 +207,6 @@ class MovieController {
       if (newMovie) {
         const movieId = newMovie.id;
 
-        const actorIds = await Promise.all(
-          actors.map(async (name) => {
-            const actor = await Actor.findOne({
-              where: { full_name: name },
-              attributes: ['id'],
-              raw: true,
-            });
-            return actor ? actor.id : null;
-          })
-        );
-
-        const directorIds = await Promise.all(
-          directors.map(async (name) => {
-            const director = await Director.findOne({
-              where: { full_name: name },
-              attributes: ['id'],
-              raw: true,
-            });
-            return director ? director.id : null;
-          })
-        );
-
-        const studioIds = await Promise.all(
-          studios.map(async (title) => {
-            const studio = await Studio.findOne({
-              where: { title },
-              attributes: ['id'],
-              raw: true,
-            });
-            return studio ? studio.id : null;
-          })
-        );
-
         if (actorIds.length > 0) {
           await newMovie.addActors(
             actorIds.filter((id) => id !== null),
@@ -210,19 +214,19 @@ class MovieController {
           );
         }
 
-        // if (directorIds.length > 0) {
-        //   await newMovie.addDirectors(
-        //     directorIds.filter((id) => id !== null),
-        //     { transaction: t }
-        //   );
-        // }
+        if (directorIds.length > 0) {
+          await newMovie.addDirectors(
+            directorIds.filter((id) => id !== null),
+            { transaction: t }
+          );
+        }
 
-        // if (studioIds.length > 0) {
-        //   await newMovie.addStudios(
-        //     studioIds.filter((id) => id !== null),
-        //     { transaction: t }
-        //   );
-        // }
+        if (studioIds.length > 0) {
+          await newMovie.addStudios(
+            studioIds.filter((id) => id !== null),
+            { transaction: t }
+          );
+        }
 
         console.log(`Result is: ${JSON.stringify(newMovie, null, 2)}`);
         await t.commit();

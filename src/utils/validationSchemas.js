@@ -99,20 +99,6 @@ const PATCH_STUDIO_VALIDATION_SCHEMA = yup.object().shape({
   about: yup.string().nullable(),
 });
 
-const MOVIE_ACTOR_VALIDATION_SCHEMA = yup.object().shape({
-  movie_id: ID_SCHEMA,
-  actor_id: ID_SCHEMA,
-});
-
-const MOVIE_DIRECTOR_VALIDATION_SCHEMA = yup.object().shape({
-  movie_id: ID_SCHEMA,
-  actor_id: ID_SCHEMA,
-});
-const MOVIE_STUDIO_VALIDATION_SCHEMA = yup.object().shape({
-  movie_id: ID_SCHEMA,
-  actor_id: ID_SCHEMA,
-});
-
 const PAGINATION_SCHEMA = yup.object().shape({
   limit: yup.number().min(1).max(100).required(),
   offset: yup.number().min(0).required(),
@@ -128,8 +114,5 @@ module.exports = {
   PATCH_MOVIE_VALIDATION_SCHEMA,
   NEW_STUDIO_VALIDATION_SCHEMA,
   PATCH_STUDIO_VALIDATION_SCHEMA,
-  MOVIE_ACTOR_VALIDATION_SCHEMA,
-  MOVIE_DIRECTOR_VALIDATION_SCHEMA,
-  MOVIE_STUDIO_VALIDATION_SCHEMA,
   PAGINATION_SCHEMA,
 };

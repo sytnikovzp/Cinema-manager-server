@@ -141,9 +141,9 @@ class MovieController {
         poster,
         trailer,
         storyline,
-        actors = [],
-        directors = [],
-        studios = [],
+        actors,
+        directors,
+        studios,
       } = req.body;
 
       const genreId = await Genre.findOne({

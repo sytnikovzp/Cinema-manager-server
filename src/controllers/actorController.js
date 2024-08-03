@@ -20,9 +20,18 @@ class ActorController {
         order: [['id', 'DESC']],
       });
 
-      if (actors.length > 0) {
-        console.log(`Result is: ${JSON.stringify(actors, null, 2)}`);
-        res.status(200).json(actors);
+      const formattedActors = actors.map((actor) => {
+        return {
+          id: actor.id,
+          full_name: actor.full_name,
+          photo: actor.photo,
+          nationality: actor['Country.title'],
+        };
+      });
+
+      if (formattedActors.length > 0) {
+        console.log(`Result is: ${JSON.stringify(formattedActors, null, 2)}`);
+        res.status(200).json(formattedActors);
       } else {
         next(createError(404, 'Actors not found'));
       }
@@ -45,7 +54,7 @@ class ActorController {
         include: [
           {
             model: Country,
-            attributes: ['id', 'title'],
+            attributes: ['title'],
           },
           {
             model: Movie,
@@ -58,8 +67,14 @@ class ActorController {
       });
 
       if (actorById) {
-        console.log(`Result is: ${JSON.stringify(actorById, null, 2)}`);
-        res.status(200).json(actorById);
+        const formattedActor = {
+          ...actorById.toJSON(),
+          nationality: actorById.Country.title,
+        };
+        delete formattedActor.Country;
+
+        console.log(`Result is: ${JSON.stringify(formattedActor, null, 2)}`);
+        res.status(200).json(formattedActor);
       } else {
         console.log('Actor not found!');
         next(createError(404, 'Actor not found!'));
@@ -74,12 +89,12 @@ class ActorController {
     const t = await sequelize.transaction();
 
     try {
-      const { full_name, country, birth_date, death_date, photo, biography } =
+      const { full_name, nationality, birth_date, death_date, photo, biography } =
         req.body;
 
       const countryId = await Country.findOne({
         where: {
-          title: country,
+          title: nationality,
         },
         attributes: ['id'],
         raw: true,
@@ -122,7 +137,7 @@ class ActorController {
       const {
         id,
         full_name,
-        country,
+        nationality,
         birth_date,
         death_date,
         photo,
@@ -131,7 +146,7 @@ class ActorController {
 
       const countryId = await Country.findOne({
         where: {
-          title: country,
+          title: nationality,
         },
         attributes: ['id'],
         raw: true,
@@ -185,14 +200,14 @@ class ActorController {
     try {
       const {
         params: { actorId },
-        body: { full_name, country, birth_date, death_date, photo, biography },
+        body: { full_name, nationality, birth_date, death_date, photo, biography },
       } = req;
 
       let country_id;
-      if (country) {
+      if (nationality) {
         const countryRecord = await Country.findOne({
           where: {
-            title: country,
+            title: nationality,
           },
           attributes: ['id'],
           raw: true,

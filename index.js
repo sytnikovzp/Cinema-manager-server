@@ -4,7 +4,6 @@ require('dotenv').config();
 // ============================
 const db = require('./src/db/models');
 const app = require('./src/app');
-const { raw } = require('express');
 
 // =========== Create server with HTTP module ===========
 const HOST_NAME = process.env.DB_HOST;

@@ -15,7 +15,7 @@ class StudioController {
       });
 
       if (studios.length > 0) {
-        console.log(`Result is: ${JSON.stringify(studios, null, 2)}`);
+        // console.log(`Result is: ${JSON.stringify(studios, null, 2)}`);
         res.status(200).json(studios);
       } else {
         next(createError(404, 'Studios not found'));

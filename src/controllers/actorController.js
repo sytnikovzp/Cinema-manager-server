@@ -20,6 +20,8 @@ class ActorController {
         order: [['id', 'DESC']],
       });
 
+      const actorsCount = await Actor.findAll();
+
       const formattedActors = actors.map((actor) => {
         return {
           id: actor.id,
@@ -30,8 +32,12 @@ class ActorController {
       });
 
       if (formattedActors.length > 0) {
-        console.log(`Result is: ${JSON.stringify(formattedActors, null, 2)}`);
-        res.status(200).json(formattedActors);
+        // console.log(`Result is: ${JSON.stringify(formattedActors, null, 2)}`);
+        console.log(`============================================================`)
+        res
+          .status(200)
+          .set('X-Total-Count', actorsCount.length)
+          .json(formattedActors);
       } else {
         next(createError(404, 'Actors not found'));
       }
@@ -89,8 +95,14 @@ class ActorController {
     const t = await sequelize.transaction();
 
     try {
-      const { full_name, nationality, birth_date, death_date, photo, biography } =
-        req.body;
+      const {
+        full_name,
+        nationality,
+        birth_date,
+        death_date,
+        photo,
+        biography,
+      } = req.body;
 
       const countryId = await Country.findOne({
         where: {
@@ -200,7 +212,14 @@ class ActorController {
     try {
       const {
         params: { actorId },
-        body: { full_name, nationality, birth_date, death_date, photo, biography },
+        body: {
+          full_name,
+          nationality,
+          birth_date,
+          death_date,
+          photo,
+          biography,
+        },
       } = req;
 
       let country_id;

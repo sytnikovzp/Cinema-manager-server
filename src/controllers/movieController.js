@@ -22,7 +22,7 @@ class MovieController {
       });
 
       if (movies.length > 0) {
-        console.log(`Result is: ${JSON.stringify(movies, null, 2)}`);
+        // console.log(`Result is: ${JSON.stringify(movies, null, 2)}`);
         res.status(200).json(movies);
       } else {
         next(createError(404, 'Movies not found'));

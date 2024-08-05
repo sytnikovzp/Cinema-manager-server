@@ -20,9 +20,24 @@ class DirectorController {
         order: [['id', 'DESC']],
       });
 
-      if (directors.length > 0) {
-        console.log(`Result is: ${JSON.stringify(directors, null, 2)}`);
-        res.status(200).json(directors);
+      const directorsCount = await Director.findAll();
+
+      const formattedDirectors = directors.map((director) => {
+        return {
+          id: director.id,
+          full_name: director.full_name,
+          photo: director.photo,
+          nationality: director['Country.title'],
+        };
+      });
+
+      if (formattedDirectors.length > 0) {
+        // console.log(`Result is: ${JSON.stringify(formattedDirectors, null, 2)}`);
+        console.log(`============================================================`)
+        res
+          .status(200)
+          .set('X-Total-Count', directorsCount.length)
+          .json(formattedDirectors);
       } else {
         next(createError(404, 'Directors not found'));
       }

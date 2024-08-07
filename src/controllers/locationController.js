@@ -14,7 +14,7 @@ class LocationController {
           },
         ],
         raw: true,
-        order: [['id', 'ASC']],
+        order: [['id', 'DESC']],
       });
 
       if (locations.length > 0) {

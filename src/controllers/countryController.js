@@ -8,6 +8,7 @@ class CountryController {
       const countries = await Country.findAll({
         attributes: ['id', 'title'],
         raw: true,
+        order: [['id', 'DESC']],
       });
 
       if (countries.length > 0) {

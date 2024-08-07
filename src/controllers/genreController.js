@@ -8,6 +8,7 @@ class GenreController {
       const genres = await Genre.findAll({
         attributes: ['id', 'title'],
         raw: true,
+        order: [['id', 'DESC']],
       });
 
       if (genres.length > 0) {

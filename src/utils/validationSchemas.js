@@ -40,7 +40,6 @@ const GENRE_VALIDATION_SCHEMA = yup.object().shape({
 
 const COUNTRY_VALIDATION_SCHEMA = yup.object().shape({
   title: TITLE_NAME_SCHEMA.required(),
-  code: STRING_NULLABLE_SCHEMA,
 });
 
 const LOCATION_VALIDATION_SCHEMA = yup.object().shape({

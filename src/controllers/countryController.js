@@ -6,7 +6,7 @@ class CountryController {
   async getCountries(req, res, next) {
     try {
       const countries = await Country.findAll({
-        attributes: ['id', 'title', 'code'],
+        attributes: ['id', 'title'],
         raw: true,
       });
 
@@ -49,8 +49,8 @@ class CountryController {
     const t = await sequelize.transaction();
 
     try {
-      const { title, code } = req.body;
-      const newBody = { title, code };
+      const { title } = req.body;
+      const newBody = { title };
       const newCountry = await Country.create(newBody, {
         returning: ['id'],
         transaction: t,
@@ -82,7 +82,7 @@ class CountryController {
           id: body.id,
         },
         raw: true,
-        returning: ['id', 'title', 'code'],
+        returning: ['id', 'title'],
         transaction: t,
       });
 

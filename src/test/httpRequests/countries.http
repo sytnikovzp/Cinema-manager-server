@@ -9,8 +9,7 @@ POST http://localhost:5000/api/countries HTTP/1.1
 content-type: application/json
 
 {
-  "title": "New country",
-  "code": "TST"
+  "title": "New country"
 }
 
 ### Update country
@@ -19,8 +18,7 @@ content-type: application/json
 
 {
   "id": 40,
-  "title": "Updated country",
-  "code": "UPD"
+  "title": "Updated country"
 }
 
 ### Delete country

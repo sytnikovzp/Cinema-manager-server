@@ -9,7 +9,8 @@ POST http://localhost:5000/api/countries HTTP/1.1
 content-type: application/json
 
 {
-  "title": "New country"
+  "title": "New country",
+  "flag": ""
 }
 
 ### Update country
@@ -18,7 +19,17 @@ content-type: application/json
 
 {
   "id": 40,
-  "title": "Updated country"
+  "title": "Updated country",
+  "flag": ""
+}
+
+### Patch country
+PATCH http://localhost:5000/api/countries/40 HTTP/1.1
+content-type: application/json
+
+{
+  "title": "Patched country",
+  "flag": null
 }
 
 ### Delete country

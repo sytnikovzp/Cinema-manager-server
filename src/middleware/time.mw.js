@@ -11,8 +11,11 @@ exports.getTime = (req, res, next) => {
 };
 
 exports.showTime = (req, res, next) => {
-  console.log('=============================================================');
-  console.log(`Date & Time: ${req.getTime}`);
-  console.log('=================================');
+  console.log('');
+  console.log(
+    '============================================================================================'
+  );
+  console.log(`↓ Date & Time: ${req.getTime} ↓`);
+  console.log('=====================================');
   next();
 };

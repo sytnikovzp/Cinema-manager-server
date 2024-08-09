@@ -20,7 +20,7 @@ module.exports = {
           model: 'locations',
           key: 'id',
         },
-        onDelete: 'CASCADE',
+        onDelete: 'SET NULL',
         onUpdate: 'CASCADE',
       },
       foundation_year: {

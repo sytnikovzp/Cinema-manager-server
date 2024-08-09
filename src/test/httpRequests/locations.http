@@ -10,7 +10,8 @@ content-type: application/json
 
 {
   "title": "New location",
-  "country": "United States of America"
+  "country": "United States of America",
+  "coat_of_arms": ""
 }
 
 ### Update location
@@ -18,10 +19,21 @@ PUT http://localhost:5000/api/locations HTTP/1.1
 content-type: application/json
 
 {
-  "id": 13,
+  "id": 11,
   "title": "Updated location",
-  "country": "France"
+  "country": "France",
+  "coat_of_arms": ""
+}
+
+### Patch location
+PATCH http://localhost:5000/api/locations/11 HTTP/1.1
+content-type: application/json
+
+{
+  "title": "Patched location",
+  "country": "Ukraine",
+  "coat_of_arms": null
 }
 
 ### Delete location
-DELETE  http://localhost:5000/api/locations/13 HTTP/1.1
+DELETE  http://localhost:5000/api/locations/11 HTTP/1.1

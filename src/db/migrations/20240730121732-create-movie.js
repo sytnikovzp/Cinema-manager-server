@@ -20,7 +20,7 @@ module.exports = {
           model: 'genres',
           key: 'id',
         },
-        onDelete: 'CASCADE',
+        onDelete: 'SET NULL',
         onUpdate: 'CASCADE',
       },
       release_year: {

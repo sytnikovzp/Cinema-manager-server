@@ -6,13 +6,12 @@ class CountryController {
   async getCountries(req, res, next) {
     try {
       const countries = await Country.findAll({
-        attributes: ['id', 'title'],
+        attributes: ['id', 'title', 'flag'],
         raw: true,
         order: [['id', 'DESC']],
       });
 
       if (countries.length > 0) {
-        console.log(`Result is: ${JSON.stringify(countries, null, 2)}`);
         res.status(200).json(countries);
       } else {
         next(createError(404, 'Countries not found'));
@@ -34,7 +33,6 @@ class CountryController {
       });
 
       if (countryById) {
-        console.log(`Result is: ${JSON.stringify(countryById, null, 2)}`);
         res.status(200).json(countryById);
       } else {
         console.log('Country not found!');
@@ -50,21 +48,21 @@ class CountryController {
     const t = await sequelize.transaction();
 
     try {
-      const { title } = req.body;
-      const newBody = { title };
+      const { title, flag } = req.body;
+      const newBody = { title, flag };
       const newCountry = await Country.create(newBody, {
         returning: ['id'],
         transaction: t,
       });
 
       if (newCountry) {
-        console.log(`Result is: ${JSON.stringify(newCountry, null, 2)}`);
+        await t.commit();
         res.status(201).json(newCountry);
       } else {
+        await t.rollback();
         console.log(`Bad request.`);
         next(createError(400, 'The country has not been created!'));
       }
-      await t.commit();
     } catch (error) {
       console.log(error.message);
       await t.rollback();
@@ -77,24 +75,60 @@ class CountryController {
 
     try {
       const { body } = req;
-
       const updatedCountry = await Country.update(body, {
         where: {
           id: body.id,
         },
         raw: true,
-        returning: ['id', 'title'],
+        returning: ['id', 'title', 'flag'],
         transaction: t,
       });
 
       if (updatedCountry) {
-        console.log(`Result is: ${JSON.stringify(updatedCountry, null, 2)}`);
+        await t.commit();
         res.status(201).json(updatedCountry);
       } else {
+        await t.rollback();
         console.log(`Bad request.`);
         next(createError(400, 'The country has not been updated!'));
       }
-      await t.commit();
+    } catch (error) {
+      console.log(error.message);
+      await t.rollback();
+      next(error);
+    }
+  }
+
+  async patchCountry(req, res, next) {
+    const t = await sequelize.transaction();
+
+    try {
+      const {
+        params: { countryId },
+        body: { title, flag },
+      } = req;
+
+      const newBody = {};
+      if (title !== undefined) newBody.title = title;
+      if (flag !== undefined) newBody.flag = flag;
+
+      const [count, [updatedCountry]] = await Country.update(newBody, {
+        where: {
+          id: countryId,
+        },
+        returning: true,
+        transaction: t,
+      });
+      console.log(count);
+
+      if (count > 0) {
+        await t.commit();
+        res.status(200).json(updatedCountry);
+      } else {
+        await t.rollback();
+        console.log('Country not found');
+        next(createError(400, 'The country has not been updated!'));
+      }
     } catch (error) {
       console.log(error.message);
       await t.rollback();
@@ -118,13 +152,13 @@ class CountryController {
       });
 
       if (delCountry) {
-        console.log(res.statusCode);
+        await t.commit();
         res.sendStatus(res.statusCode);
       } else {
+        await t.rollback();
         console.log(`Bad request.`);
         next(createError(400, 'The country has not been deleted!'));
       }
-      await t.commit();
     } catch (error) {
       console.log(error.message);
       await t.rollback();

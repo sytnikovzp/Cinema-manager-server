@@ -1,7 +1,10 @@
 const { Router } = require('express');
 // ============================
 const locationController = require('../controllers/locationController');
-const { validateLocation } = require('../middleware/validate.mw');
+const {
+  validateLocation,
+  validatePatchLocation,
+} = require('../middleware/validate.mw');
 
 // ============================
 
@@ -16,6 +19,7 @@ router
 router
   .route('/:locationId')
   .get(locationController.getLocationById)
-  .delete(locationController.deleteLocation);
+  .delete(locationController.deleteLocation)
+  .patch(validatePatchLocation, locationController.patchLocation);
 
 module.exports = router;

@@ -6,13 +6,12 @@ class GenreController {
   async getGenres(req, res, next) {
     try {
       const genres = await Genre.findAll({
-        attributes: ['id', 'title'],
+        attributes: ['id', 'title', 'logo'],
         raw: true,
         order: [['id', 'DESC']],
       });
 
       if (genres.length > 0) {
-        console.log(`Result is: ${JSON.stringify(genres, null, 2)}`);
         res.status(200).json(genres);
       } else {
         next(createError(404, 'Genres not found'));
@@ -34,7 +33,6 @@ class GenreController {
       });
 
       if (genreById) {
-        console.log(`Result is: ${JSON.stringify(genreById, null, 2)}`);
         res.status(200).json(genreById);
       } else {
         console.log('Genre not found!');
@@ -50,21 +48,21 @@ class GenreController {
     const t = await sequelize.transaction();
 
     try {
-      const { title } = req.body;
-      const newBody = { title };
+      const { title, logo } = req.body;
+      const newBody = { title, logo };
       const newGenre = await Genre.create(newBody, {
         returning: ['id'],
         transaction: t,
       });
 
       if (newGenre) {
-        console.log(`Result is: ${JSON.stringify(newGenre, null, 2)}`);
+        await t.commit();
         res.status(201).json(newGenre);
       } else {
+        await t.rollback();
         console.log(`Bad request.`);
         next(createError(400, 'The genre has not been created!'));
       }
-      await t.commit();
     } catch (error) {
       console.log(error.message);
       await t.rollback();
@@ -82,18 +80,55 @@ class GenreController {
           id: body.id,
         },
         raw: true,
-        returning: ['id', 'title'],
+        returning: ['id', 'title', 'logo'],
         transaction: t,
       });
 
       if (updatedGenre) {
-        console.log(`Result is: ${JSON.stringify(updatedGenre, null, 2)}`);
+        await t.commit();
         res.status(201).json(updatedGenre);
       } else {
+        await t.rollback();
         console.log(`Bad request.`);
         next(createError(400, 'The genre has not been updated!'));
       }
-      await t.commit();
+    } catch (error) {
+      console.log(error.message);
+      await t.rollback();
+      next(error);
+    }
+  }
+
+  async patchGenre(req, res, next) {
+    const t = await sequelize.transaction();
+
+    try {
+      const {
+        params: { genreId },
+        body: { title, logo },
+      } = req;
+
+      const newBody = {};
+      if (title !== undefined) newBody.title = title;
+      if (logo !== undefined) newBody.logo = logo;
+
+      const [count, [updatedGenre]] = await Genre.update(newBody, {
+        where: {
+          id: genreId,
+        },
+        returning: true,
+        transaction: t,
+      });
+      console.log(count);
+
+      if (count > 0) {
+        await t.commit();
+        res.status(200).json(updatedGenre);
+      } else {
+        await t.rollback();
+        console.log('Genre not found');
+        next(createError(400, 'The genre has not been updated!'));
+      }
     } catch (error) {
       console.log(error.message);
       await t.rollback();
@@ -117,13 +152,13 @@ class GenreController {
       });
 
       if (delGenre) {
-        console.log(res.statusCode);
+        await t.commit();
         res.sendStatus(res.statusCode);
       } else {
+        await t.rollback();
         console.log(`Bad request.`);
         next(createError(400, 'The genre has not been deleted!'));
       }
-      await t.commit();
     } catch (error) {
       console.log(error.message);
       await t.rollback();

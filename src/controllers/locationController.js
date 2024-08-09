@@ -6,7 +6,7 @@ class LocationController {
   async getLocations(req, res, next) {
     try {
       const locations = await Location.findAll({
-        attributes: ['id', 'title'],
+        attributes: ['id', 'title', 'coat_of_arms'],
         include: [
           {
             model: Country,
@@ -17,9 +17,17 @@ class LocationController {
         order: [['id', 'DESC']],
       });
 
-      if (locations.length > 0) {
-        console.log(`Result is: ${JSON.stringify(locations, null, 2)}`);
-        res.status(200).json(locations);
+      const formattedLocations = locations.map((location) => {
+        return {
+          id: location.id,
+          title: location.title,
+          coat_of_arms: location.coat_of_arms,
+          country: location['Country.title'],
+        };
+      });
+
+      if (formattedLocations.length > 0) {
+        res.status(200).json(formattedLocations);
       } else {
         next(createError(404, 'Locations not found'));
       }
@@ -45,12 +53,15 @@ class LocationController {
             attributes: ['title'],
           },
         ],
-        raw: true,
       });
 
       if (locationById) {
-        console.log(`Result is: ${JSON.stringify(locationById, null, 2)}`);
-        res.status(200).json(locationById);
+        const formattedLocation = {
+          ...locationById.toJSON(),
+          country: locationById.Country.title,
+        };
+        delete formattedLocation.Country;
+        res.status(200).json(formattedLocation);
       } else {
         console.log('Location not found!');
         next(createError(404, 'Location not found!'));
@@ -65,32 +76,39 @@ class LocationController {
     const t = await sequelize.transaction();
 
     try {
-      const { title, country } = req.body;
+      const { title, country, coat_of_arms } = req.body;
 
-      const countryId = await Country.findOne({
+      const countryRecord = await Country.findOne({
         where: {
           title: country,
         },
         attributes: ['id'],
         raw: true,
       });
-      const { id: country_id } = countryId;
+
+      if (!countryRecord) {
+        throw new Error('Country not found');
+      }
+
+      const { id: country_id } = countryRecord;
       console.log(`Country ID is: ${country_id}`);
 
-      const newBody = { title, country_id };
+      const newBody = { title, country_id, coat_of_arms };
+
       const newLocation = await Location.create(newBody, {
         returning: ['id'],
         transaction: t,
       });
 
       if (newLocation) {
-        console.log(`Result is: ${JSON.stringify(newLocation, null, 2)}`);
-        res.status(201).json(newLocation);
+        await t.commit();
+        const { id } = newLocation;
+        return res.status(201).json({ id, title, country_id, coat_of_arms });
       } else {
+        await t.rollback();
         console.log(`Bad request.`);
         next(createError(400, 'The location has not been created!'));
       }
-      await t.commit();
     } catch (error) {
       console.log(error.message);
       await t.rollback();
@@ -102,36 +120,97 @@ class LocationController {
     const t = await sequelize.transaction();
 
     try {
-      const { id, title, country } = req.body;
+      const { id, title, country, coat_of_arms } = req.body;
 
-      const countryId = await Country.findOne({
+      const countryRecord = await Country.findOne({
         where: {
           title: country,
         },
         attributes: ['id'],
         raw: true,
       });
-      const { id: country_id } = countryId;
+
+      if (!countryRecord) {
+        throw new Error('Country not found');
+      }
+
+      const { id: country_id } = countryRecord;
       console.log(`Country ID is: ${country_id}`);
 
-      const newBody = { title, country_id };
+      const newBody = { title, country_id, coat_of_arms };
       const updatedLocation = await Location.update(newBody, {
         where: {
           id: id,
         },
         raw: true,
-        returning: ['id', 'title', 'country_id'],
+        returning: ['id', 'title', 'country_id', 'coat_of_arms'],
         transaction: t,
       });
 
       if (updatedLocation) {
-        console.log(`Result is: ${JSON.stringify(updatedLocation, null, 2)}`);
+        await t.commit();
         res.status(201).json(updatedLocation);
       } else {
+        await t.rollback();
         console.log(`Bad request.`);
         next(createError(400, 'The location has not been updated!'));
       }
-      await t.commit();
+    } catch (error) {
+      console.log(error.message);
+      await t.rollback();
+      next(error);
+    }
+  }
+
+  async patchLocation(req, res, next) {
+    const t = await sequelize.transaction();
+
+    try {
+      const {
+        params: { locationId },
+        body: { title, country, coat_of_arms },
+      } = req;
+
+      let country_id;
+      if (country) {
+        const countryRecord = await Country.findOne({
+          where: {
+            title: country,
+          },
+          attributes: ['id'],
+          raw: true,
+        });
+
+        if (!countryRecord) {
+          throw new Error('Country not found');
+        }
+
+        country_id = countryRecord.id;
+        console.log(`Country ID is: ${country_id}`);
+      }
+
+      const newBody = {};
+      if (title !== undefined) newBody.title = title;
+      if (country_id !== undefined) newBody.country_id = country_id;
+      if (coat_of_arms !== undefined) newBody.coat_of_arms = coat_of_arms;
+
+      const [count, [updatedLocation]] = await Location.update(newBody, {
+        where: {
+          id: locationId,
+        },
+        returning: true,
+        transaction: t,
+      });
+      console.log(count);
+
+      if (count > 0) {
+        await t.commit();
+        res.status(200).json(updatedLocation);
+      } else {
+        await t.rollback();
+        console.log('Location not found');
+        next(createError(400, 'The location has not been updated!'));
+      }
     } catch (error) {
       console.log(error.message);
       await t.rollback();
@@ -155,13 +234,13 @@ class LocationController {
       });
 
       if (delLocation) {
-        console.log(res.statusCode);
+        await t.commit();
         res.sendStatus(res.statusCode);
       } else {
+        await t.rollback();
         console.log(`Bad request.`);
         next(createError(400, 'The location has not been deleted!'));
       }
-      await t.commit();
     } catch (error) {
       console.log(error.message);
       await t.rollback();

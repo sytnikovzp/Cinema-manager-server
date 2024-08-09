@@ -14,6 +14,9 @@ module.exports = {
         allowNull: false,
         unique: true,
       },
+      logo: {
+        type: Sequelize.TEXT,
+      },
     });
   },
   async down(queryInterface, Sequelize) {

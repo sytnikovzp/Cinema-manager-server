@@ -1,7 +1,10 @@
 const { Router } = require('express');
 // ============================
 const countryController = require('../controllers/countryController');
-const { validateCountry } = require('../middleware/validate.mw');
+const {
+  validateCountry,
+  validatePatchCountry,
+} = require('../middleware/validate.mw');
 
 // ============================
 
@@ -16,6 +19,7 @@ router
 router
   .route('/:countryId')
   .get(countryController.getCountryById)
-  .delete(countryController.deleteCountry);
+  .delete(countryController.deleteCountry)
+  .patch(validatePatchCountry, countryController.patchCountry);
 
 module.exports = router;

@@ -1,9 +1,12 @@
 const yup = require('yup');
 
 const {
-  GENRE_VALIDATION_SCHEMA,
-  COUNTRY_VALIDATION_SCHEMA,
-  LOCATION_VALIDATION_SCHEMA,
+  NEW_GENRE_VALIDATION_SCHEMA,
+  PATCH_GENRE_VALIDATION_SCHEMA,
+  NEW_COUNTRY_VALIDATION_SCHEMA,
+  PATCH_COUNTRY_VALIDATION_SCHEMA,
+  NEW_LOCATION_VALIDATION_SCHEMA,
+  PATCH_LOCATION_VALIDATION_SCHEMA,
   NEW_PERSON_VALIDATION_SCHEMA,
   PATCH_PERSON_VALIDATION_SCHEMA,
   NEW_MOVIE_VALIDATION_SCHEMA,
@@ -15,7 +18,20 @@ const {
 module.exports.validateGenre = async (req, res, next) => {
   const { body } = req;
   try {
-    await GENRE_VALIDATION_SCHEMA.validate(body, {
+    await NEW_GENRE_VALIDATION_SCHEMA.validate(body, {
+      abortEarly: false,
+    });
+    next();
+  } catch (error) {
+    console.log(error.errors);
+    next(error);
+  }
+};
+
+module.exports.validatePatchGenre = async (req, res, next) => {
+  const { body } = req;
+  try {
+    await PATCH_GENRE_VALIDATION_SCHEMA.validate(body, {
       abortEarly: false,
     });
     next();
@@ -28,7 +44,20 @@ module.exports.validateGenre = async (req, res, next) => {
 module.exports.validateCountry = async (req, res, next) => {
   const { body } = req;
   try {
-    await COUNTRY_VALIDATION_SCHEMA.validate(body, {
+    await NEW_COUNTRY_VALIDATION_SCHEMA.validate(body, {
+      abortEarly: false,
+    });
+    next();
+  } catch (error) {
+    console.log(error.errors);
+    next(error);
+  }
+};
+
+module.exports.validatePatchCountry = async (req, res, next) => {
+  const { body } = req;
+  try {
+    await PATCH_COUNTRY_VALIDATION_SCHEMA.validate(body, {
       abortEarly: false,
     });
     next();
@@ -41,7 +70,20 @@ module.exports.validateCountry = async (req, res, next) => {
 module.exports.validateLocation = async (req, res, next) => {
   const { body } = req;
   try {
-    await LOCATION_VALIDATION_SCHEMA.validate(body, {
+    await NEW_LOCATION_VALIDATION_SCHEMA.validate(body, {
+      abortEarly: false,
+    });
+    next();
+  } catch (error) {
+    console.log(error.errors);
+    next(error);
+  }
+};
+
+module.exports.validatePatchLocation = async (req, res, next) => {
+  const { body } = req;
+  try {
+    await PATCH_LOCATION_VALIDATION_SCHEMA.validate(body, {
       abortEarly: false,
     });
     next();

@@ -32,8 +32,6 @@ class ActorController {
       });
 
       if (formattedActors.length > 0) {
-        // console.log(`Result is: ${JSON.stringify(formattedActors, null, 2)}`);
-        console.log(`============================================================`)
         res
           .status(200)
           .set('X-Total-Count', actorsCount.length)
@@ -79,7 +77,6 @@ class ActorController {
         };
         delete formattedActor.Country;
 
-        console.log(`Result is: ${JSON.stringify(formattedActor, null, 2)}`);
         res.status(200).json(formattedActor);
       } else {
         console.log('Actor not found!');

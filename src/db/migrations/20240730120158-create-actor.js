@@ -20,7 +20,7 @@ module.exports = {
           model: 'countries',
           key: 'id',
         },
-        onDelete: 'CASCADE',
+        onDelete: 'SET NULL',
         onUpdate: 'CASCADE',
       },
       birth_date: {

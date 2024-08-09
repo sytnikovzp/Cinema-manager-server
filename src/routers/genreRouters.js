@@ -1,7 +1,10 @@
 const { Router } = require('express');
 // ============================
 const genreController = require('../controllers/genreController');
-const { validateGenre } = require('../middleware/validate.mw');
+const {
+  validateGenre,
+  validatePatchGenre,
+} = require('../middleware/validate.mw');
 
 // ============================
 
@@ -16,6 +19,8 @@ router
 router
   .route('/:genreId')
   .get(genreController.getGenreById)
-  .delete(genreController.deleteGenre);
+  .delete(genreController.deleteGenre)
+  .patch(validatePatchGenre, genreController.patchGenre);
+
 
 module.exports = router;

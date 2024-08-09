@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       Genre.hasMany(models.Movie, {
         foreignKey: 'genreId',
-        onDelete: 'CASCADE',
+        onDelete: 'SET NULL',
         onUpdate: 'CASCADE',
       });
     }
@@ -23,6 +23,7 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         unique: true,
       },
+      logo: DataTypes.TEXT,
     },
     {
       sequelize,

@@ -1,79 +1,301 @@
 module.exports = {
   genres: [
-    { title: 'Action' },
-    { title: 'Adventure' },
-    { title: 'Anime' },
-    { title: 'Biopic' },
-    { title: 'Comedy' },
-    { title: 'Crime film' },
-    { title: 'Documentary' },
-    { title: 'Drama' },
-    { title: 'Fantasy' },
-    { title: 'Historic' },
-    { title: 'Horror' },
-    { title: 'Melodrama' },
-    { title: 'Music' },
-    { title: 'Peplum' },
-    { title: 'Science fiction' },
-    { title: 'Serial' },
-    { title: 'Sequel' },
-    { title: 'Thriller' },
-    { title: 'Western' },
+    {
+      title: 'Action',
+      logo: 'https://img.icons8.com/?size=100&id=V8DoLg02M4Fb&format=png&color=000000',
+    },
+    {
+      title: 'Adventure',
+      logo: 'https://img.icons8.com/?size=100&id=pUeA8ucsk6lE&format=png&color=000000',
+    },
+    {
+      title: 'Anime',
+      logo: 'https://img.icons8.com/?size=100&id=7SElOvor3Uxx&format=png&color=000000',
+    },
+    {
+      title: 'Biopic',
+      logo: 'https://img.icons8.com/?size=100&id=jYnzCn4k70CX&format=png&color=000000',
+    },
+    {
+      title: 'Comedy',
+      logo: 'https://img.icons8.com/?size=100&id=11892&format=png&color=000000',
+    },
+    {
+      title: 'Crime film',
+      logo: 'https://img.icons8.com/?size=100&id=11928&format=png&color=000000',
+    },
+    {
+      title: 'Documentary',
+      logo: 'https://img.icons8.com/?size=100&id=MVzhdCbn5Ssi&format=png&color=000000',
+    },
+    {
+      title: 'Drama',
+      logo: 'https://img.icons8.com/?size=100&id=VQ19xMiDr-jZ&format=png&color=000000',
+    },
+    {
+      title: 'Fantasy',
+      logo: 'https://img.icons8.com/?size=100&id=12133&format=png&color=000000',
+    },
+    {
+      title: 'Historic',
+      logo: 'https://img.icons8.com/?size=100&id=DrXWvEzp7WxP&format=png&color=000000',
+    },
+    {
+      title: 'Horror',
+      logo: 'https://img.icons8.com/?size=100&id=33097&format=png&color=000000',
+    },
+    {
+      title: 'Melodrama',
+      logo: 'https://img.icons8.com/?size=100&id=19869&format=png&color=000000',
+    },
+    {
+      title: 'Music',
+      logo: 'https://img.icons8.com/?size=100&id=W1UrWn4kSdmD&format=png&color=000000',
+    },
+    {
+      title: 'Peplum',
+      logo: 'https://cdn-icons-png.freepik.com/512/8060/8060862.png',
+    },
+    {
+      title: 'Science fiction',
+      logo: 'https://img.icons8.com/?size=100&id=13038&format=png&color=000000',
+    },
+    {
+      title: 'Serial',
+      logo: 'https://img.icons8.com/?size=100&id=UflTdYCrASUS&format=png&color=000000',
+    },
+    {
+      title: 'Sequel',
+      logo: 'https://www.shutterstock.com/image-vector/sequel-black-badge-260nw-1192271638.jpg',
+    },
+    {
+      title: 'Thriller',
+      logo: 'https://img.icons8.com/?size=100&id=13034&format=png&color=000000',
+    },
+    {
+      title: 'Western',
+      logo: 'https://img.icons8.com/?size=100&id=19870&format=png&color=000000',
+    },
   ],
   countries: [
-    { title: 'United States of America' },
-    { title: 'Great Britain (England)' },
-    { title: 'Ukraine' },
-    { title: 'Deutschland' },
-    { title: 'France' },
-    { title: 'Australia' },
-    { title: 'Belgium' },
-    { title: 'Brazil' },
-    { title: 'Georgia' },
-    { title: 'Denmark' },
-    { title: 'Israel' },
-    { title: 'India' },
-    { title: 'Ireland' },
-    { title: 'Italy' },
-    { title: 'Canada' },
-    { title: 'China' },
-    { title: 'Korea' },
-    { title: 'Latvia' },
-    { title: 'Lithuania' },
-    { title: 'Netherlands' },
-    { title: 'Norway' },
-    { title: 'Poland' },
-    { title: 'Portugal' },
-    { title: 'Turkey' },
-    { title: 'Finland' },
-    { title: 'Czech Republic' },
-    { title: 'Switzerland' },
-    { title: 'Estonia' },
-    { title: 'Japan' },
-    { title: 'New Zealand' },
-    { title: 'Puerto Rico' },
-    { title: 'Malta' },
-    { title: 'Benin' },
-    { title: 'Sweden' },
-    { title: 'Russian' },
-    { title: 'Iceland' },
-    { title: 'Austria' },
-    { title: 'Spain' },
-    { title: 'Mexico' },
+    {
+      title: 'United States of America',
+      flag: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/Flag_of_the_United_States_%28DoS_ECA_Color_Standard%29.svg/1200px-Flag_of_the_United_States_%28DoS_ECA_Color_Standard%29.svg.png',
+    },
+    {
+      title: 'Great Britain (England)',
+      flag: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Flag_of_the_United_Kingdom_%281-2%29.svg/1200px-Flag_of_the_United_Kingdom_%281-2%29.svg.png',
+    },
+    {
+      title: 'Ukraine',
+      flag: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/49/Flag_of_Ukraine.svg/1599px-Flag_of_Ukraine.svg.png?20230624202942',
+    },
+    {
+      title: 'Deutschland',
+      flag: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/ba/Flag_of_Germany.svg/1600px-Flag_of_Germany.svg.png',
+    },
+    {
+      title: 'France',
+      flag: 'https://upload.wikimedia.org/wikipedia/en/thumb/c/c3/Flag_of_France.svg/1920px-Flag_of_France.svg.png',
+    },
+    {
+      title: 'Australia',
+      flag: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/88/Flag_of_Australia_%28converted%29.svg/2560px-Flag_of_Australia_%28converted%29.svg.png',
+    },
+    {
+      title: 'Belgium',
+      flag: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/Flag_of_Belgium.svg/392px-Flag_of_Belgium.svg.png',
+    },
+    {
+      title: 'Brazil',
+      flag: 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Flag_of_Brazil.svg/1280px-Flag_of_Brazil.svg.png',
+    },
+    {
+      title: 'Georgia',
+      flag: 'https://www.colonialflag.com/cdn/shop/products/georgia-republic-flag__11456.1639690367.1280.1280.jpg?v=1673390094&width=1200',
+    },
+    {
+      title: 'Denmark',
+      flag: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9c/Flag_of_Denmark.svg/1024px-Flag_of_Denmark.svg.png',
+    },
+    {
+      title: 'Israel',
+      flag: 'https://cdn.britannica.com/53/1753-004-03582EDA/Flag-Israel.jpg',
+    },
+    {
+      title: 'India',
+      flag: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/41/Flag_of_India.svg/1599px-Flag_of_India.svg.png',
+    },
+    {
+      title: 'Ireland',
+      flag: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/45/Flag_of_Ireland.svg/1600px-Flag_of_Ireland.svg.png',
+    },
+    {
+      title: 'Italy',
+      flag: 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/03/Flag_of_Italy.svg/1599px-Flag_of_Italy.svg.png',
+    },
+    {
+      title: 'Canada',
+      flag: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/cf/Flag_of_Canada.svg/2560px-Flag_of_Canada.svg.png',
+    },
+    {
+      title: 'China',
+      flag: 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/fa/Flag_of_the_People%27s_Republic_of_China.svg/1024px-Flag_of_the_People%27s_Republic_of_China.svg.png',
+    },
+    {
+      title: 'Korea',
+      flag: 'https://asiasociety.org/sites/default/files/styles/1200w/public/K/korean-flag.jpg',
+    },
+    {
+      title: 'Latvia',
+      flag: 'https://www.worldatlas.com/img/flag/lv-flag.jpg',
+    },
+    {
+      title: 'Lithuania',
+      flag: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/11/Flag_of_Lithuania.svg/2560px-Flag_of_Lithuania.svg.png',
+    },
+    {
+      title: 'Netherlands',
+      flag: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/20/Flag_of_the_Netherlands.svg/1920px-Flag_of_the_Netherlands.svg.png',
+    },
+    {
+      title: 'Norway',
+      flag: 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d9/Flag_of_Norway.svg/1200px-Flag_of_Norway.svg.png',
+    },
+    {
+      title: 'Poland',
+      flag: 'https://upload.wikimedia.org/wikipedia/en/thumb/1/12/Flag_of_Poland.svg/1920px-Flag_of_Poland.svg.png',
+    },
+    {
+      title: 'Portugal',
+      flag: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/Flag_of_Portugal.svg/1920px-Flag_of_Portugal.svg.png',
+    },
+    {
+      title: 'Turkey',
+      flag: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b4/Flag_of_Turkey.svg/1599px-Flag_of_Turkey.svg.png',
+    },
+    {
+      title: 'Finland',
+      flag: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/bc/Flag_of_Finland.svg/1600px-Flag_of_Finland.svg.png?20230220191416',
+    },
+    {
+      title: 'Czech Republic',
+      flag: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/cb/Flag_of_the_Czech_Republic.svg/1599px-Flag_of_the_Czech_Republic.svg.png',
+    },
+    {
+      title: 'Switzerland',
+      flag: 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f3/Flag_of_Switzerland.svg/1024px-Flag_of_Switzerland.svg.png',
+    },
+    {
+      title: 'Estonia',
+      flag: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8f/Flag_of_Estonia.svg/1600px-Flag_of_Estonia.svg.png',
+    },
+    {
+      title: 'Japan',
+      flag: 'https://upload.wikimedia.org/wikipedia/en/thumb/9/9e/Flag_of_Japan.svg/1920px-Flag_of_Japan.svg.png',
+    },
+    {
+      title: 'New Zealand',
+      flag: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Flag_of_New_Zealand.svg/1600px-Flag_of_New_Zealand.svg.png',
+    },
+    {
+      title: 'Puerto Rico',
+      flag: 'https://upload.wikimedia.org/wikipedia/commons/thumb/2/28/Flag_of_Puerto_Rico.svg/1599px-Flag_of_Puerto_Rico.svg.png',
+    },
+    {
+      title: 'Malta',
+      flag: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/73/Flag_of_Malta.svg/1024px-Flag_of_Malta.svg.png',
+    },
+    {
+      title: 'Benin',
+      flag: 'https://upload.wikimedia.org/wikipedia/commons/thumb/0/0a/Flag_of_Benin.svg/1599px-Flag_of_Benin.svg.png',
+    },
+    {
+      title: 'Sweden',
+      flag: 'https://upload.wikimedia.org/wikipedia/en/thumb/4/4c/Flag_of_Sweden.svg/1920px-Flag_of_Sweden.svg.png',
+    },
+    {
+      title: 'Russian',
+      flag: 'https://upload.wikimedia.org/wikipedia/en/thumb/f/f3/Flag_of_Russia.svg/1920px-Flag_of_Russia.svg.png',
+    },
+    {
+      title: 'Iceland',
+      flag: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/ce/Flag_of_Iceland.svg/1200px-Flag_of_Iceland.svg.png',
+    },
+    {
+      title: 'Austria',
+      flag: 'https://cdn.britannica.com/73/6073-050-4D6FDAF6/Flag-Austria.jpg',
+    },
+    {
+      title: 'Spain',
+      flag: 'https://upload.wikimedia.org/wikipedia/en/thumb/9/9a/Flag_of_Spain.svg/800px-Flag_of_Spain.svg.png',
+    },
+    {
+      title: 'Mexico',
+      flag: 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/fc/Flag_of_Mexico.svg/1600px-Flag_of_Mexico.svg.png',
+    },
   ],
   locations: [
-    { title: 'San Francisco', country_id: 1 },
-    { title: 'Los Angeles', country_id: 1 },
-    { title: 'Culver City', country_id: 1 },
-    { title: 'Universal City', country_id: 1 },
-    { title: 'London', country_id: 2 },
-    { title: 'Burbank', country_id: 1 },
-    { title: 'Toronto', country_id: 15 },
-    { title: 'California', country_id: 1 },
-    { title: 'New York', country_id: 1 },
-    { title: 'Sydney', country_id: 6 },
-    { title: 'Paris', country_id: 5 },
-    { title: 'Munchen', country_id: 4 },
+    {
+      title: 'San Francisco',
+      country_id: 1,
+      coat_of_arms:
+        'https://img.freepik.com/premium-vector/san-francisco-california-usa-stamp-logo-icon-symbol-design-skyline-city_731533-2144.jpg',
+    },
+    {
+      title: 'Los Angeles',
+      country_id: 1,
+      coat_of_arms:
+        'https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/Seal_of_Los_Angeles_County%2C_California.svg/640px-Seal_of_Los_Angeles_County%2C_California.svg.png',
+    },
+    {
+      title: 'Culver City',
+      country_id: 1,
+      coat_of_arms:
+        'https://upload.wikimedia.org/wikipedia/commons/thumb/6/66/Seal_of_Culver_City%2C_California.png/768px-Seal_of_Culver_City%2C_California.png',
+    },
+    {
+      title: 'London',
+      country_id: 2,
+      coat_of_arms:
+        'https://upload.wikimedia.org/wikipedia/commons/thumb/2/20/Coat_of_Arms_of_The_City_of_London.svg/250px-Coat_of_Arms_of_The_City_of_London.svg.png',
+    },
+    {
+      title: 'Burbank',
+      country_id: 1,
+      coat_of_arms:
+        'https://upload.wikimedia.org/wikipedia/commons/9/99/Burbank%2C_California_proportionate_flag.png',
+    },
+    {
+      title: 'Toronto',
+      country_id: 15,
+      coat_of_arms:
+        'https://upload.wikimedia.org/wikipedia/commons/thumb/7/78/Coat_of_arms_of_Toronto.svg/500px-Coat_of_arms_of_Toronto.svg.png',
+    },
+    {
+      title: 'New York',
+      country_id: 1,
+      coat_of_arms:
+        'https://upload.wikimedia.org/wikipedia/commons/thumb/3/39/Seal_of_New_York_City.svg/419px-Seal_of_New_York_City.svg.png',
+    },
+    {
+      title: 'Sydney',
+      country_id: 6,
+      coat_of_arms:
+        'https://upload.wikimedia.org/wikipedia/commons/thumb/2/27/Sydney_-_COA.svg/500px-Sydney_-_COA.svg.png',
+    },
+    {
+      title: 'Paris',
+      country_id: 5,
+      coat_of_arms:
+        'https://upload.wikimedia.org/wikipedia/commons/thumb/0/0d/Grandes_Armes_de_Paris.svg/340px-Grandes_Armes_de_Paris.svg.png',
+    },
+    {
+      title: 'Munchen',
+      country_id: 4,
+      coat_of_arms:
+        'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d8/DEU_M%C3%BCnchen_COA.svg/1200px-DEU_M%C3%BCnchen_COA.svg.png',
+    },
   ],
   actors: [
     {
@@ -3243,7 +3465,7 @@ module.exports = {
     },
     {
       title: 'Walt Disney Pictures',
-      location_id: 8,
+      location_id: 5,
       foundation_year: 1929,
       logo: 'https://i.insider.com/5f5770dee6ff30001d4e7684?width=800&format=jpeg&auto=webp',
       about:
@@ -3267,15 +3489,15 @@ module.exports = {
     },
     {
       title: 'Universal Studios',
-      location_id: 8,
+      location_id: 5,
       foundation_year: 1912,
       logo: 'https://media.tacdn.com/media/attractions-splice-spp-674x446/09/28/92/ef.jpg',
       about:
-        'Universal Studios is a film studio and theme park in the San Fernando Valley area of Los Angeles County, California. About 70% of the studio lies within the unincorporated county island known as Universal City while the rest lies within the city limits of Los Angeles, California. It is one of the oldest and most famous Hollywood film studios still in use. Its official marketing headline is "The Entertainment Capital of LA". It was initially created to offer tours of the real Universal Studios sets and is the first of many full-fledged Universal Studios Theme Parks located across the world.\n\nOutside the theme park, a new, all-digital facility near the Universal Pictures backlot was built in an effort to merge all of NBCUniversal\'s West Coast operations into one area. As a result, the current home for KNBC, KVEA and NBC News with Noticias Telemundo Los Angeles Bureaus with new digital facility is on the Universal lot formerly occupied by Technicolor SA. Universal City includes hotels Universal Hilton & Towers, the Sheraton Universal Hotel, and Universal CityWalk, which offers a collection of shops, restaurants, an 18-screen Universal Cinema and a seven-story IMAX theater. In 2017, the park hosted 9.056 million guests, ranking it 15th in the world and 9th among North American parks.',
+        'Universal Studios is a film studio and theme park in the San Fernando Valley area of Los Angeles County, California. About 70% of the studio lies within the unincorporated county island known as Los Angeles while the rest lies within the city limits of Los Angeles, California. It is one of the oldest and most famous Hollywood film studios still in use. Its official marketing headline is "The Entertainment Capital of LA". It was initially created to offer tours of the real Universal Studios sets and is the first of many full-fledged Universal Studios Theme Parks located across the world.\n\nOutside the theme park, a new, all-digital facility near the Universal Pictures backlot was built in an effort to merge all of NBCUniversal\'s West Coast operations into one area. As a result, the current home for KNBC, KVEA and NBC News with Noticias Telemundo Los Angeles Bureaus with new digital facility is on the Universal lot formerly occupied by Technicolor SA. Los Angeles includes hotels Universal Hilton & Towers, the Sheraton Universal Hotel, and Los AngelesWalk, which offers a collection of shops, restaurants, an 18-screen Universal Cinema and a seven-story IMAX theater. In 2017, the park hosted 9.056 million guests, ranking it 15th in the world and 9th among North American parks.',
     },
     {
       title: 'Hemdale Film Corporation',
-      location_id: 5,
+      location_id: 4,
       foundation_year: 1967,
       logo: 'https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/02df2846-a4a8-4c9d-bc27-349080c98596/d743mql-1d4b0afe-7568-4b74-b1cb-53728cf8578d.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcLzAyZGYyODQ2LWE0YTgtNGM5ZC1iYzI3LTM0OTA4MGM5ODU5NlwvZDc0M21xbC0xZDRiMGFmZS03NTY4LTRiNzQtYjFjYi01MzcyOGNmODU3OGQucG5nIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.xVvAJfFNP9v7LWDWBB19jdeIoLPMkdtqONXkP-pHFL8',
       about:
@@ -3283,7 +3505,7 @@ module.exports = {
     },
     {
       title: 'Columbia Pictures',
-      location_id: 8,
+      location_id: 5,
       foundation_year: 1924,
       logo: 'https://pbs.twimg.com/profile_images/3726733706/fa7e2dcde69c450a3c6e7e14cec1020d_400x400.png',
       about:
@@ -3291,7 +3513,7 @@ module.exports = {
     },
     {
       title: 'Scott Free Productions',
-      location_id: 5,
+      location_id: 4,
       foundation_year: 1970,
       logo: 'https://pbs.twimg.com/media/GE9VNoKXAAA0kch.jpg',
       about:
@@ -3299,7 +3521,7 @@ module.exports = {
     },
     {
       title: 'Corus Entertainment',
-      location_id: 7,
+      location_id: 6,
       foundation_year: 1921,
       logo: 'https://www.anbmedia.com/wp-content/uploads/2023/02/Corus-Entertainment.jpg',
       about:
@@ -3307,7 +3529,7 @@ module.exports = {
     },
     {
       title: 'DreamWorks Pictures',
-      location_id: 8,
+      location_id: 5,
       foundation_year: 1994,
       logo: 'https://static.tvtropes.org/pmwiki/pub/images/dreamworks_logo.png',
       about:
@@ -3315,7 +3537,7 @@ module.exports = {
     },
     {
       title: 'Warner Bros.',
-      location_id: 8,
+      location_id: 5,
       foundation_year: 1923,
       logo: 'https://entertainment.time.com/wp-content/uploads/sites/3/2012/09/warner_bros-_pictures_intro.jpg?w=720&h=480&crop=1',
       about:
@@ -3323,7 +3545,7 @@ module.exports = {
     },
     {
       title: 'Hollywood Pictures',
-      location_id: 8,
+      location_id: 5,
       foundation_year: 1989,
       logo: 'https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/01093dcf-3500-4866-b84d-fb3c90fa9cfc/dfosopf-376bd8a3-1b5f-4933-b12c-f9d49f58486e.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcLzAxMDkzZGNmLTM1MDAtNDg2Ni1iODRkLWZiM2M5MGZhOWNmY1wvZGZvc29wZi0zNzZiZDhhMy0xYjVmLTQ5MzMtYjEyYy1mOWQ0OWY1ODQ4NmUucG5nIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.XASaLLq_eWT7j3a-xmwD723hp1pnezJJTH74gIcvVII',
       about:
@@ -3331,7 +3553,7 @@ module.exports = {
     },
     {
       title: 'TriStar Pictures',
-      location_id: 8,
+      location_id: 5,
       foundation_year: 1982,
       logo: 'https://global.discourse-cdn.com/business7/uploads/mst3k/original/3X/a/4/a4fb49ba2fddf84c144e9bdf9dad6096eaa8680f.jpeg',
       about:
@@ -3339,7 +3561,7 @@ module.exports = {
     },
     {
       title: 'Touchstone Pictures',
-      location_id: 8,
+      location_id: 5,
       foundation_year: 1984,
       logo: 'https://upload.wikimedia.org/wikipedia/en/thumb/a/af/Touchstone_Pictures_logo.svg/440px-Touchstone_Pictures_logo.svg.png',
       about:
@@ -3347,7 +3569,7 @@ module.exports = {
     },
     {
       title: 'Marvel Studios',
-      location_id: 9,
+      location_id: 7,
       foundation_year: 1993,
       logo: 'https://thechronicleclc.com/wp-content/uploads/2024/05/Marvel_Studios-image.webp',
       about:
@@ -3355,7 +3577,7 @@ module.exports = {
     },
     {
       title: 'Walden Media',
-      location_id: 8,
+      location_id: 5,
       foundation_year: 2000,
       logo: 'https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/c15210a3-97ee-467f-8ee6-deaa7f724e14/dfrn3bd-38b6dc9b-e628-4559-ab5c-5168f2b70899.png/v1/fill/w_960,h_720,q_80,strp/walden_media__2005___logo_remake_by_scottbrody666_dfrn3bd-fullview.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7ImhlaWdodCI6Ijw9NzIwIiwicGF0aCI6IlwvZlwvYzE1MjEwYTMtOTdlZS00NjdmLThlZTYtZGVhYTdmNzI0ZTE0XC9kZnJuM2JkLTM4YjZkYzliLWU2MjgtNDU1OS1hYjVjLTUxNjhmMmI3MDg5OS5wbmciLCJ3aWR0aCI6Ijw9OTYwIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmltYWdlLm9wZXJhdGlvbnMiXX0.C2TCaG2Ur8cNNdo0kj_EU2MdP9TW3rRv99damCCDgAE',
       about:
@@ -3363,7 +3585,7 @@ module.exports = {
     },
     {
       title: 'WingNut Films',
-      location_id: 5,
+      location_id: 4,
       foundation_year: 1987,
       logo: 'https://upload.wikimedia.org/wikipedia/en/thumb/2/27/Wingnut_Films_logo.svg/440px-Wingnut_Films_logo.svg.png',
       about:
@@ -3371,7 +3593,7 @@ module.exports = {
     },
     {
       title: 'Legendary Pictures',
-      location_id: 8,
+      location_id: 5,
       foundation_year: 2000,
       logo: 'https://variety.com/wp-content/uploads/2013/03/legendary_pictures.jpg',
       about:
@@ -3379,7 +3601,7 @@ module.exports = {
     },
     {
       title: 'Syncopy Inc.',
-      location_id: 5,
+      location_id: 4,
       foundation_year: 2001,
       logo: 'https://upload.wikimedia.org/wikipedia/uk/6/6a/SyncopyInc._logo.png',
       about:
@@ -3387,7 +3609,7 @@ module.exports = {
     },
     {
       title: 'Village Roadshow Pictures',
-      location_id: 8,
+      location_id: 5,
       foundation_year: 1989,
       logo: 'https://variety.com/wp-content/uploads/2020/12/VRL-logoj-cr-res.jpg',
       about:
@@ -3395,7 +3617,7 @@ module.exports = {
     },
     {
       title: 'Kennedy Miller Mitchell',
-      location_id: 10,
+      location_id: 8,
       foundation_year: 1978,
       logo: 'https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/17c228f6-5f23-4f29-af0d-e4f9af650e5a/ddx96r5-9dc4bc0d-e0f1-4751-8389-4d2381151aa6.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcLzE3YzIyOGY2LTVmMjMtNGYyOS1hZjBkLWU0ZjlhZjY1MGU1YVwvZGR4OTZyNS05ZGM0YmMwZC1lMGYxLTQ3NTEtODM4OS00ZDIzODExNTFhYTYuanBnIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0._dz2boKvOYUCVyV6QEo-MvR572xNnYUxG32pzUII2Xs',
       about:
@@ -3403,11 +3625,11 @@ module.exports = {
     },
     {
       title: 'Amblin Entertainment',
-      location_id: 8,
+      location_id: 5,
       foundation_year: 1981,
       logo: 'https://upload.wikimedia.org/wikipedia/en/4/4c/Amblin_official_poster.jpg',
       about:
-        "Amblin' Entertainment, Inc., formerly named Amblin Productions and Steven Spielberg Productions, is an American film production company founded by director and producer Steven Spielberg, and film producers Kathleen Kennedy and Frank Marshall in 1980. Its headquarters are located in Bungalow 477 of the Universal Studios backlot in Universal City, California. It distributes all of the films from Amblin Partners under the Amblin Entertainment banner.\n\nThe same year, Amblin signed a deal with Turner Network Television to produce television films.\n\nIn 1992, Amblin launched a visual effects studio Amblin Imaging, headed by visual effects pioneer John Gross. It was later shut down in 1995.\n\nIn 1991, founding partner Frank Marshall left the company after 10 years. The next year, Kathleen Kennedy left the company.\n\nIn 1989, they set up an animated unit Amblimation. It was defunct in 1997 and was transferred to DreamWorks Animation. In 1993, Walter Parkes and Laurie MacDonald joined the company.\n\nOn June 21, 2021, it was announced that Amblin Entertainment signed a deal with Netflix to release multiple new feature films for the streaming service. Under the deal, Amblin is expected to produce at least two films a year for Netflix for an unspecified number of years. It is possible that Spielberg may even direct some of the projects.",
+        "Amblin' Entertainment, Inc., formerly named Amblin Productions and Steven Spielberg Productions, is an American film production company founded by director and producer Steven Spielberg, and film producers Kathleen Kennedy and Frank Marshall in 1980. Its headquarters are located in Bungalow 477 of the Universal Studios backlot in Los Angeles, California. It distributes all of the films from Amblin Partners under the Amblin Entertainment banner.\n\nThe same year, Amblin signed a deal with Turner Network Television to produce television films.\n\nIn 1992, Amblin launched a visual effects studio Amblin Imaging, headed by visual effects pioneer John Gross. It was later shut down in 1995.\n\nIn 1991, founding partner Frank Marshall left the company after 10 years. The next year, Kathleen Kennedy left the company.\n\nIn 1989, they set up an animated unit Amblimation. It was defunct in 1997 and was transferred to DreamWorks Animation. In 1993, Walter Parkes and Laurie MacDonald joined the company.\n\nOn June 21, 2021, it was announced that Amblin Entertainment signed a deal with Netflix to release multiple new feature films for the streaming service. Under the deal, Amblin is expected to produce at least two films a year for Netflix for an unspecified number of years. It is possible that Spielberg may even direct some of the projects.",
     },
     {
       title: 'Silver Pictures',
@@ -3419,7 +3641,7 @@ module.exports = {
     },
     {
       title: 'Lightstorm Entertainment',
-      location_id: 8,
+      location_id: 5,
       foundation_year: 1990,
       logo: 'https://i.ytimg.com/vi/DOrYJx_R4Ls/maxresdefault.jpg',
       about:
@@ -3427,7 +3649,7 @@ module.exports = {
     },
     {
       title: 'Jerry Bruckheimer Films',
-      location_id: 8,
+      location_id: 5,
       foundation_year: 1983,
       logo: 'https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/06358576-9cb7-4a8b-8045-5f68265fb438/de4vee9-0e408ca7-b963-4ac1-8b40-9b2ad812f446.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcLzA2MzU4NTc2LTljYjctNGE4Yi04MDQ1LTVmNjgyNjVmYjQzOFwvZGU0dmVlOS0wZTQwOGNhNy1iOTYzLTRhYzEtOGI0MC05YjJhZDgxMmY0NDYucG5nIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.rH2X_C1cK7tKVdZSjOwKopiFLoohhnmLntJkNyghLtM',
       about:
@@ -3435,7 +3657,7 @@ module.exports = {
     },
     {
       title: 'Pacific Western Productions',
-      location_id: 8,
+      location_id: 5,
       foundation_year: 1982,
       logo: 'https://static.wikia.nocookie.net/dreamlogosandstations/images/1/10/Tilly-2.png',
       about:
@@ -3443,7 +3665,7 @@ module.exports = {
     },
     {
       title: 'Brandywine Productions',
-      location_id: 8,
+      location_id: 5,
       foundation_year: 1969,
       logo: 'https://i.ytimg.com/vi/DBIZfNMesDI/hqdefault.jpg',
       about:
@@ -3451,7 +3673,7 @@ module.exports = {
     },
     {
       title: 'Icon Productions',
-      location_id: 8,
+      location_id: 5,
       foundation_year: 1989,
       logo: 'https://upload.wikimedia.org/wikipedia/en/9/94/Iconmainlogo.png',
       about:
@@ -3459,7 +3681,7 @@ module.exports = {
     },
     {
       title: 'The Ladd Company',
-      location_id: 8,
+      location_id: 5,
       foundation_year: 1979,
       logo: 'https://i.ytimg.com/vi/NBWJ0BS7Hgw/maxresdefault.jpg',
       about:
@@ -3483,7 +3705,7 @@ module.exports = {
     },
     {
       title: 'Metro-Goldwyn-Mayer',
-      location_id: 8,
+      location_id: 5,
       foundation_year: 1924,
       logo: 'https://static.espreso.tv/uploads/article/155941/images/im-Mgm-logo.jpeg',
       about:
@@ -3491,7 +3713,7 @@ module.exports = {
     },
     {
       title: 'Gaumont',
-      location_id: 11,
+      location_id: 9,
       foundation_year: 1900,
       logo: 'https://logowik.com/content/uploads/images/gaumont-new6827.logowik.com.webp',
       about:
@@ -3499,7 +3721,7 @@ module.exports = {
     },
     {
       title: 'Pinewood Studios',
-      location_id: 5,
+      location_id: 4,
       foundation_year: 1936,
       logo: 'https://img1.bonhams.com/image?src=Images/live/2013-05/15/8772351-1-1.jpg',
       about:
@@ -3507,7 +3729,7 @@ module.exports = {
     },
     {
       title: 'Constantin Film',
-      location_id: 12,
+      location_id: 10,
       foundation_year: 1979,
       logo: 'https://i.ytimg.com/vi/K3MJsdDTapQ/maxresdefault.jpg',
       about:

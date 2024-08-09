@@ -14,6 +14,9 @@ module.exports = {
         allowNull: false,
         unique: true,
       },
+      flag: {
+        type: Sequelize.TEXT,
+      },
     });
   },
   async down(queryInterface, Sequelize) {

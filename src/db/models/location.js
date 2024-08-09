@@ -13,7 +13,7 @@ module.exports = (sequelize, DataTypes) => {
 
       Location.hasMany(models.Studio, {
         foreignKey: 'locationId',
-        onDelete: 'CASCADE',
+        onDelete: 'SET NULL',
         onUpdate: 'CASCADE',
       });
     }
@@ -26,6 +26,7 @@ module.exports = (sequelize, DataTypes) => {
         unique: true,
       },
       country_id: DataTypes.INTEGER,
+      coat_of_arms: DataTypes.TEXT,
     },
     {
       sequelize,

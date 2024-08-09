@@ -9,7 +9,8 @@ POST http://localhost:5000/api/genres HTTP/1.1
 content-type: application/json
 
 {
-  "title": "New genre"
+  "title": "New genre",
+  "logo": ""
 }
 
 ### Update genre
@@ -18,7 +19,17 @@ content-type: application/json
 
 {
   "id": 20,
-  "title": "Updated genre"
+  "title": "Updated genre",
+  "logo": ""
+}
+
+### Patch genre
+PATCH http://localhost:5000/api/genres/20 HTTP/1.1
+content-type: application/json
+
+{
+  "title": "Patched genre",
+  "logo": null
 }
 
 ### Delete genre

@@ -20,8 +20,11 @@ module.exports = {
           model: 'countries',
           key: 'id',
         },
-        onDelete: 'CASCADE',
+        onDelete: 'SET NULL',
         onUpdate: 'CASCADE',
+      },
+      coat_of_arms: {
+        type: Sequelize.TEXT,
       },
     });
   },

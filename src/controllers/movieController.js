@@ -1,4 +1,5 @@
 const createError = require('http-errors');
+const moment = require('moment');
 
 const {
   Actor,
@@ -89,6 +90,8 @@ class MovieController {
             id: actor.id,
             full_name: actor.full_name,
           })),
+          createdAt: moment(movieById.createdAt).format('YYYY-MM-DD HH:mm:ss'),
+          updatedAt: moment(movieById.updatedAt).format('YYYY-MM-DD HH:mm:ss'),
         };
         delete formattedMovie.Genre;
         delete formattedMovie.Actors;

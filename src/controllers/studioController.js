@@ -1,4 +1,5 @@
 const createError = require('http-errors');
+const moment = require('moment');
 
 const { Movie, Studio, Location, Country, sequelize } = require('../db/models');
 
@@ -64,6 +65,8 @@ class StudioController {
           location: studioById.Location.title,
           country: studioById.Location.Country.title,
           movies: studioById.Movies,
+          createdAt: moment(studioById.createdAt).format('YYYY-MM-DD HH:mm:ss'),
+          updatedAt: moment(studioById.updatedAt).format('YYYY-MM-DD HH:mm:ss'),
         };
         delete formattedStudio.Location;
         delete formattedStudio.Movies;

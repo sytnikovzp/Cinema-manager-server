@@ -1,4 +1,5 @@
 const createError = require('http-errors');
+const moment = require('moment');
 
 const { Director, Movie, Country, sequelize } = require('../db/models');
 
@@ -75,6 +76,12 @@ class DirectorController {
           ...directorById.toJSON(),
           country: directorById.Country.title,
           movies: directorById.Movies,
+          createdAt: moment(directorById.createdAt).format(
+            'YYYY-MM-DD HH:mm:ss'
+          ),
+          updatedAt: moment(directorById.updatedAt).format(
+            'YYYY-MM-DD HH:mm:ss'
+          ),
         };
         delete formattedDirector.Country;
         delete formattedDirector.Movies;

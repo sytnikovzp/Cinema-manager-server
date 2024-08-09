@@ -27,13 +27,11 @@ class DirectorController {
           id: director.id,
           full_name: director.full_name,
           photo: director.photo,
-          nationality: director['Country.title'],
+          country: director['Country.title'],
         };
       });
 
       if (formattedDirectors.length > 0) {
-        // console.log(`Result is: ${JSON.stringify(formattedDirectors, null, 2)}`);
-        console.log(`============================================================`)
         res
           .status(200)
           .set('X-Total-Count', directorsCount.length)
@@ -60,7 +58,7 @@ class DirectorController {
         include: [
           {
             model: Country,
-            attributes: ['id', 'title'],
+            attributes: ['title'],
           },
           {
             model: Movie,
@@ -73,8 +71,15 @@ class DirectorController {
       });
 
       if (directorById) {
-        console.log(`Result is: ${JSON.stringify(directorById, null, 2)}`);
-        res.status(200).json(directorById);
+        const formattedDirector = {
+          ...directorById.toJSON(),
+          country: directorById.Country.title,
+          movies: directorById.Movies,
+        };
+        delete formattedDirector.Country;
+        delete formattedDirector.Movies;
+
+        res.status(200).json(formattedDirector);
       } else {
         console.log('Director not found!');
         next(createError(404, 'Director not found!'));
@@ -92,14 +97,19 @@ class DirectorController {
       const { full_name, country, birth_date, death_date, photo, biography } =
         req.body;
 
-      const countryId = await Country.findOne({
+      const countryRecord = await Country.findOne({
         where: {
           title: country,
         },
         attributes: ['id'],
         raw: true,
       });
-      const { id: country_id } = countryId;
+
+      if (!countryRecord) {
+        throw new Error('Country not found');
+      }
+
+      const { id: country_id } = countryRecord;
       console.log(`Country ID is: ${country_id}`);
 
       const newBody = {
@@ -110,19 +120,29 @@ class DirectorController {
         photo,
         biography,
       };
+
       const newDirector = await Director.create(newBody, {
         returning: ['id'],
         transaction: t,
       });
 
       if (newDirector) {
-        console.log(`Result is: ${JSON.stringify(newDirector, null, 2)}`);
-        res.status(201).json(newDirector);
+        await t.commit();
+        const { id } = newDirector;
+        return res.status(201).json({
+          id,
+          full_name,
+          country_id,
+          birth_date,
+          death_date,
+          photo,
+          biography,
+        });
       } else {
+        await t.rollback();
         console.log(`Bad request.`);
         next(createError(400, 'The director has not been created!'));
       }
-      await t.commit();
     } catch (error) {
       console.log(error.message);
       await t.rollback();
@@ -144,14 +164,19 @@ class DirectorController {
         biography,
       } = req.body;
 
-      const countryId = await Country.findOne({
+      const countryRecord = await Country.findOne({
         where: {
           title: country,
         },
         attributes: ['id'],
         raw: true,
       });
-      const { id: country_id } = countryId;
+
+      if (!countryRecord) {
+        throw new Error('Country not found');
+      }
+
+      const { id: country_id } = countryRecord;
       console.log(`Country ID is: ${country_id}`);
 
       const newBody = {
@@ -162,6 +187,7 @@ class DirectorController {
         photo,
         biography,
       };
+
       const updatedDirector = await Director.update(newBody, {
         where: {
           id: id,
@@ -180,13 +206,13 @@ class DirectorController {
       });
 
       if (updatedDirector) {
-        console.log(`Result is: ${JSON.stringify(updatedDirector, null, 2)}`);
+        await t.commit();
         res.status(201).json(updatedDirector);
       } else {
+        await t.rollback();
         console.log(`Bad request.`);
         next(createError(400, 'The director has not been updated!'));
       }
-      await t.commit();
     } catch (error) {
       console.log(error.message);
       await t.rollback();
@@ -214,21 +240,20 @@ class DirectorController {
         });
 
         if (!countryRecord) {
-          throw createError(404, 'Country not found');
+          throw new Error('Country not found');
         }
 
         country_id = countryRecord.id;
         console.log(`Country ID is: ${country_id}`);
       }
 
-      const newBody = {
-        ...(full_name && { full_name }),
-        ...(country_id && { country_id }),
-        ...(birth_date && { birth_date }),
-        ...(death_date && { death_date }),
-        ...(photo && { photo }),
-        ...(biography && { biography }),
-      };
+      const newBody = {};
+      if (full_name !== undefined) newBody.full_name = full_name;
+      if (country_id !== undefined) newBody.country_id = country_id;
+      if (birth_date !== undefined) newBody.birth_date = birth_date;
+      if (death_date !== undefined) newBody.death_date = death_date;
+      if (photo !== undefined) newBody.photo = photo;
+      if (biography !== undefined) newBody.biography = biography;
 
       const [count, [updatedDirectors]] = await Director.update(newBody, {
         where: {
@@ -243,20 +268,18 @@ class DirectorController {
           'photo',
           'biography',
         ],
-        raw: true,
         transaction: t,
       });
-      console.log(count);
-      console.log(updatedDirectors);
+      console.log(`Count of patched rows: ${count}`);
 
       if (count > 0) {
-        console.log(`Result is: ${JSON.stringify(updatedDirectors, null, 2)}`);
+        await t.commit();
         res.status(200).json(updatedDirectors);
       } else {
+        await t.rollback();
         console.log('Directors not found');
         next(createError(404, 'Directors not found'));
       }
-      await t.commit();
     } catch (error) {
       console.log(error.message);
       await t.rollback();
@@ -280,13 +303,13 @@ class DirectorController {
       });
 
       if (delDirector) {
-        console.log(res.statusCode);
+        await t.commit();
         res.sendStatus(res.statusCode);
       } else {
+        await t.rollback();
         console.log(`Bad request.`);
         next(createError(400, 'The director has not been deleted!'));
       }
-      await t.commit();
     } catch (error) {
       console.log(error.message);
       await t.rollback();

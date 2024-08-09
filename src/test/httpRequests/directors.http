@@ -20,27 +20,28 @@ content-type: application/json
   "biography": null
 }
 
-### Update director (full)
+### Update director
 PUT http://localhost:5000/api/directors HTTP/1.1
 content-type: application/json
 
 {
   "id": 29,
   "full_name": "Updated director",
-  "country": "United States of America",
+  "country": "Georgia",
   "birth_date": "2000-01-01",
   "death_date": "2000-01-01",
   "photo": null,
   "biography": null
 }
 
-### Update director (patch)
+### Patch director
 PATCH http://localhost:5000/api/directors/29 HTTP/1.1
 content-type: application/json
 
 {
   "full_name": "Patched director",
-  "country": "Great Britain (England)"
+  "country": "Great Britain (England)",
+  "biography": ""
 }
 
 ### Delete director

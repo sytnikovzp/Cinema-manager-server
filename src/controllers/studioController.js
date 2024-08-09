@@ -14,9 +14,10 @@ class StudioController {
         order: [['id', 'DESC']],
       });
 
+      const studiosCount = await Studio.findAll();
+
       if (studios.length > 0) {
-        // console.log(`Result is: ${JSON.stringify(studios, null, 2)}`);
-        res.status(200).json(studios);
+        res.status(200).set('X-Total-Count', studiosCount.length).json(studios);
       } else {
         next(createError(404, 'Studios not found'));
       }
@@ -39,11 +40,11 @@ class StudioController {
         include: [
           {
             model: Location,
-            attributes: ['id', 'title'],
+            attributes: ['title'],
             include: [
               {
                 model: Country,
-                attributes: ['id', 'title'],
+                attributes: ['title'],
               },
             ],
           },
@@ -58,8 +59,16 @@ class StudioController {
       });
 
       if (studioById) {
-        console.log(`Result is: ${JSON.stringify(studioById, null, 2)}`);
-        res.status(200).json(studioById);
+        const formattedStudio = {
+          ...studioById.toJSON(),
+          location: studioById.Location.title,
+          country: studioById.Location.Country.title,
+          movies: studioById.Movies,
+        };
+        delete formattedStudio.Location;
+        delete formattedStudio.Movies;
+
+        res.status(200).json(formattedStudio);
       } else {
         console.log('Studio not found!');
         next(createError(404, 'Studio not found!'));
@@ -76,14 +85,19 @@ class StudioController {
     try {
       const { title, location, foundation_year, logo, about } = req.body;
 
-      const locationId = await Location.findOne({
+      const locationRecord = await Location.findOne({
         where: {
           title: location,
         },
         attributes: ['id'],
         raw: true,
       });
-      const { id: location_id } = locationId;
+
+      if (!locationRecord) {
+        throw new Error('Location not found');
+      }
+
+      const { id: location_id } = locationRecord;
       console.log(`Location ID is: ${location_id}`);
 
       const newBody = {
@@ -93,19 +107,28 @@ class StudioController {
         logo,
         about,
       };
+
       const newStudio = await Studio.create(newBody, {
         returning: ['id'],
         transaction: t,
       });
 
       if (newStudio) {
-        console.log(`Result is: ${JSON.stringify(newStudio, null, 2)}`);
-        res.status(201).json(newStudio);
+        await t.commit();
+        const { id } = newStudio;
+        return res.status(201).json({
+          id,
+          title,
+          location_id,
+          foundation_year,
+          logo,
+          about,
+        });
       } else {
+        await t.rollback();
         console.log(`Bad request.`);
         next(createError(400, 'The studio has not been created!'));
       }
-      await t.commit();
     } catch (error) {
       console.log(error.message);
       await t.rollback();
@@ -119,14 +142,19 @@ class StudioController {
     try {
       const { id, title, location, foundation_year, logo, about } = req.body;
 
-      const locationId = await Location.findOne({
+      const locationRecord = await Location.findOne({
         where: {
           title: location,
         },
         attributes: ['id'],
         raw: true,
       });
-      const { id: location_id } = locationId;
+
+      if (!locationRecord) {
+        throw new Error('Location not found');
+      }
+
+      const { id: location_id } = locationRecord;
       console.log(`Location ID is: ${location_id}`);
 
       const newBody = {
@@ -134,9 +162,9 @@ class StudioController {
         location_id,
         foundation_year,
         logo,
-
         about,
       };
+
       const updatedStudio = await Studio.update(newBody, {
         where: {
           id: id,
@@ -154,13 +182,13 @@ class StudioController {
       });
 
       if (updatedStudio) {
-        console.log(`Result is: ${JSON.stringify(updatedStudio, null, 2)}`);
+        await t.commit();
         res.status(201).json(updatedStudio);
       } else {
+        await t.rollback();
         console.log(`Bad request.`);
         next(createError(400, 'The studio has not been updated!'));
       }
-      await t.commit();
     } catch (error) {
       console.log(error.message);
       await t.rollback();
@@ -195,13 +223,13 @@ class StudioController {
         console.log(`Location ID is: ${location_id}`);
       }
 
-      const newBody = {
-        ...(title && { title }),
-        ...(location_id && { location_id }),
-        ...(foundation_year && { foundation_year }),
-        ...(logo && { logo }),
-        ...(about && { about }),
-      };
+      const newBody = {};
+      if (title !== undefined) newBody.title = title;
+      if (location_id !== undefined) newBody.location_id = location_id;
+      if (foundation_year !== undefined)
+        newBody.foundation_year = foundation_year;
+      if (logo !== undefined) newBody.logo = logo;
+      if (about !== undefined) newBody.about = about;
 
       const [count, [updatedStudios]] = await Studio.update(newBody, {
         where: {
@@ -215,20 +243,18 @@ class StudioController {
           'logo',
           'about',
         ],
-        raw: true,
         transaction: t,
       });
-      console.log(count);
-      console.log(updatedStudios);
+      console.log(`Count of patched rows: ${count}`);
 
       if (count > 0) {
-        console.log(`Result is: ${JSON.stringify(updatedStudios, null, 2)}`);
+        await t.commit();
         res.status(200).json(updatedStudios);
       } else {
+        await t.rollback();
         console.log('Studios not found');
         next(createError(404, 'Studios not found'));
       }
-      await t.commit();
     } catch (error) {
       console.log(error.message);
       await t.rollback();
@@ -252,13 +278,13 @@ class StudioController {
       });
 
       if (delStudio) {
-        console.log(res.statusCode);
+        await t.commit();
         res.sendStatus(res.statusCode);
       } else {
+        await t.rollback();
         console.log(`Bad request.`);
         next(createError(400, 'The studio has not been deleted!'));
       }
-      await t.commit();
     } catch (error) {
       console.log(error.message);
       await t.rollback();

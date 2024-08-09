@@ -13,33 +13,34 @@ content-type: application/json
 
 {
   "title": "New studio",
-  "location": "California",
+  "location": "Los Angeles",
   "foundation_year": 2024,
   "logo": null,
   "about": null
 }
 
-### Update studio (full)
+### Update studio
 PUT http://localhost:5000/api/studios HTTP/1.1
 content-type: application/json
 
 {
   "id": 37,
   "title": "Updated studio",
-  "location": "California",
+  "location": "Sydney",
   "foundation_year": 2023,
   "logo": null,
-  "about": null
+  "about": ""
 }
 
-### Update studio (patch)
+### Patch studio 
 PATCH http://localhost:5000/api/studios/37 HTTP/1.1
 content-type: application/json
 
 {
   "title": "Patched studio",
   "location": "Toronto",
-  "foundation_year": 1800
+  "foundation_year": 1800,
+  "about": null
 }
 
 ### Delete studio

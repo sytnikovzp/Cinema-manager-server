@@ -119,7 +119,7 @@ class CountryController {
         returning: true,
         transaction: t,
       });
-      console.log(count);
+      console.log(`Count of patched rows: ${count}`);
 
       if (count > 0) {
         await t.commit();

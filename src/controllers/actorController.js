@@ -74,8 +74,10 @@ class ActorController {
         const formattedActor = {
           ...actorById.toJSON(),
           country: actorById.Country.title,
+          movies: actorById.Movies,
         };
         delete formattedActor.Country;
+        delete formattedActor.Movies;
 
         res.status(200).json(formattedActor);
       } else {
@@ -92,23 +94,22 @@ class ActorController {
     const t = await sequelize.transaction();
 
     try {
-      const {
-        full_name,
-        nationality,
-        birth_date,
-        death_date,
-        photo,
-        biography,
-      } = req.body;
+      const { full_name, country, birth_date, death_date, photo, biography } =
+        req.body;
 
-      const countryId = await Country.findOne({
+      const countryRecord = await Country.findOne({
         where: {
-          title: nationality,
+          title: country,
         },
         attributes: ['id'],
         raw: true,
       });
-      const { id: country_id } = countryId;
+
+      if (!countryRecord) {
+        throw new Error('Country not found');
+      }
+
+      const { id: country_id } = countryRecord;
       console.log(`Country ID is: ${country_id}`);
 
       const newBody = {
@@ -119,19 +120,29 @@ class ActorController {
         photo,
         biography,
       };
+
       const newActor = await Actor.create(newBody, {
         returning: ['id'],
         transaction: t,
       });
 
       if (newActor) {
-        console.log(`Result is: ${JSON.stringify(newActor, null, 2)}`);
-        res.status(201).json(newActor);
+        await t.commit();
+        const { id } = newActor;
+        return res.status(201).json({
+          id,
+          full_name,
+          country_id,
+          birth_date,
+          death_date,
+          photo,
+          biography,
+        });
       } else {
+        await t.rollback();
         console.log(`Bad request.`);
         next(createError(400, 'The actor has not been created!'));
       }
-      await t.commit();
     } catch (error) {
       console.log(error.message);
       await t.rollback();
@@ -146,21 +157,26 @@ class ActorController {
       const {
         id,
         full_name,
-        nationality,
+        country,
         birth_date,
         death_date,
         photo,
         biography,
       } = req.body;
 
-      const countryId = await Country.findOne({
+      const countryRecord = await Country.findOne({
         where: {
-          title: nationality,
+          title: country,
         },
         attributes: ['id'],
         raw: true,
       });
-      const { id: country_id } = countryId;
+
+      if (!countryRecord) {
+        throw new Error('Country not found');
+      }
+
+      const { id: country_id } = countryRecord;
       console.log(`Country ID is: ${country_id}`);
 
       const newBody = {
@@ -171,6 +187,7 @@ class ActorController {
         photo,
         biography,
       };
+
       const updatedActor = await Actor.update(newBody, {
         where: {
           id: id,
@@ -189,13 +206,13 @@ class ActorController {
       });
 
       if (updatedActor) {
-        console.log(`Result is: ${JSON.stringify(updatedActor, null, 2)}`);
+        await t.commit();
         res.status(201).json(updatedActor);
       } else {
+        await t.rollback();
         console.log(`Bad request.`);
         next(createError(400, 'The actor has not been updated!'));
       }
-      await t.commit();
     } catch (error) {
       console.log(error.message);
       await t.rollback();
@@ -209,42 +226,34 @@ class ActorController {
     try {
       const {
         params: { actorId },
-        body: {
-          full_name,
-          nationality,
-          birth_date,
-          death_date,
-          photo,
-          biography,
-        },
+        body: { full_name, country, birth_date, death_date, photo, biography },
       } = req;
 
       let country_id;
-      if (nationality) {
+      if (country) {
         const countryRecord = await Country.findOne({
           where: {
-            title: nationality,
+            title: country,
           },
           attributes: ['id'],
           raw: true,
         });
 
         if (!countryRecord) {
-          throw createError(404, 'Country not found');
+          throw new Error('Country not found');
         }
 
         country_id = countryRecord.id;
         console.log(`Country ID is: ${country_id}`);
       }
 
-      const newBody = {
-        ...(full_name && { full_name }),
-        ...(country_id && { country_id }),
-        ...(birth_date && { birth_date }),
-        ...(death_date && { death_date }),
-        ...(photo && { photo }),
-        ...(biography && { biography }),
-      };
+      const newBody = {};
+      if (full_name !== undefined) newBody.full_name = full_name;
+      if (country_id !== undefined) newBody.country_id = country_id;
+      if (birth_date !== undefined) newBody.birth_date = birth_date;
+      if (death_date !== undefined) newBody.death_date = death_date;
+      if (photo !== undefined) newBody.photo = photo;
+      if (biography !== undefined) newBody.biography = biography;
 
       const [count, [updatedActors]] = await Actor.update(newBody, {
         where: {
@@ -259,20 +268,18 @@ class ActorController {
           'photo',
           'biography',
         ],
-        raw: true,
         transaction: t,
       });
-      console.log(count);
-      console.log(updatedActors);
+      console.log(`Count of patched rows: ${count}`);
 
       if (count > 0) {
-        console.log(`Result is: ${JSON.stringify(updatedActors, null, 2)}`);
+        await t.commit();
         res.status(200).json(updatedActors);
       } else {
+        await t.rollback();
         console.log('Actors not found');
         next(createError(404, 'Actors not found'));
       }
-      await t.commit();
     } catch (error) {
       console.log(error.message);
       await t.rollback();
@@ -296,13 +303,13 @@ class ActorController {
       });
 
       if (delActor) {
-        console.log(res.statusCode);
+        await t.commit();
         res.sendStatus(res.statusCode);
       } else {
+        await t.rollback();
         console.log(`Bad request.`);
         next(createError(400, 'The actor has not been deleted!'));
       }
-      await t.commit();
     } catch (error) {
       console.log(error.message);
       await t.rollback();

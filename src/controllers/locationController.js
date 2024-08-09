@@ -61,6 +61,7 @@ class LocationController {
           country: locationById.Country.title,
         };
         delete formattedLocation.Country;
+
         res.status(200).json(formattedLocation);
       } else {
         console.log('Location not found!');
@@ -138,6 +139,7 @@ class LocationController {
       console.log(`Country ID is: ${country_id}`);
 
       const newBody = { title, country_id, coat_of_arms };
+
       const updatedLocation = await Location.update(newBody, {
         where: {
           id: id,
@@ -201,7 +203,7 @@ class LocationController {
         returning: true,
         transaction: t,
       });
-      console.log(count);
+      console.log(`Count of patched rows: ${count}`);
 
       if (count > 0) {
         await t.commit();

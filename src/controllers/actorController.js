@@ -27,7 +27,7 @@ class ActorController {
           id: actor.id,
           full_name: actor.full_name,
           photo: actor.photo,
-          nationality: actor['Country.title'],
+          country: actor['Country.title'],
         };
       });
 
@@ -75,7 +75,7 @@ class ActorController {
       if (actorById) {
         const formattedActor = {
           ...actorById.toJSON(),
-          nationality: actorById.Country.title,
+          country: actorById.Country.title,
         };
         delete formattedActor.Country;
 

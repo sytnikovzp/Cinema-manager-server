@@ -6,6 +6,10 @@ const cors = require('cors');
 const {
   errorHandlers: { validationErrorHandler, errorHandler },
 } = require('./middleware');
+
+const {
+  time: { getTime, showTime },
+} = require('./middleware');
 // ============================
 const router = require('./routers');
 
@@ -20,6 +24,8 @@ app.use(
 app.use(express.json());
 
 app.use(express.static(path.resolve('public')));
+
+app.use(getTime, showTime);
 
 // ============================
 //  Cinema manager APP

@@ -13,7 +13,7 @@ content-type: application/json
 
 {
   "full_name": "New actor",
-  "nationality": "United States of America",
+  "country": "United States of America",
   "birth_date": "2000-01-01",
   "death_date": null,
   "photo": null,
@@ -27,7 +27,7 @@ content-type: application/json
 {
   "id": 238,
   "full_name": "Updated actor",
-  "nationality": "United States of America",
+  "country": "United States of America",
   "birth_date": "2000-01-01",
   "death_date": "2000-01-01",
   "photo": null,
@@ -40,7 +40,7 @@ content-type: application/json
 
 {
   "full_name": "Patched actor",
-  "nationality": "Great Britain (England)"
+  "country": "Great Britain (England)"
 }
 
 ### Delete actor

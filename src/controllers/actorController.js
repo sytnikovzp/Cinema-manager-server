@@ -277,8 +277,8 @@ class ActorController {
         res.status(200).json(updatedActors);
       } else {
         await t.rollback();
-        console.log('Actors not found');
-        next(createError(404, 'Actors not found'));
+        console.log('Actor not found');
+        next(createError(404, 'Actor not found'));
       }
     } catch (error) {
       console.log(error.message);

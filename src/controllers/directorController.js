@@ -277,8 +277,8 @@ class DirectorController {
         res.status(200).json(updatedDirectors);
       } else {
         await t.rollback();
-        console.log('Directors not found');
-        next(createError(404, 'Directors not found'));
+        console.log('Director not found');
+        next(createError(404, 'Director not found'));
       }
     } catch (error) {
       console.log(error.message);

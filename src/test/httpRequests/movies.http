@@ -23,28 +23,34 @@ content-type: application/json
   "studios": ["Lucasfilm Ltd."]     
 }
 
-### Update movie (full)
+### Update movie
 PUT http://localhost:5000/api/movies HTTP/1.1
 content-type: application/json
 
 {
   "id": 51,
   "title": "Updated movie",
-  "genre": "Action",
-  "release_year": 2023,
+  "genre": "Documentary",
+  "release_year": 1900,
   "poster": null,
   "trailer": null,
-  "storyline": null
+  "storyline": "",
+  "actors": ["Tom Skerritt", "Bill Paxton", "Elijah Wood"], 
+  "directors": ["Mel Gibson"],  
+  "studios": ["Walt Disney Pictures", "Marvel Studios"]  
 }
 
-### Update movie (patch)
+### Patch movie
 PATCH http://localhost:5000/api/movies/51 HTTP/1.1
 content-type: application/json
 
 {
   "title": "Patched movie",
   "genre": "Adventure",
-  "release_year": 1800
+  "release_year": 1850,
+  "storyline": null,
+  "actors": ["Tom Skerritt", "Patrick McGoohan", "Elijah Wood"], 
+  "studios": ["Marvel Studios"] 
 }
 
 ### Delete movie

@@ -252,8 +252,8 @@ class StudioController {
         res.status(200).json(updatedStudios);
       } else {
         await t.rollback();
-        console.log('Studios not found');
-        next(createError(404, 'Studios not found'));
+        console.log('Studio not found');
+        next(createError(404, 'Studio not found'));
       }
     } catch (error) {
       console.log(error.message);

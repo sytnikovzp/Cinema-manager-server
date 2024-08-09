@@ -21,9 +21,10 @@ class MovieController {
         order: [['id', 'DESC']],
       });
 
+      const moviesCount = await Movie.findAll();
+
       if (movies.length > 0) {
-        // console.log(`Result is: ${JSON.stringify(movies, null, 2)}`);
-        res.status(200).json(movies);
+        res.status(200).set('X-Total-Count', moviesCount.length).json(movies);
       } else {
         next(createError(404, 'Movies not found'));
       }
@@ -46,7 +47,7 @@ class MovieController {
         include: [
           {
             model: Genre,
-            attributes: ['id', 'title'],
+            attributes: ['title'],
           },
           {
             model: Actor,
@@ -73,8 +74,28 @@ class MovieController {
       });
 
       if (movieById) {
-        console.log(`Result is: ${JSON.stringify(movieById, null, 2)}`);
-        res.status(200).json(movieById);
+        const formattedMovie = {
+          ...movieById.toJSON(),
+          genre: movieById.Genre.title,
+          studios: movieById.Studios.map((studio) => ({
+            id: studio.id,
+            title: studio.title,
+          })),
+          directors: movieById.Directors.map((director) => ({
+            id: director.id,
+            full_name: director.full_name,
+          })),
+          actors: movieById.Actors.map((actor) => ({
+            id: actor.id,
+            full_name: actor.full_name,
+          })),
+        };
+        delete formattedMovie.Genre;
+        delete formattedMovie.Actors;
+        delete formattedMovie.Directors;
+        delete formattedMovie.Studios;
+
+        res.status(200).json(formattedMovie);
       } else {
         console.log('Movie not found!');
         next(createError(404, 'Movie not found!'));
@@ -84,51 +105,6 @@ class MovieController {
       next(error);
     }
   }
-
-  // async createMovie(req, res, next) {
-  //   const t = await sequelize.transaction();
-
-  //   try {
-  //     const { title, genre, release_year, poster, trailer, storyline } =
-  //       req.body;
-
-  //     const genreId = await Genre.findOne({
-  //       where: {
-  //         title: genre,
-  //       },
-  //       attributes: ['id'],
-  //       raw: true,
-  //     });
-  //     const { id: genre_id } = genreId;
-  //     console.log(`Genre ID is: ${genre_id}`);
-
-  //     const newBody = {
-  //       title,
-  //       genre_id,
-  //       release_year,
-  //       poster,
-  //       trailer,
-  //       storyline,
-  //     };
-  //     const newMovie = await Movie.create(newBody, {
-  //       returning: ['id'],
-  //       transaction: t,
-  //     });
-
-  //     if (newMovie) {
-  //       console.log(`Result is: ${JSON.stringify(newMovie, null, 2)}`);
-  //       res.status(201).json(newMovie);
-  //     } else {
-  //       console.log(`Bad request.`);
-  //       next(createError(400, 'The movie has not been created!'));
-  //     }
-  //     await t.commit();
-  //   } catch (error) {
-  //     console.log(error.message);
-  //     await t.rollback();
-  //     next(error);
-  //   }
-  // }
 
   async createMovie(req, res, next) {
     const t = await sequelize.transaction();
@@ -146,39 +122,44 @@ class MovieController {
         studios,
       } = req.body;
 
-      const genreId = await Genre.findOne({
+      const genreRecord = await Genre.findOne({
         where: { title: genre },
         attributes: ['id'],
         raw: true,
       });
-      const { id: genre_id } = genreId;
-      console.log('Genre Id:', genreId);
 
-      const actorIds = await Promise.all(
-        actors.map(async (name) => {
+      if (!genreRecord) {
+        throw new Error('Genre not found');
+      }
+
+      const { id: genre_id } = genreRecord;
+      console.log('Genre Id:', genreRecord);
+
+      const actorRecords = await Promise.all(
+        actors.map(async (full_name) => {
           const actor = await Actor.findOne({
-            where: { full_name: name },
+            where: { full_name },
             attributes: ['id'],
             raw: true,
           });
           return actor ? actor.id : null;
         })
       );
-      console.log('Actors Id`s:', actorIds);
+      console.log('Actors Id`s:', actorRecords);
 
-      const directorIds = await Promise.all(
-        directors.map(async (name) => {
+      const directorRecords = await Promise.all(
+        directors.map(async (full_name) => {
           const director = await Director.findOne({
-            where: { full_name: name },
+            where: { full_name },
             attributes: ['id'],
             raw: true,
           });
           return director ? director.id : null;
         })
       );
-      console.log('Directors Id`s:', directorIds);
+      console.log('Directors Id`s:', directorRecords);
 
-      const studioIds = await Promise.all(
+      const studioRecords = await Promise.all(
         studios.map(async (title) => {
           const studio = await Studio.findOne({
             where: { title },
@@ -188,7 +169,7 @@ class MovieController {
           return studio ? studio.id : null;
         })
       );
-      console.log('Studios Id`s:', studioIds);
+      console.log('Studios Id`s:', studioRecords);
 
       const newBody = {
         title,
@@ -205,35 +186,41 @@ class MovieController {
       });
 
       if (newMovie) {
-        const movieId = newMovie.id;
-
-        if (actorIds.length > 0) {
+        if (actorRecords.length > 0) {
           await newMovie.addActors(
-            actorIds.filter((id) => id !== null),
+            actorRecords.filter((id) => id !== null),
             { transaction: t }
           );
         }
 
-        if (directorIds.length > 0) {
+        if (directorRecords.length > 0) {
           await newMovie.addDirectors(
-            directorIds.filter((id) => id !== null),
+            directorRecords.filter((id) => id !== null),
             { transaction: t }
           );
         }
 
-        if (studioIds.length > 0) {
+        if (studioRecords.length > 0) {
           await newMovie.addStudios(
-            studioIds.filter((id) => id !== null),
+            studioRecords.filter((id) => id !== null),
             { transaction: t }
           );
         }
 
-        console.log(`Result is: ${JSON.stringify(newMovie, null, 2)}`);
         await t.commit();
-        res.status(201).json(newMovie);
+        const { id } = newMovie;
+        return res.status(201).json({
+          id,
+          title,
+          genre_id,
+          release_year,
+          poster,
+          trailer,
+          storyline,
+        });
       } else {
-        console.log(`Bad request.`);
         await t.rollback();
+        console.log(`Bad request.`);
         next(createError(400, 'The movie has not been created!'));
       }
     } catch (error) {
@@ -247,18 +234,67 @@ class MovieController {
     const t = await sequelize.transaction();
 
     try {
-      const { id, title, genre, release_year, poster, trailer, storyline } =
-        req.body;
+      const {
+        id,
+        title,
+        genre,
+        release_year,
+        poster,
+        trailer,
+        storyline,
+        actors,
+        directors,
+        studios,
+      } = req.body;
 
-      const genreId = await Genre.findOne({
-        where: {
-          title: genre,
-        },
+      const genreRecord = await Genre.findOne({
+        where: { title: genre },
         attributes: ['id'],
         raw: true,
       });
-      const { id: genre_id } = genreId;
-      console.log(`Genre ID is: ${genre_id}`);
+
+      if (!genreRecord) {
+        throw new Error('Genre not found');
+      }
+
+      const { id: genre_id } = genreRecord;
+      console.log('Genre Id:', genreRecord);
+
+      const actorRecords = await Promise.all(
+        actors.map(async (full_name) => {
+          const actor = await Actor.findOne({
+            where: { full_name },
+            attributes: ['id'],
+            raw: true,
+          });
+          return actor ? actor.id : null;
+        })
+      );
+      console.log('Actors Id`s:', actorRecords);
+
+      const directorRecords = await Promise.all(
+        directors.map(async (full_name) => {
+          const director = await Director.findOne({
+            where: { full_name },
+            attributes: ['id'],
+            raw: true,
+          });
+          return director ? director.id : null;
+        })
+      );
+      console.log('Directors Id`s:', directorRecords);
+
+      const studioRecords = await Promise.all(
+        studios.map(async (title) => {
+          const studio = await Studio.findOne({
+            where: { title },
+            attributes: ['id'],
+            raw: true,
+          });
+          return studio ? studio.id : null;
+        })
+      );
+      console.log('Studios Id`s:', studioRecords);
 
       const newBody = {
         title,
@@ -268,11 +304,9 @@ class MovieController {
         trailer,
         storyline,
       };
-      const updatedMovie = await Movie.update(newBody, {
-        where: {
-          id: id,
-        },
-        raw: true,
+
+      const [count, [updatedMovie]] = await Movie.update(newBody, {
+        where: { id },
         returning: [
           'id',
           'title',
@@ -285,14 +319,37 @@ class MovieController {
         transaction: t,
       });
 
-      if (updatedMovie) {
-        console.log(`Result is: ${JSON.stringify(updatedMovie, null, 2)}`);
-        res.status(201).json(updatedMovie);
+      if (count > 0) {
+        const movieInstance = await Movie.findByPk(id, { transaction: t });
+
+        if (actorRecords.length > 0) {
+          await movieInstance.setActors(
+            actorRecords.filter((id) => id !== null),
+            { transaction: t }
+          );
+        }
+
+        if (directorRecords.length > 0) {
+          await movieInstance.setDirectors(
+            directorRecords.filter((id) => id !== null),
+            { transaction: t }
+          );
+        }
+
+        if (studioRecords.length > 0) {
+          await movieInstance.setStudios(
+            studioRecords.filter((id) => id !== null),
+            { transaction: t }
+          );
+        }
+
+        await t.commit();
+        return res.status(200).json(updatedMovie);
       } else {
+        await t.rollback();
         console.log(`Bad request.`);
         next(createError(400, 'The movie has not been updated!'));
       }
-      await t.commit();
     } catch (error) {
       console.log(error.message);
       await t.rollback();
@@ -306,15 +363,23 @@ class MovieController {
     try {
       const {
         params: { movieId },
-        body: { title, genre, release_year, poster, trailer, storyline },
+        body: {
+          title,
+          genre,
+          release_year,
+          poster,
+          trailer,
+          storyline,
+          actors,
+          directors,
+          studios,
+        },
       } = req;
 
       let genre_id;
       if (genre) {
         const genreRecord = await Genre.findOne({
-          where: {
-            title: genre,
-          },
+          where: { title: genre },
           attributes: ['id'],
           raw: true,
         });
@@ -324,22 +389,64 @@ class MovieController {
         }
 
         genre_id = genreRecord.id;
-        console.log(`Genre ID is: ${genre_id}`);
+        console.log('Genre Id:', genreRecord);
       }
 
-      const newBody = {
-        ...(title && { title }),
-        ...(genre_id && { genre_id }),
-        ...(release_year && { release_year }),
-        ...(poster && { poster }),
-        ...(trailer && { trailer }),
-        ...(storyline && { storyline }),
-      };
+      const actorRecords = actors
+        ? await Promise.all(
+            actors.map(async (full_name) => {
+              const actor = await Actor.findOne({
+                where: { full_name },
+                attributes: ['id'],
+                raw: true,
+              });
+              return actor ? actor.id : null;
+            })
+          )
+        : [];
 
-      const [count, [updatedMovies]] = await Movie.update(newBody, {
-        where: {
-          id: movieId,
-        },
+      console.log('Actors Id`s:', actorRecords);
+
+      const directorRecords = directors
+        ? await Promise.all(
+            directors.map(async (full_name) => {
+              const director = await Director.findOne({
+                where: { full_name },
+                attributes: ['id'],
+                raw: true,
+              });
+              return director ? director.id : null;
+            })
+          )
+        : [];
+
+      console.log('Directors Id`s:', directorRecords);
+
+      const studioRecords = studios
+        ? await Promise.all(
+            studios.map(async (title) => {
+              const studio = await Studio.findOne({
+                where: { title },
+                attributes: ['id'],
+                raw: true,
+              });
+              return studio ? studio.id : null;
+            })
+          )
+        : [];
+
+      console.log('Studios Id`s:', studioRecords);
+
+      const newBody = {};
+      if (title !== undefined) newBody.title = title;
+      if (genre_id !== undefined) newBody.genre_id = genre_id;
+      if (release_year !== undefined) newBody.release_year = release_year;
+      if (poster !== undefined) newBody.poster = poster;
+      if (trailer !== undefined) newBody.trailer = trailer;
+      if (storyline !== undefined) newBody.storyline = storyline;
+
+      const [count, [updatedMovie]] = await Movie.update(newBody, {
+        where: { id: movieId },
         returning: [
           'id',
           'title',
@@ -349,20 +456,42 @@ class MovieController {
           'trailer',
           'storyline',
         ],
-        raw: true,
         transaction: t,
       });
-      console.log(count);
-      console.log(updatedMovies);
+
+      console.log(`Count of patched rows: ${count}`);
 
       if (count > 0) {
-        console.log(`Result is: ${JSON.stringify(updatedMovies, null, 2)}`);
-        res.status(200).json(updatedMovies);
+        const movieInstance = await Movie.findByPk(movieId, { transaction: t });
+
+        if (actors && actorRecords.length > 0) {
+          await movieInstance.setActors(
+            actorRecords.filter((id) => id !== null),
+            { transaction: t }
+          );
+        }
+
+        if (directors && directorRecords.length > 0) {
+          await movieInstance.setDirectors(
+            directorRecords.filter((id) => id !== null),
+            { transaction: t }
+          );
+        }
+
+        if (studios && studioRecords.length > 0) {
+          await movieInstance.setStudios(
+            studioRecords.filter((id) => id !== null),
+            { transaction: t }
+          );
+        }
+
+        await t.commit();
+        return res.status(200).json(updatedMovie);
       } else {
-        console.log('Movies not found');
-        next(createError(404, 'Movies not found'));
+        await t.rollback();
+        console.log('Movie not found');
+        next(createError(404, 'Movie not found'));
       }
-      await t.commit();
     } catch (error) {
       console.log(error.message);
       await t.rollback();
@@ -386,13 +515,13 @@ class MovieController {
       });
 
       if (delMovie) {
-        console.log(res.statusCode);
+        await t.commit();
         res.sendStatus(res.statusCode);
       } else {
+        await t.rollback();
         console.log(`Bad request.`);
         next(createError(400, 'The movie has not been deleted!'));
       }
-      await t.commit();
     } catch (error) {
       console.log(error.message);
       await t.rollback();

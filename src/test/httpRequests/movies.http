@@ -31,13 +31,13 @@ content-type: application/json
   "id": 51,
   "title": "Updated movie",
   "genre": "Documentary",
-  "release_year": 1900,
+  "release_year": null,
   "poster": null,
   "trailer": null,
-  "storyline": "",
-  "actors": ["Tom Skerritt", "Bill Paxton", "Elijah Wood"], 
-  "directors": ["Mel Gibson"],  
-  "studios": ["Walt Disney Pictures", "Marvel Studios"]  
+  "storyline": null,
+  "actors": [""], 
+  "directors": [""],  
+  "studios": [""]  
 }
 
 ### Patch movie

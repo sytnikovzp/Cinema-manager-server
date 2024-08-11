@@ -21,22 +21,19 @@ class ActorController {
         order: [['id', 'DESC']],
       });
 
-      const actorsCount = await Actor.findAll();
+      const actorsCount = await Actor.count();
 
       const formattedActors = actors.map((actor) => {
         return {
           id: actor.id,
-          full_name: actor.full_name,
-          photo: actor.photo,
-          country: actor['Country.title'],
+          full_name: actor.full_name || '',
+          photo: actor.photo || '',
+          country: actor['Country.title'] || '',
         };
       });
 
       if (formattedActors.length > 0) {
-        res
-          .status(200)
-          .set('X-Total-Count', actorsCount.length)
-          .json(formattedActors);
+        res.status(200).set('X-Total-Count', actorsCount).json(formattedActors);
       } else {
         next(createError(404, 'Actors not found'));
       }
@@ -72,13 +69,20 @@ class ActorController {
       });
 
       if (actorById) {
+        const actorData = actorById.toJSON();
         const formattedActor = {
-          ...actorById.toJSON(),
-          country: actorById.Country.title,
-          movies: actorById.Movies,
-          createdAt: moment(actorById.createdAt).format('YYYY-MM-DD HH:mm:ss'),
-          updatedAt: moment(actorById.updatedAt).format('YYYY-MM-DD HH:mm:ss'),
+          ...actorData,
+          full_name: actorData.full_name || '',
+          birth_date: actorData.birth_date || '',
+          death_date: actorData.death_date || '',
+          photo: actorData.photo || '',
+          biography: actorData.biography || '',
+          country: actorData.Country ? actorData.Country.title : '',
+          movies: actorData.Movies || [],
+          createdAt: moment(actorData.createdAt).format('YYYY-MM-DD HH:mm:ss'),
+          updatedAt: moment(actorData.updatedAt).format('YYYY-MM-DD HH:mm:ss'),
         };
+
         delete formattedActor.Country;
         delete formattedActor.Movies;
 

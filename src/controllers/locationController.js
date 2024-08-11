@@ -20,21 +20,21 @@ class LocationController {
         order: [['id', 'DESC']],
       });
 
-      const locationsCount = await Location.findAll();
+      const locationsCount = await Location.count();
 
       const formattedLocations = locations.map((location) => {
         return {
           id: location.id,
-          title: location.title,
-          coat_of_arms: location.coat_of_arms,
-          country: location['Country.title'],
+          title: location.title || '',
+          coat_of_arms: location.coat_of_arms || '',
+          country: location['Country.title'] || '',
         };
       });
 
       if (formattedLocations.length > 0) {
         res
           .status(200)
-          .set('X-Total-Count', locationsCount.length)
+          .set('X-Total-Count', locationsCount)
           .json(formattedLocations);
       } else {
         next(createError(404, 'Locations not found'));
@@ -64,10 +64,14 @@ class LocationController {
       });
 
       if (locationById) {
+        const locationData = locationById.toJSON();
         const formattedLocation = {
-          ...locationById.toJSON(),
-          country: locationById.Country.title,
+          ...locationData,
+          title: locationData.title || '',
+          coat_of_arms: locationData.coat_of_arms || '',
+          country: locationById.Country.title || '',
         };
+
         delete formattedLocation.Country;
 
         res.status(200).json(formattedLocation);

@@ -22,10 +22,19 @@ class MovieController {
         order: [['id', 'DESC']],
       });
 
-      const moviesCount = await Movie.findAll();
+      const moviesCount = await Movie.count();
 
-      if (movies.length > 0) {
-        res.status(200).set('X-Total-Count', moviesCount.length).json(movies);
+      const formattedMovies = movies.map((movie) => {
+        return {
+          id: movie.id,
+          title: movie.title || '',
+          release_year: movie.release_year || '',
+          poster: movie.poster || '',
+        };
+      });
+
+      if (formattedMovies.length > 0) {
+        res.status(200).set('X-Total-Count', moviesCount).json(formattedMovies);
       } else {
         next(createError(404, 'Movies not found'));
       }
@@ -75,24 +84,22 @@ class MovieController {
       });
 
       if (movieById) {
+        const movieData = movieById.toJSON();
         const formattedMovie = {
-          ...movieById.toJSON(),
-          genre: movieById.Genre.title,
-          studios: movieById.Studios.map((studio) => ({
-            id: studio.id,
-            title: studio.title,
-          })),
-          directors: movieById.Directors.map((director) => ({
-            id: director.id,
-            full_name: director.full_name,
-          })),
-          actors: movieById.Actors.map((actor) => ({
-            id: actor.id,
-            full_name: actor.full_name,
-          })),
-          createdAt: moment(movieById.createdAt).format('YYYY-MM-DD HH:mm:ss'),
-          updatedAt: moment(movieById.updatedAt).format('YYYY-MM-DD HH:mm:ss'),
+          ...movieData,
+          title: movieData.title || '',
+          release_year: movieData.release_year || '',
+          poster: movieData.poster || '',
+          trailer: movieData.trailer || '',
+          storyline: movieData.storyline || '',
+          genre: movieData.Genre ? movieData.Genre.title : '',
+          studios: movieData.Studios || [],
+          directors: movieData.Directors || [],
+          actors: movieData.Actors || [],
+          createdAt: moment(movieData.createdAt).format('YYYY-MM-DD HH:mm:ss'),
+          updatedAt: moment(movieData.updatedAt).format('YYYY-MM-DD HH:mm:ss'),
         };
+
         delete formattedMovie.Genre;
         delete formattedMovie.Actors;
         delete formattedMovie.Directors;

@@ -1,5 +1,8 @@
-### Get all genres 
+### Get all genres (default pagination)
 GET http://localhost:5000/api/genres
+
+### Get all genres (custom pagination)
+GET http://localhost:5000/api/genres?_page=1&_limit=10
 
 ### Get genre by id
 GET http://localhost:5000/api/genres/3
@@ -20,7 +23,7 @@ content-type: application/json
 {
   "id": 20,
   "title": "Updated genre",
-  "logo": ""
+  "logo": null
 }
 
 ### Patch genre

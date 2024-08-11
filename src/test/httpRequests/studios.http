@@ -27,9 +27,9 @@ content-type: application/json
   "id": 37,
   "title": "Updated studio",
   "location": "Sydney",
-  "foundation_year": 2023,
+  "foundation_year": null,
   "logo": null,
-  "about": ""
+  "about": null
 }
 
 ### Patch studio 

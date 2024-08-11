@@ -15,10 +15,22 @@ class StudioController {
         order: [['id', 'DESC']],
       });
 
-      const studiosCount = await Studio.findAll();
+      const studiosCount = await Studio.count();
 
-      if (studios.length > 0) {
-        res.status(200).set('X-Total-Count', studiosCount.length).json(studios);
+      const formattedStudios = studios.map((studio) => {
+        return {
+          id: studio.id,
+          title: studio.title || '',
+          foundation_year: studio.foundation_year || '',
+          logo: studio.logo || '',
+        };
+      });
+
+      if (formattedStudios.length > 0) {
+        res
+          .status(200)
+          .set('X-Total-Count', studiosCount)
+          .json(formattedStudios);
       } else {
         next(createError(404, 'Studios not found'));
       }
@@ -60,14 +72,19 @@ class StudioController {
       });
 
       if (studioById) {
+        const studioData = studioById.toJSON();
         const formattedStudio = {
-          ...studioById.toJSON(),
-          location: studioById.Location.title,
-          country: studioById.Location.Country.title,
-          movies: studioById.Movies,
-          createdAt: moment(studioById.createdAt).format('YYYY-MM-DD HH:mm:ss'),
-          updatedAt: moment(studioById.updatedAt).format('YYYY-MM-DD HH:mm:ss'),
+          ...studioData,
+          title: studioData.title || '',
+          location: studioData.Location.title || '',
+          country: studioById.Location.Country.title || '',
+          foundation_year: studioData.foundation_year || '',
+          logo: studioData.logo || '',
+          about: studioData.about || '',
+          createdAt: moment(studioData.createdAt).format('YYYY-MM-DD HH:mm:ss'),
+          updatedAt: moment(studioData.updatedAt).format('YYYY-MM-DD HH:mm:ss'),
         };
+
         delete formattedStudio.Location;
         delete formattedStudio.Movies;
 

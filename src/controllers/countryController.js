@@ -14,13 +14,21 @@ class CountryController {
         order: [['id', 'DESC']],
       });
 
-      const countriesCount = await Country.findAll();
+      const countriesCount = await Country.count();
 
-      if (countries.length > 0) {
+      const formattedCountries = countries.map((country) => {
+        return {
+          id: country.id,
+          title: country.title || '',
+          flag: country.flag || '',
+        };
+      });
+
+      if (formattedCountries.length > 0) {
         res
           .status(200)
-          .set('X-Total-Count', countriesCount.length)
-          .json(countries);
+          .set('X-Total-Count', countriesCount)
+          .json(formattedCountries);
       } else {
         next(createError(404, 'Countries not found'));
       }
@@ -36,12 +44,17 @@ class CountryController {
         params: { countryId },
       } = req;
 
-      const countryById = await Country.findByPk(countryId, {
-        raw: true,
-      });
+      const countryById = await Country.findByPk(countryId);
 
       if (countryById) {
-        res.status(200).json(countryById);
+        const countryData = countryById.toJSON();
+        const formattedCountry = {
+          ...countryData,
+          title: countryData.title || '',
+          flag: countryData.flag || '',
+        };
+
+        res.status(200).json(formattedCountry);
       } else {
         console.log('Country not found!');
         next(createError(404, 'Country not found!'));

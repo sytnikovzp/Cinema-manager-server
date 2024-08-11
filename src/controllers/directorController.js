@@ -21,21 +21,21 @@ class DirectorController {
         order: [['id', 'DESC']],
       });
 
-      const directorsCount = await Director.findAll();
+      const directorsCount = await Director.count();
 
       const formattedDirectors = directors.map((director) => {
         return {
           id: director.id,
-          full_name: director.full_name,
-          photo: director.photo,
-          country: director['Country.title'],
+          full_name: director.full_name || '',
+          photo: director.photo || '',
+          country: director['Country.title'] || '',
         };
       });
 
       if (formattedDirectors.length > 0) {
         res
           .status(200)
-          .set('X-Total-Count', directorsCount.length)
+          .set('X-Total-Count', directorsCount)
           .json(formattedDirectors);
       } else {
         next(createError(404, 'Directors not found'));
@@ -72,17 +72,20 @@ class DirectorController {
       });
 
       if (directorById) {
+        const directorData = directorById.toJSON();
         const formattedDirector = {
-          ...directorById.toJSON(),
-          country: directorById.Country.title,
-          movies: directorById.Movies,
-          createdAt: moment(directorById.createdAt).format(
-            'YYYY-MM-DD HH:mm:ss'
-          ),
-          updatedAt: moment(directorById.updatedAt).format(
-            'YYYY-MM-DD HH:mm:ss'
-          ),
+          ...directorData,
+          full_name: directorData.full_name || '',
+          birth_date: directorData.birth_date || '',
+          death_date: directorData.death_date || '',
+          photo: directorData.photo || '',
+          biography: directorData.biography || '',
+          country: directorData.Country ? directorData.Country.title : '',
+          movies: directorData.Movies || [],
+          createdAt: moment(directorData.createdAt).format('YYYY-MM-DD HH:mm:ss'),
+          updatedAt: moment(directorData.updatedAt).format('YYYY-MM-DD HH:mm:ss'),
         };
+
         delete formattedDirector.Country;
         delete formattedDirector.Movies;
 

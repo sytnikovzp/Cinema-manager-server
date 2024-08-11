@@ -14,10 +14,18 @@ class GenreController {
         order: [['id', 'DESC']],
       });
 
-      const genresCount = await Genre.findAll();
+      const genresCount = await Genre.count();
 
-      if (genres.length > 0) {
-        res.status(200).set('X-Total-Count', genresCount.length).json(genres);
+      const formattedGenres = genres.map((genre) => {
+        return {
+          id: genre.id,
+          title: genre.title || '',
+          logo: genre.logo || '',
+        };
+      });
+
+      if (formattedGenres.length > 0) {
+        res.status(200).set('X-Total-Count', genresCount).json(formattedGenres);
       } else {
         next(createError(404, 'Genres not found'));
       }
@@ -33,12 +41,17 @@ class GenreController {
         params: { genreId },
       } = req;
 
-      const genreById = await Genre.findByPk(genreId, {
-        raw: true,
-      });
+      const genreById = await Genre.findByPk(genreId);
 
       if (genreById) {
-        res.status(200).json(genreById);
+        const genreData = genreById.toJSON();
+        const formattedGenre = {
+          ...genreData,
+          title: genreData.title || '',
+          logo: genreData.logo || '',
+        };
+
+        res.status(200).json(formattedGenre);
       } else {
         console.log('Genre not found!');
         next(createError(404, 'Genre not found!'));

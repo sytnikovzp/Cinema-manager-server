@@ -15,10 +15,10 @@ const {
   PATCH_STUDIO_VALIDATION_SCHEMA,
 } = require('../utils/validationSchemas');
 
-module.exports.validateGenre = async (req, res, next) => {
+const validateSchema = (schema) => async (req, res, next) => {
   const { body } = req;
   try {
-    await NEW_GENRE_VALIDATION_SCHEMA.validate(body, {
+    await schema.validate(body, {
       abortEarly: false,
     });
     next();
@@ -28,145 +28,17 @@ module.exports.validateGenre = async (req, res, next) => {
   }
 };
 
-module.exports.validatePatchGenre = async (req, res, next) => {
-  const { body } = req;
-  try {
-    await PATCH_GENRE_VALIDATION_SCHEMA.validate(body, {
-      abortEarly: false,
-    });
-    next();
-  } catch (error) {
-    console.log(error.errors);
-    next(error);
-  }
-};
-
-module.exports.validateCountry = async (req, res, next) => {
-  const { body } = req;
-  try {
-    await NEW_COUNTRY_VALIDATION_SCHEMA.validate(body, {
-      abortEarly: false,
-    });
-    next();
-  } catch (error) {
-    console.log(error.errors);
-    next(error);
-  }
-};
-
-module.exports.validatePatchCountry = async (req, res, next) => {
-  const { body } = req;
-  try {
-    await PATCH_COUNTRY_VALIDATION_SCHEMA.validate(body, {
-      abortEarly: false,
-    });
-    next();
-  } catch (error) {
-    console.log(error.errors);
-    next(error);
-  }
-};
-
-module.exports.validateLocation = async (req, res, next) => {
-  const { body } = req;
-  try {
-    await NEW_LOCATION_VALIDATION_SCHEMA.validate(body, {
-      abortEarly: false,
-    });
-    next();
-  } catch (error) {
-    console.log(error.errors);
-    next(error);
-  }
-};
-
-module.exports.validatePatchLocation = async (req, res, next) => {
-  const { body } = req;
-  try {
-    await PATCH_LOCATION_VALIDATION_SCHEMA.validate(body, {
-      abortEarly: false,
-    });
-    next();
-  } catch (error) {
-    console.log(error.errors);
-    next(error);
-  }
-};
-
-module.exports.validatePerson = async (req, res, next) => {
-  const { body } = req;
-  try {
-    await NEW_PERSON_VALIDATION_SCHEMA.validate(body, {
-      abortEarly: false,
-    });
-    next();
-  } catch (error) {
-    console.log(error.errors);
-    next(error);
-  }
-};
-
-module.exports.validatePatchPerson = async (req, res, next) => {
-  const { body } = req;
-  try {
-    await PATCH_PERSON_VALIDATION_SCHEMA.validate(body, {
-      abortEarly: false,
-    });
-    next();
-  } catch (error) {
-    console.log(error.errors);
-    next(error);
-  }
-};
-
-module.exports.validateMovie = async (req, res, next) => {
-  const { body } = req;
-  try {
-    await NEW_MOVIE_VALIDATION_SCHEMA.validate(body, {
-      abortEarly: false,
-    });
-    next();
-  } catch (error) {
-    console.log(error.errors);
-    next(error);
-  }
-};
-
-module.exports.validatePatchMovie = async (req, res, next) => {
-  const { body } = req;
-  try {
-    await PATCH_MOVIE_VALIDATION_SCHEMA.validate(body, {
-      abortEarly: false,
-    });
-    next();
-  } catch (error) {
-    console.log(error.errors);
-    next(error);
-  }
-};
-
-module.exports.validateStudio = async (req, res, next) => {
-  const { body } = req;
-  try {
-    await NEW_STUDIO_VALIDATION_SCHEMA.validate(body, {
-      abortEarly: false,
-    });
-    next();
-  } catch (error) {
-    console.log(error.errors);
-    next(error);
-  }
-};
-
-module.exports.validatePatchStudio = async (req, res, next) => {
-  const { body } = req;
-  try {
-    await PATCH_STUDIO_VALIDATION_SCHEMA.validate(body, {
-      abortEarly: false,
-    });
-    next();
-  } catch (error) {
-    console.log(error.errors);
-    next(error);
-  }
+module.exports = {
+  validateGenre: validateSchema(NEW_GENRE_VALIDATION_SCHEMA),
+  validatePatchGenre: validateSchema(PATCH_GENRE_VALIDATION_SCHEMA),
+  validateCountry: validateSchema(NEW_COUNTRY_VALIDATION_SCHEMA),
+  validatePatchCountry: validateSchema(PATCH_COUNTRY_VALIDATION_SCHEMA),
+  validateLocation: validateSchema(NEW_LOCATION_VALIDATION_SCHEMA),
+  validatePatchLocation: validateSchema(PATCH_LOCATION_VALIDATION_SCHEMA),
+  validatePerson: validateSchema(NEW_PERSON_VALIDATION_SCHEMA),
+  validatePatchPerson: validateSchema(PATCH_PERSON_VALIDATION_SCHEMA),
+  validateMovie: validateSchema(NEW_MOVIE_VALIDATION_SCHEMA),
+  validatePatchMovie: validateSchema(PATCH_MOVIE_VALIDATION_SCHEMA),
+  validateStudio: validateSchema(NEW_STUDIO_VALIDATION_SCHEMA),
+  validatePatchStudio: validateSchema(PATCH_STUDIO_VALIDATION_SCHEMA),
 };

@@ -5,6 +5,7 @@ const { Location, Country, sequelize } = require('../db/models');
 class LocationController {
   async getLocations(req, res, next) {
     try {
+      const { limit, offset } = req.pagination;
       const locations = await Location.findAll({
         attributes: ['id', 'title', 'coat_of_arms'],
         include: [
@@ -14,8 +15,12 @@ class LocationController {
           },
         ],
         raw: true,
+        limit,
+        offset,
         order: [['id', 'DESC']],
       });
+
+      const locationsCount = await Location.findAll();
 
       const formattedLocations = locations.map((location) => {
         return {
@@ -27,7 +32,10 @@ class LocationController {
       });
 
       if (formattedLocations.length > 0) {
-        res.status(200).json(formattedLocations);
+        res
+          .status(200)
+          .set('X-Total-Count', locationsCount.length)
+          .json(formattedLocations);
       } else {
         next(createError(404, 'Locations not found'));
       }

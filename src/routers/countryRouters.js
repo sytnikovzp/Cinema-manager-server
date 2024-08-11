@@ -5,6 +5,7 @@ const {
   validateCountry,
   validatePatchCountry,
 } = require('../middleware/validate.mw');
+const { paginate } = require('../middleware');
 
 // ============================
 
@@ -12,7 +13,7 @@ const router = new Router();
 
 router
   .route('/')
-  .get(countryController.getCountries)
+  .get(paginate.paginateElements, countryController.getCountries)
   .post(validateCountry, countryController.createCountry)
   .put(validateCountry, countryController.updateCountry);
 

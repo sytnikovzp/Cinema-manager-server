@@ -5,14 +5,22 @@ const { Country, sequelize } = require('../db/models');
 class CountryController {
   async getCountries(req, res, next) {
     try {
+      const { limit, offset } = req.pagination;
       const countries = await Country.findAll({
         attributes: ['id', 'title', 'flag'],
         raw: true,
+        limit,
+        offset,
         order: [['id', 'DESC']],
       });
 
+      const countriesCount = await Country.findAll();
+
       if (countries.length > 0) {
-        res.status(200).json(countries);
+        res
+          .status(200)
+          .set('X-Total-Count', countriesCount.length)
+          .json(countries);
       } else {
         next(createError(404, 'Countries not found'));
       }

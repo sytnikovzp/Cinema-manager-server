@@ -5,14 +5,19 @@ const { Genre, sequelize } = require('../db/models');
 class GenreController {
   async getGenres(req, res, next) {
     try {
+      const { limit, offset } = req.pagination;
       const genres = await Genre.findAll({
         attributes: ['id', 'title', 'logo'],
         raw: true,
+        limit,
+        offset,
         order: [['id', 'DESC']],
       });
 
+      const genresCount = await Genre.findAll();
+
       if (genres.length > 0) {
-        res.status(200).json(genres);
+        res.status(200).set('X-Total-Count', genresCount.length).json(genres);
       } else {
         next(createError(404, 'Genres not found'));
       }

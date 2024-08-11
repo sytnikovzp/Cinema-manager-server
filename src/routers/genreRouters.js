@@ -5,6 +5,7 @@ const {
   validateGenre,
   validatePatchGenre,
 } = require('../middleware/validate.mw');
+const { paginate } = require('../middleware');
 
 // ============================
 
@@ -12,7 +13,7 @@ const router = new Router();
 
 router
   .route('/')
-  .get(genreController.getGenres)
+  .get(paginate.paginateElements, genreController.getGenres)
   .post(validateGenre, genreController.createGenre)
   .put(validateGenre, genreController.updateGenre);
 
@@ -21,6 +22,5 @@ router
   .get(genreController.getGenreById)
   .delete(genreController.deleteGenre)
   .patch(validatePatchGenre, genreController.patchGenre);
-
 
 module.exports = router;

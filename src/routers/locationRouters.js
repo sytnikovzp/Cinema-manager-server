@@ -5,6 +5,7 @@ const {
   validateLocation,
   validatePatchLocation,
 } = require('../middleware/validate.mw');
+const { paginate } = require('../middleware');
 
 // ============================
 
@@ -12,7 +13,7 @@ const router = new Router();
 
 router
   .route('/')
-  .get(locationController.getLocations)
+  .get(paginate.paginateElements, locationController.getLocations)
   .post(validateLocation, locationController.createLocation)
   .put(validateLocation, locationController.updateLocation);
 

@@ -81,6 +81,7 @@ class StudioController {
           foundation_year: studioData.foundation_year || '',
           logo: studioData.logo || '',
           about: studioData.about || '',
+          movies: studioData.Movies || [],
           createdAt: moment(studioData.createdAt).format('YYYY-MM-DD HH:mm:ss'),
           updatedAt: moment(studioData.updatedAt).format('YYYY-MM-DD HH:mm:ss'),
         };

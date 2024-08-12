@@ -38,9 +38,10 @@ content-type: application/json
 
 {
   "title": "Patched studio",
-  "location": "Toronto",
-  "foundation_year": 1800,
-  "about": null
+  "location": "",
+  "foundation_year": "",
+  "logo": "",
+  "about": ""
 }
 
 ### Delete studio

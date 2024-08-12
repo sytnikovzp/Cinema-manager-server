@@ -264,50 +264,67 @@ class DirectorController {
         body: { full_name, country, birth_date, death_date, photo, biography },
       } = req;
 
-      let country_id;
-      if (country) {
-        const countryRecord = await Country.findOne({
-          where: {
-            title: country,
-          },
-          attributes: ['id'],
-          raw: true,
-        });
+      let country_id = null;
+      if (country !== undefined) {
+        if (country !== '') {
+          const countryRecord = await Country.findOne({
+            where: {
+              title: country,
+            },
+            attributes: ['id'],
+            raw: true,
+          });
 
-        if (!countryRecord) {
-          throw new Error('Country not found');
+          if (!countryRecord) {
+            throw new Error('Country not found');
+          }
+
+          country_id = countryRecord.id;
+          console.log(`Country ID is: ${country_id}`);
         }
-
-        country_id = countryRecord.id;
-        console.log(`Country ID is: ${country_id}`);
       }
 
-      const newBody = {};
-      if (full_name !== undefined) newBody.full_name = full_name;
-      if (country_id !== undefined) newBody.country_id = country_id;
-      if (birth_date !== undefined) newBody.birth_date = birth_date;
-      if (death_date !== undefined) newBody.death_date = death_date;
-      if (photo !== undefined) newBody.photo = photo;
-      if (biography !== undefined) newBody.biography = biography;
+      const newBody = {
+        full_name,
+        country_id,
+        birth_date,
+        death_date,
+        photo,
+        biography,
+      };
 
-      const [count, [updatedDirectors]] = await Director.update(newBody, {
-        where: {
-          id: directorId,
-        },
-        returning: [
-          'id',
-          'full_name',
-          'country_id',
-          'birth_date',
-          'death_date',
-          'photo',
-          'biography',
-        ],
-        transaction: t,
-      });
-      console.log(`Count of patched rows: ${count}`);
+      const replaceEmptyStringsWithNull = (obj) => {
+        return Object.fromEntries(
+          Object.entries(obj).map(([key, value]) => [
+            key,
+            value === '' ? null : value,
+          ])
+        );
+      };
 
-      if (count > 0) {
+      const processedBody = replaceEmptyStringsWithNull(newBody);
+
+      const [affectedRows, [updatedDirectors]] = await Director.update(
+        processedBody,
+        {
+          where: {
+            id: directorId,
+          },
+          returning: [
+            'id',
+            'full_name',
+            'country_id',
+            'birth_date',
+            'death_date',
+            'photo',
+            'biography',
+          ],
+          transaction: t,
+        }
+      );
+      console.log(`Count of patched rows: ${affectedRows}`);
+
+      if (affectedRows > 0) {
         await t.commit();
         res.status(200).json(updatedDirectors);
       } else {

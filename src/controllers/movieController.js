@@ -411,20 +411,24 @@ class MovieController {
         },
       } = req;
 
-      let genre_id;
-      if (genre) {
-        const genreRecord = await Genre.findOne({
-          where: { title: genre },
-          attributes: ['id'],
-          raw: true,
-        });
+      let genre_id = null;
+      if (genre !== undefined) {
+        if (genre !== '') {
+          const genreRecord = await Genre.findOne({
+            where: {
+              title: genre,
+            },
+            attributes: ['id'],
+            raw: true,
+          });
 
-        if (!genreRecord) {
-          throw createError(404, 'Genre not found');
+          if (!genreRecord) {
+            throw new Error('Genre not found');
+          }
+
+          genre_id = genreRecord.id;
+          console.log(`Genre ID is: ${genre_id}`);
         }
-
-        genre_id = genreRecord.id;
-        console.log('Genre Id:', genreRecord);
       }
 
       const actorRecords = actors
@@ -472,15 +476,27 @@ class MovieController {
 
       console.log('Studios Id`s:', studioRecords);
 
-      const newBody = {};
-      if (title !== undefined) newBody.title = title;
-      if (genre_id !== undefined) newBody.genre_id = genre_id;
-      if (release_year !== undefined) newBody.release_year = release_year;
-      if (poster !== undefined) newBody.poster = poster;
-      if (trailer !== undefined) newBody.trailer = trailer;
-      if (storyline !== undefined) newBody.storyline = storyline;
+      const newBody = {
+        title,
+        genre_id,
+        release_year,
+        poster,
+        trailer,
+        storyline,
+      };
 
-      const [count, [updatedMovie]] = await Movie.update(newBody, {
+      const replaceEmptyStringsWithNull = (obj) => {
+        return Object.fromEntries(
+          Object.entries(obj).map(([key, value]) => [
+            key,
+            value === '' ? null : value,
+          ])
+        );
+      };
+
+      const processedBody = replaceEmptyStringsWithNull(newBody);
+
+      const [affectedRows, [updatedMovie]] = await Movie.update(processedBody, {
         where: { id: movieId },
         returning: [
           'id',
@@ -494,9 +510,9 @@ class MovieController {
         transaction: t,
       });
 
-      console.log(`Count of patched rows: ${count}`);
+      console.log(`Count of patched rows: ${affectedRows}`);
 
-      if (count > 0) {
+      if (affectedRows > 0) {
         const movieInstance = await Movie.findByPk(movieId, { transaction: t });
 
         if (actors && actorRecords.length > 0) {

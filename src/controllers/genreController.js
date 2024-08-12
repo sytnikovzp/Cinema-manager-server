@@ -154,20 +154,29 @@ class GenreController {
         body: { title, logo },
       } = req;
 
-      const newBody = {};
-      if (title !== undefined) newBody.title = title;
-      if (logo !== undefined) newBody.logo = logo;
+      const newBody = { title, logo };
 
-      const [count, [updatedGenre]] = await Genre.update(newBody, {
+      const replaceEmptyStringsWithNull = (obj) => {
+        return Object.fromEntries(
+          Object.entries(obj).map(([key, value]) => [
+            key,
+            value === '' ? null : value,
+          ])
+        );
+      };
+
+      const processedBody = replaceEmptyStringsWithNull(newBody);
+
+      const [affectedRows, [updatedGenre]] = await Genre.update(processedBody, {
         where: {
           id: genreId,
         },
         returning: true,
         transaction: t,
       });
-      console.log(`Count of patched rows: ${count}`);
+      console.log(`Count of patched rows: ${affectedRows}`);
 
-      if (count > 0) {
+      if (affectedRows > 0) {
         await t.commit();
         res.status(200).json(updatedGenre);
       } else {

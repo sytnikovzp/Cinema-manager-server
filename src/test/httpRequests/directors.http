@@ -40,7 +40,10 @@ content-type: application/json
 
 {
   "full_name": "Patched director",
-  "country": "Great Britain (England)",
+  "country": "",
+  "birth_date": "",
+  "death_date": "",
+  "photo": "",
   "biography": ""
 }
 

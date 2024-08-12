@@ -46,11 +46,14 @@ content-type: application/json
 
 {
   "title": "Patched movie",
-  "genre": "Adventure",
-  "release_year": 1850,
-  "storyline": null,
-  "actors": ["Tom Skerritt", "Patrick McGoohan", "Elijah Wood"], 
-  "studios": ["Marvel Studios"] 
+  "genre": "",
+  "release_year": "",
+  "poster": "",
+  "trailer": "",
+  "storyline": "",
+  "actors": [""], 
+  "directors": [""],  
+  "studios": [""]  
 }
 
 ### Delete movie

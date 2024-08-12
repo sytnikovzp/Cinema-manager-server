@@ -248,49 +248,65 @@ class StudioController {
         body: { title, location, foundation_year, logo, about },
       } = req;
 
-      let location_id;
-      if (location) {
-        const locationRecord = await Location.findOne({
-          where: {
-            title: location,
-          },
-          attributes: ['id'],
-          raw: true,
-        });
+      let location_id = null;
+      if (location !== undefined) {
+        if (location !== '') {
+          const locationRecord = await Location.findOne({
+            where: {
+              title: location,
+            },
+            attributes: ['id'],
+            raw: true,
+          });
 
-        if (!locationRecord) {
-          throw createError(404, 'Location not found');
+          if (!locationRecord) {
+            throw new Error('Location not found');
+          }
+
+          location_id = locationRecord.id;
+          console.log(`Location ID is: ${location_id}`);
         }
-
-        location_id = locationRecord.id;
-        console.log(`Location ID is: ${location_id}`);
       }
 
-      const newBody = {};
-      if (title !== undefined) newBody.title = title;
-      if (location_id !== undefined) newBody.location_id = location_id;
-      if (foundation_year !== undefined)
-        newBody.foundation_year = foundation_year;
-      if (logo !== undefined) newBody.logo = logo;
-      if (about !== undefined) newBody.about = about;
+      const newBody = {
+        title,
+        location_id,
+        foundation_year,
+        logo,
+        about,
+      };
 
-      const [count, [updatedStudios]] = await Studio.update(newBody, {
-        where: {
-          id: studioId,
-        },
-        returning: [
-          'id',
-          'title',
-          'location_id',
-          'foundation_year',
-          'logo',
-          'about',
-        ],
-        transaction: t,
-      });
-      console.log(`Count of patched rows: ${count}`);
+      const replaceEmptyStringsWithNull = (obj) => {
+        return Object.fromEntries(
+          Object.entries(obj).map(([key, value]) => [
+            key,
+            value === '' ? null : value,
+          ])
+        );
+      };
 
-      if (count > 0) {
+      const processedBody = replaceEmptyStringsWithNull(newBody);
+
+      const [affectedRows, [updatedStudios]] = await Studio.update(
+        processedBody,
+        {
+          where: {
+            id: studioId,
+          },
+          returning: [
+            'id',
+            'title',
+            'location_id',
+            'foundation_year',
+            'logo',
+            'about',
+          ],
+          transaction: t,
+        }
+      );
+      console.log(`Count of patched rows: ${affectedRows}`);
+
+      if (affectedRows > 0) {
         await t.commit();
         res.status(200).json(updatedStudios);
       } else {

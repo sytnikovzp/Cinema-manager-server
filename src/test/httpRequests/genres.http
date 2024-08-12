@@ -32,7 +32,7 @@ content-type: application/json
 
 {
   "title": "Patched genre",
-  "logo": null
+  "logo": ""
 }
 
 ### Delete genre

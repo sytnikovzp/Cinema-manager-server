@@ -34,8 +34,8 @@ content-type: application/json
 
 {
   "title": "Patched location",
-  "country": "Ukraine",
-  "coat_of_arms": null
+  "country": "",
+  "coat_of_arms": ""
 }
 
 ### Delete location

@@ -214,39 +214,56 @@ class LocationController {
         body: { title, country, coat_of_arms },
       } = req;
 
-      let country_id;
-      if (country) {
-        const countryRecord = await Country.findOne({
-          where: {
-            title: country,
-          },
-          attributes: ['id'],
-          raw: true,
-        });
+      let country_id = null;
+      if (country !== undefined) {
+        if (country !== '') {
+          const countryRecord = await Country.findOne({
+            where: {
+              title: country,
+            },
+            attributes: ['id'],
+            raw: true,
+          });
 
-        if (!countryRecord) {
-          throw new Error('Country not found');
+          if (!countryRecord) {
+            throw new Error('Country not found');
+          }
+
+          country_id = countryRecord.id;
+          console.log(`Country ID is: ${country_id}`);
         }
-
-        country_id = countryRecord.id;
-        console.log(`Country ID is: ${country_id}`);
       }
 
-      const newBody = {};
-      if (title !== undefined) newBody.title = title;
-      if (country_id !== undefined) newBody.country_id = country_id;
-      if (coat_of_arms !== undefined) newBody.coat_of_arms = coat_of_arms;
+      const newBody = {
+        title,
+        country_id,
+        coat_of_arms,
+      };
 
-      const [count, [updatedLocation]] = await Location.update(newBody, {
-        where: {
-          id: locationId,
-        },
-        returning: true,
-        transaction: t,
-      });
-      console.log(`Count of patched rows: ${count}`);
+      const replaceEmptyStringsWithNull = (obj) => {
+        return Object.fromEntries(
+          Object.entries(obj).map(([key, value]) => [
+            key,
+            value === '' ? null : value,
+          ])
+        );
+      };
 
-      if (count > 0) {
+      const processedBody = replaceEmptyStringsWithNull(newBody);
+
+      const [affectedRows, [updatedLocation]] = await Location.update(
+        processedBody,
+        {
+          where: {
+            id: locationId,
+          },
+          returning: true,
+          transaction: t,
+        }
+      );
+      console.log(`Count of patched rows: ${affectedRows}`);
+
+      if (affectedRows > 0) {
         await t.commit();
         res.status(200).json(updatedLocation);
       } else {

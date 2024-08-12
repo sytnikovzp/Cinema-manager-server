@@ -160,20 +160,32 @@ class CountryController {
         body: { title, flag },
       } = req;
 
-      const newBody = {};
-      if (title !== undefined) newBody.title = title;
-      if (flag !== undefined) newBody.flag = flag;
+      const newBody = { title, flag };
 
-      const [count, [updatedCountry]] = await Country.update(newBody, {
-        where: {
-          id: countryId,
-        },
-        returning: true,
-        transaction: t,
-      });
-      console.log(`Count of patched rows: ${count}`);
+      const replaceEmptyStringsWithNull = (obj) => {
+        return Object.fromEntries(
+          Object.entries(obj).map(([key, value]) => [
+            key,
+            value === '' ? null : value,
+          ])
+        );
+      };
 
-      if (count > 0) {
+      const processedBody = replaceEmptyStringsWithNull(newBody);
+
+      const [affectedRows, [updatedCountry]] = await Country.update(
+        processedBody,
+        {
+          where: {
+            id: countryId,
+          },
+          returning: true,
+          transaction: t,
+        }
+      );
+      console.log(`Count of patched rows: ${affectedRows}`);
+
+      if (affectedRows > 0) {
         await t.commit();
         res.status(200).json(updatedCountry);
       } else {

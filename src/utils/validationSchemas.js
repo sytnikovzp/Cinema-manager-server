@@ -2,11 +2,13 @@ const yup = require('yup');
 
 const TITLE_NAME_SCHEMA = yup
   .string()
-  .trim()
-  .min(2)
-  .max(30)
-  .matches(/^[A-Z](\w+\s?){1,50}\w+$/);
-
+  .trim('Input cannot contain leading or trailing spaces')
+  .min(2, 'Input must be at least 2 characters')
+  .max(30, 'Input cannot exceed 30 characters')
+  .matches(
+    /^[A-Z](\w+\s?){1,50}\w+$/,
+    'Input must start with an uppercase letter and can contain only letters [A-z] and spaces'
+  );
 const ID_SCHEMA = yup
   .number('This field must be a number!')
   .integer('This field must be integer!')

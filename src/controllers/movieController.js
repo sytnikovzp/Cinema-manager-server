@@ -267,18 +267,22 @@ class MovieController {
         studios,
       } = req.body;
 
-      const genreRecord = await Genre.findOne({
-        where: { title: genre },
-        attributes: ['id'],
-        raw: true,
-      });
+      const genreValue = genre === '' ? null : genre;
 
-      if (!genreRecord) {
+      const genreRecord = genreValue
+        ? await Genre.findOne({
+            where: { title: genreValue },
+            attributes: ['id'],
+            raw: true,
+          })
+        : null;
+
+      if (genreValue && !genreRecord) {
         throw new Error('Genre not found');
       }
 
-      const { id: genre_id } = genreRecord;
-      console.log('Genre Id:', genreRecord);
+      const genre_id = genreRecord ? genreRecord.id : null;
+      console.log(`Genre ID is: ${genre_id}`);
 
       const actorRecords = await Promise.all(
         actors.map(async (full_name) => {
@@ -325,7 +329,18 @@ class MovieController {
         storyline,
       };
 
-      const [count, [updatedMovie]] = await Movie.update(newBody, {
+      const replaceEmptyStringsWithNull = (obj) => {
+        return Object.fromEntries(
+          Object.entries(obj).map(([key, value]) => [
+            key,
+            value === '' ? null : value,
+          ])
+        );
+      };
+
+      const processedBody = replaceEmptyStringsWithNull(newBody);
+
+      const [affectedRows, [updatedMovie]] = await Movie.update(processedBody, {
         where: { id },
         returning: [
           'id',
@@ -339,7 +354,7 @@ class MovieController {
         transaction: t,
       });
 
-      if (count > 0) {
+      if (affectedRows > 0) {
         const movieInstance = await Movie.findByPk(id, { transaction: t });
 
         if (actorRecords.length > 0) {
@@ -364,7 +379,7 @@ class MovieController {
         }
 
         await t.commit();
-        return res.status(200).json(updatedMovie);
+        res.status(201).json(updatedMovie);
       } else {
         await t.rollback();
         console.log(`The movie has not been updated!`);

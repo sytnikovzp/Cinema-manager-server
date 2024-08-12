@@ -151,33 +151,46 @@ class LocationController {
     try {
       const { id, title, country, coat_of_arms } = req.body;
 
-      const countryRecord = await Country.findOne({
-        where: {
-          title: country,
-        },
-        attributes: ['id'],
-        raw: true,
-      });
+      const countryValue = country === '' ? null : country;
 
-      if (!countryRecord) {
+      const countryRecord = countryValue
+        ? await Country.findOne({
+            where: { title: countryValue },
+            attributes: ['id'],
+            raw: true,
+          })
+        : null;
+
+      if (countryValue && !countryRecord) {
         throw new Error('Country not found');
       }
 
-      const { id: country_id } = countryRecord;
+      const country_id = countryRecord ? countryRecord.id : null;
       console.log(`Country ID is: ${country_id}`);
 
       const newBody = { title, country_id, coat_of_arms };
 
-      const updatedLocation = await Location.update(newBody, {
-        where: {
-          id: id,
-        },
-        raw: true,
-        returning: ['id', 'title', 'country_id', 'coat_of_arms'],
-        transaction: t,
-      });
+      const replaceEmptyStringsWithNull = (obj) => {
+        return Object.fromEntries(
+          Object.entries(obj).map(([key, value]) => [
+            key,
+            value === '' ? null : value,
+          ])
+        );
+      };
 
-      if (updatedLocation) {
+      const processedBody = replaceEmptyStringsWithNull(newBody);
+
+      const [affectedRows, [updatedLocation]] = await Location.update(
+        processedBody,
+        {
+          where: { id },
+          returning: ['id', 'title', 'country_id', 'coat_of_arms'],
+          transaction: t,
+        }
+      );
+
+      if (affectedRows > 0) {
         await t.commit();
         res.status(201).json(updatedLocation);
       } else {

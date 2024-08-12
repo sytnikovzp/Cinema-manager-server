@@ -109,17 +109,28 @@ class GenreController {
     const t = await sequelize.transaction();
 
     try {
-      const { body } = req;
-      const updatedGenre = await Genre.update(body, {
-        where: {
-          id: body.id,
-        },
-        raw: true,
+      const { id, title, logo } = req.body;
+
+      const newBody = { title, logo };
+
+      const replaceEmptyStringsWithNull = (obj) => {
+        return Object.fromEntries(
+          Object.entries(obj).map(([key, value]) => [
+            key,
+            value === '' ? null : value,
+          ])
+        );
+      };
+
+      const processedBody = replaceEmptyStringsWithNull(newBody);
+
+      const [affectedRows, [updatedGenre]] = await Genre.update(processedBody, {
+        where: { id },
         returning: ['id', 'title', 'logo'],
         transaction: t,
       });
 
-      if (updatedGenre) {
+      if (affectedRows > 0) {
         await t.commit();
         res.status(201).json(updatedGenre);
       } else {

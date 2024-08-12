@@ -1,11 +1,11 @@
 ### Get all movies (default pagination)
-GET http://localhost:5000/api/movies
+GET http://localhost:5000/api/movies HTTP/1.1
 
 ### Get all movies (custom pagination)
-GET http://localhost:5000/api/movies?_page=1&_limit=10
+GET http://localhost:5000/api/movies?_page=1&_limit=10 HTTP/1.1
 
 ### Get movie by id
-GET http://localhost:5000/api/movies/3
+GET http://localhost:5000/api/movies/3 HTTP/1.1
 
 ### Create movie
 POST http://localhost:5000/api/movies HTTP/1.1
@@ -31,10 +31,10 @@ content-type: application/json
   "id": 51,
   "title": "Updated movie",
   "genre": "Documentary",
-  "release_year": null,
-  "poster": null,
-  "trailer": null,
-  "storyline": null,
+  "release_year": 2000,
+  "poster": "",
+  "trailer": "",
+  "storyline": "",
   "actors": [""], 
   "directors": [""],  
   "studios": [""]  

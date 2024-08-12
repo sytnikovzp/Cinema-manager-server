@@ -1,11 +1,11 @@
 ### Get all directors (default pagination)
-GET http://localhost:5000/api/directors
+GET http://localhost:5000/api/directors HTTP/1.1
 
 ### Get all directors (custom pagination)
-GET http://localhost:5000/api/directors?_page=1&_limit=10
+GET http://localhost:5000/api/directors?_page=1&_limit=10 HTTP/1.1
 
 ### Get director by id
-GET http://localhost:5000/api/directors/3
+GET http://localhost:5000/api/directors/3 HTTP/1.1
 
 ### Create director
 POST http://localhost:5000/api/directors HTTP/1.1
@@ -15,9 +15,9 @@ content-type: application/json
   "full_name": "New director",
   "country": "United States of America",
   "birth_date": "2000-01-01",
-  "death_date": null,
-  "photo": null,
-  "biography": null
+  "death_date": "",
+  "photo": "",
+  "biography": ""
 }
 
 ### Update director
@@ -28,10 +28,10 @@ content-type: application/json
   "id": 29,
   "full_name": "Updated director",
   "country": "Georgia",
-  "birth_date": null,
-  "death_date": null,
-  "photo": null,
-  "biography": null
+  "birth_date": "",
+  "death_date": "",
+  "photo": "",
+  "biography": ""
 }
 
 ### Patch director

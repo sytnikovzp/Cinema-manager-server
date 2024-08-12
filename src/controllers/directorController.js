@@ -186,19 +186,21 @@ class DirectorController {
         biography,
       } = req.body;
 
-      const countryRecord = await Country.findOne({
-        where: {
-          title: country,
-        },
-        attributes: ['id'],
-        raw: true,
-      });
+      const countryValue = country === '' ? null : country;
 
-      if (!countryRecord) {
+      const countryRecord = countryValue
+        ? await Country.findOne({
+            where: { title: countryValue },
+            attributes: ['id'],
+            raw: true,
+          })
+        : null;
+
+      if (countryValue && !countryRecord) {
         throw new Error('Country not found');
       }
 
-      const { id: country_id } = countryRecord;
+      const country_id = countryRecord ? countryRecord.id : null;
       console.log(`Country ID is: ${country_id}`);
 
       const newBody = {
@@ -210,24 +212,35 @@ class DirectorController {
         biography,
       };
 
-      const updatedDirector = await Director.update(newBody, {
-        where: {
-          id: id,
-        },
-        raw: true,
-        returning: [
-          'id',
-          'full_name',
-          'country_id',
-          'birth_date',
-          'death_date',
-          'photo',
-          'biography',
-        ],
-        transaction: t,
-      });
+      const replaceEmptyStringsWithNull = (obj) => {
+        return Object.fromEntries(
+          Object.entries(obj).map(([key, value]) => [
+            key,
+            value === '' ? null : value,
+          ])
+        );
+      };
 
-      if (updatedDirector) {
+      const processedBody = replaceEmptyStringsWithNull(newBody);
+
+      const [affectedRows, [updatedDirector]] = await Director.update(
+        processedBody,
+        {
+          where: { id },
+          returning: [
+            'id',
+            'full_name',
+            'country_id',
+            'birth_date',
+            'death_date',
+            'photo',
+            'biography',
+          ],
+          transaction: t,
+        }
+      );
+
+      if (affectedRows > 0) {
         await t.commit();
         res.status(201).json(updatedDirector);
       } else {

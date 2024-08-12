@@ -172,19 +172,21 @@ class StudioController {
     try {
       const { id, title, location, foundation_year, logo, about } = req.body;
 
-      const locationRecord = await Location.findOne({
-        where: {
-          title: location,
-        },
-        attributes: ['id'],
-        raw: true,
-      });
+      const locationValue = location === '' ? null : location;
 
-      if (!locationRecord) {
+      const locationRecord = locationValue
+        ? await Location.findOne({
+            where: { title: locationValue },
+            attributes: ['id'],
+            raw: true,
+          })
+        : null;
+
+      if (locationValue && !locationRecord) {
         throw new Error('Location not found');
       }
 
-      const { id: location_id } = locationRecord;
+      const location_id = locationRecord ? locationRecord.id : null;
       console.log(`Location ID is: ${location_id}`);
 
       const newBody = {
@@ -195,23 +197,34 @@ class StudioController {
         about,
       };
 
-      const updatedStudio = await Studio.update(newBody, {
-        where: {
-          id: id,
-        },
-        raw: true,
-        returning: [
-          'id',
-          'title',
-          'location_id',
-          'foundation_year',
-          'logo',
-          'about',
-        ],
-        transaction: t,
-      });
+      const replaceEmptyStringsWithNull = (obj) => {
+        return Object.fromEntries(
+          Object.entries(obj).map(([key, value]) => [
+            key,
+            value === '' ? null : value,
+          ])
+        );
+      };
 
-      if (updatedStudio) {
+      const processedBody = replaceEmptyStringsWithNull(newBody);
+
+      const [affectedRows, [updatedStudio]] = await Studio.update(
+        processedBody,
+        {
+          where: { id },
+          returning: [
+            'id',
+            'title',
+            'location_id',
+            'foundation_year',
+            'logo',
+            'about',
+          ],
+          transaction: t,
+        }
+      );
+
+      if (affectedRows > 0) {
         await t.commit();
         res.status(201).json(updatedStudio);
       } else {

@@ -112,17 +112,31 @@ class CountryController {
     const t = await sequelize.transaction();
 
     try {
-      const { body } = req;
-      const updatedCountry = await Country.update(body, {
-        where: {
-          id: body.id,
-        },
-        raw: true,
-        returning: ['id', 'title', 'flag'],
-        transaction: t,
-      });
+      const { id, title, flag } = req.body;
 
-      if (updatedCountry) {
+      const newBody = { title, flag };
+
+      const replaceEmptyStringsWithNull = (obj) => {
+        return Object.fromEntries(
+          Object.entries(obj).map(([key, value]) => [
+            key,
+            value === '' ? null : value,
+          ])
+        );
+      };
+
+      const processedBody = replaceEmptyStringsWithNull(newBody);
+
+      const [affectedRows, [updatedCountry]] = await Country.update(
+        processedBody,
+        {
+          where: { id },
+          returning: ['id', 'title', 'flag'],
+          transaction: t,
+        }
+      );
+
+      if (affectedRows > 0) {
         await t.commit();
         res.status(201).json(updatedCountry);
       } else {

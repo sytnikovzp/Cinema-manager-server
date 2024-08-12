@@ -96,8 +96,8 @@ class MovieController {
           studios: movieData.Studios || [],
           directors: movieData.Directors || [],
           actors: movieData.Actors || [],
-          createdAt: moment(movieData.createdAt).format('YYYY-MM-DD HH:mm:ss'),
-          updatedAt: moment(movieData.updatedAt).format('YYYY-MM-DD HH:mm:ss'),
+          createdAt: moment(movieData.createdAt).format('DD-MM-YYYY HH:mm'),
+          updatedAt: moment(movieData.updatedAt).format('DD-MM-YYYY HH:mm'),
         };
 
         delete formattedMovie.Genre;

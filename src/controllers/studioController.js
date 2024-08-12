@@ -82,8 +82,8 @@ class StudioController {
           logo: studioData.logo || '',
           about: studioData.about || '',
           movies: studioData.Movies || [],
-          createdAt: moment(studioData.createdAt).format('YYYY-MM-DD HH:mm:ss'),
-          updatedAt: moment(studioData.updatedAt).format('YYYY-MM-DD HH:mm:ss'),
+          createdAt: moment(studioData.createdAt).format('DD-MM-YYYY HH:mm'),
+          updatedAt: moment(studioData.updatedAt).format('DD-MM-YYYY HH:mm'),
         };
 
         delete formattedStudio.Location;

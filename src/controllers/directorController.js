@@ -82,12 +82,8 @@ class DirectorController {
           biography: directorData.biography || '',
           country: directorData.Country ? directorData.Country.title : '',
           movies: directorData.Movies || [],
-          createdAt: moment(directorData.createdAt).format(
-            'YYYY-MM-DD HH:mm:ss'
-          ),
-          updatedAt: moment(directorData.updatedAt).format(
-            'YYYY-MM-DD HH:mm:ss'
-          ),
+          createdAt: moment(directorData.createdAt).format('DD-MM-YYYY HH:mm'),
+          updatedAt: moment(directorData.updatedAt).format('DD-MM-YYYY HH:mm'),
         };
 
         delete formattedDirector.Country;

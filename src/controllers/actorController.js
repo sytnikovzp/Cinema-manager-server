@@ -79,8 +79,8 @@ class ActorController {
           biography: actorData.biography || '',
           country: actorData.Country ? actorData.Country.title : '',
           movies: actorData.Movies || [],
-          createdAt: moment(actorData.createdAt).format('YYYY-MM-DD HH:mm:ss'),
-          updatedAt: moment(actorData.updatedAt).format('YYYY-MM-DD HH:mm:ss'),
+          createdAt: moment(actorData.createdAt).format('DD-MM-YYYY HH:mm'),
+          updatedAt: moment(actorData.updatedAt).format('DD-MM-YYYY HH:mm'),
         };
 
         delete formattedActor.Country;

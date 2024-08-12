@@ -76,8 +76,8 @@ class StudioController {
         const formattedStudio = {
           ...studioData,
           title: studioData.title || '',
-          location: studioData.Location.title || '',
-          country: studioById.Location.Country.title || '',
+          location: studioData.Location ? studioData.Location.title : '',
+          country: studioData.Location ? studioData.Location.Country.title : '',
           foundation_year: studioData.foundation_year || '',
           logo: studioData.logo || '',
           about: studioData.about || '',

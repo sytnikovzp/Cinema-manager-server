@@ -69,7 +69,7 @@ class LocationController {
           ...locationData,
           title: locationData.title || '',
           coat_of_arms: locationData.coat_of_arms || '',
-          country: locationById.Country.title || '',
+          country: locationData.Country ? locationData.Country.title : '',
         };
 
         delete formattedLocation.Country;
@@ -91,24 +91,37 @@ class LocationController {
     try {
       const { title, country, coat_of_arms } = req.body;
 
-      const countryRecord = await Country.findOne({
-        where: {
-          title: country,
-        },
-        attributes: ['id'],
-        raw: true,
-      });
+      const countryValue = country === '' ? null : country;
 
-      if (!countryRecord) {
+      const countryRecord = countryValue
+        ? await Country.findOne({
+            where: { title: countryValue },
+            attributes: ['id'],
+            raw: true,
+          })
+        : null;
+
+      if (countryValue && !countryRecord) {
         throw new Error('Country not found');
       }
 
-      const { id: country_id } = countryRecord;
+      const country_id = countryRecord ? countryRecord.id : null;
       console.log(`Country ID is: ${country_id}`);
 
       const newBody = { title, country_id, coat_of_arms };
 
-      const newLocation = await Location.create(newBody, {
+      const replaceEmptyStringsWithNull = (obj) => {
+        return Object.fromEntries(
+          Object.entries(obj).map(([key, value]) => [
+            key,
+            value === '' ? null : value,
+          ])
+        );
+      };
+
+      const processedBody = replaceEmptyStringsWithNull(newBody);
+
+      const newLocation = await Location.create(processedBody, {
         returning: ['id'],
         transaction: t,
       });
@@ -116,10 +129,13 @@ class LocationController {
       if (newLocation) {
         await t.commit();
         const { id } = newLocation;
-        return res.status(201).json({ id, title, country_id, coat_of_arms });
+        return res.status(201).json({
+          id,
+          ...processedBody,
+        });
       } else {
         await t.rollback();
-        console.log(`Bad request.`);
+        console.log(`The location has not been created!`);
         next(createError(400, 'The location has not been created!'));
       }
     } catch (error) {
@@ -166,7 +182,7 @@ class LocationController {
         res.status(201).json(updatedLocation);
       } else {
         await t.rollback();
-        console.log(`Bad request.`);
+        console.log(`The location has not been updated!`);
         next(createError(400, 'The location has not been updated!'));
       }
     } catch (error) {
@@ -222,8 +238,8 @@ class LocationController {
         res.status(200).json(updatedLocation);
       } else {
         await t.rollback();
-        console.log('Location not found');
-        next(createError(400, 'The location has not been updated!'));
+        console.log('The location has not been updated!');
+        next(createError(404, 'The location has not been updated!'));
       }
     } catch (error) {
       console.log(error.message);
@@ -252,7 +268,7 @@ class LocationController {
         res.sendStatus(res.statusCode);
       } else {
         await t.rollback();
-        console.log(`Bad request.`);
+        console.log(`The location has not been deleted!`);
         next(createError(400, 'The location has not been deleted!'));
       }
     } catch (error) {

@@ -106,19 +106,21 @@ class StudioController {
     try {
       const { title, location, foundation_year, logo, about } = req.body;
 
-      const locationRecord = await Location.findOne({
-        where: {
-          title: location,
-        },
-        attributes: ['id'],
-        raw: true,
-      });
+      const locationValue = location === '' ? null : location;
 
-      if (!locationRecord) {
+      const locationRecord = locationValue
+        ? await Location.findOne({
+            where: { title: locationValue },
+            attributes: ['id'],
+            raw: true,
+          })
+        : null;
+
+      if (locationValue && !locationRecord) {
         throw new Error('Location not found');
       }
 
-      const { id: location_id } = locationRecord;
+      const location_id = locationRecord ? locationRecord.id : null;
       console.log(`Location ID is: ${location_id}`);
 
       const newBody = {
@@ -129,7 +131,18 @@ class StudioController {
         about,
       };
 
-      const newStudio = await Studio.create(newBody, {
+      const replaceEmptyStringsWithNull = (obj) => {
+        return Object.fromEntries(
+          Object.entries(obj).map(([key, value]) => [
+            key,
+            value === '' ? null : value,
+          ])
+        );
+      };
+
+      const processedBody = replaceEmptyStringsWithNull(newBody);
+
+      const newStudio = await Studio.create(processedBody, {
         returning: ['id'],
         transaction: t,
       });
@@ -139,15 +152,11 @@ class StudioController {
         const { id } = newStudio;
         return res.status(201).json({
           id,
-          title,
-          location_id,
-          foundation_year,
-          logo,
-          about,
+          ...processedBody,
         });
       } else {
         await t.rollback();
-        console.log(`Bad request.`);
+        console.log(`The studio has not been created!`);
         next(createError(400, 'The studio has not been created!'));
       }
     } catch (error) {
@@ -207,7 +216,7 @@ class StudioController {
         res.status(201).json(updatedStudio);
       } else {
         await t.rollback();
-        console.log(`Bad request.`);
+        console.log(`The studio has not been updated!`);
         next(createError(400, 'The studio has not been updated!'));
       }
     } catch (error) {
@@ -273,8 +282,8 @@ class StudioController {
         res.status(200).json(updatedStudios);
       } else {
         await t.rollback();
-        console.log('Studio not found');
-        next(createError(404, 'Studio not found'));
+        console.log('The studio has not been updated!');
+        next(createError(404, 'The studio has not been updated!'));
       }
     } catch (error) {
       console.log(error.message);
@@ -303,7 +312,7 @@ class StudioController {
         res.sendStatus(res.statusCode);
       } else {
         await t.rollback();
-        console.log(`Bad request.`);
+        console.log(`The studio has not been deleted!`);
         next(createError(400, 'The studio has not been deleted!'));
       }
     } catch (error) {

@@ -67,18 +67,35 @@ class GenreController {
 
     try {
       const { title, logo } = req.body;
+
       const newBody = { title, logo };
-      const newGenre = await Genre.create(newBody, {
+
+      const replaceEmptyStringsWithNull = (obj) => {
+        return Object.fromEntries(
+          Object.entries(obj).map(([key, value]) => [
+            key,
+            value === '' ? null : value,
+          ])
+        );
+      };
+
+      const processedBody = replaceEmptyStringsWithNull(newBody);
+
+      const newGenre = await Genre.create(processedBody, {
         returning: ['id'],
         transaction: t,
       });
 
       if (newGenre) {
         await t.commit();
-        res.status(201).json(newGenre);
+        const { id } = newGenre;
+        return res.status(201).json({
+          id,
+          ...processedBody,
+        });
       } else {
         await t.rollback();
-        console.log(`Bad request.`);
+        console.log(`The genre has not been created!`);
         next(createError(400, 'The genre has not been created!'));
       }
     } catch (error) {
@@ -107,7 +124,7 @@ class GenreController {
         res.status(201).json(updatedGenre);
       } else {
         await t.rollback();
-        console.log(`Bad request.`);
+        console.log(`The genre has not been updated!`);
         next(createError(400, 'The genre has not been updated!'));
       }
     } catch (error) {
@@ -144,8 +161,8 @@ class GenreController {
         res.status(200).json(updatedGenre);
       } else {
         await t.rollback();
-        console.log('Genre not found');
-        next(createError(400, 'The genre has not been updated!'));
+        console.log('The genre has not been updated!');
+        next(createError(404, 'The genre has not been updated!'));
       }
     } catch (error) {
       console.log(error.message);
@@ -174,7 +191,7 @@ class GenreController {
         res.sendStatus(res.statusCode);
       } else {
         await t.rollback();
-        console.log(`Bad request.`);
+        console.log(`The genre has not been deleted!`);
         next(createError(400, 'The genre has not been deleted!'));
       }
     } catch (error) {

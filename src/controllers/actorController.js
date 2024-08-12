@@ -104,19 +104,21 @@ class ActorController {
       const { full_name, country, birth_date, death_date, photo, biography } =
         req.body;
 
-      const countryRecord = await Country.findOne({
-        where: {
-          title: country,
-        },
-        attributes: ['id'],
-        raw: true,
-      });
+      const countryValue = country === '' ? null : country;
 
-      if (!countryRecord) {
+      const countryRecord = countryValue
+        ? await Country.findOne({
+            where: { title: countryValue },
+            attributes: ['id'],
+            raw: true,
+          })
+        : null;
+
+      if (countryValue && !countryRecord) {
         throw new Error('Country not found');
       }
 
-      const { id: country_id } = countryRecord;
+      const country_id = countryRecord ? countryRecord.id : null;
       console.log(`Country ID is: ${country_id}`);
 
       const newBody = {
@@ -128,7 +130,18 @@ class ActorController {
         biography,
       };
 
-      const newActor = await Actor.create(newBody, {
+      const replaceEmptyStringsWithNull = (obj) => {
+        return Object.fromEntries(
+          Object.entries(obj).map(([key, value]) => [
+            key,
+            value === '' ? null : value,
+          ])
+        );
+      };
+
+      const processedBody = replaceEmptyStringsWithNull(newBody);
+
+      const newActor = await Actor.create(processedBody, {
         returning: ['id'],
         transaction: t,
       });
@@ -138,16 +151,11 @@ class ActorController {
         const { id } = newActor;
         return res.status(201).json({
           id,
-          full_name,
-          country_id,
-          birth_date,
-          death_date,
-          photo,
-          biography,
+          ...processedBody,
         });
       } else {
         await t.rollback();
-        console.log(`Bad request.`);
+        console.log(`The actor has not been created!`);
         next(createError(400, 'The actor has not been created!'));
       }
     } catch (error) {
@@ -217,7 +225,7 @@ class ActorController {
         res.status(201).json(updatedActor);
       } else {
         await t.rollback();
-        console.log(`Bad request.`);
+        console.log(`The actor has not been updated!`);
         next(createError(400, 'The actor has not been updated!'));
       }
     } catch (error) {
@@ -284,8 +292,8 @@ class ActorController {
         res.status(200).json(updatedActors);
       } else {
         await t.rollback();
-        console.log('Actor not found');
-        next(createError(404, 'Actor not found'));
+        console.log('The actor has not been updated!');
+        next(createError(404, 'The actor has not been updated!'));
       }
     } catch (error) {
       console.log(error.message);
@@ -314,7 +322,7 @@ class ActorController {
         res.sendStatus(res.statusCode);
       } else {
         await t.rollback();
-        console.log(`Bad request.`);
+        console.log(`The actor has not been deleted!`);
         next(createError(400, 'The actor has not been deleted!'));
       }
     } catch (error) {

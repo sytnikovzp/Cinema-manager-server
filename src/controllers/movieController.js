@@ -132,18 +132,22 @@ class MovieController {
         studios,
       } = req.body;
 
-      const genreRecord = await Genre.findOne({
-        where: { title: genre },
-        attributes: ['id'],
-        raw: true,
-      });
+      const genreValue = genre === '' ? null : genre;
 
-      if (!genreRecord) {
+      const genreRecord = genreValue
+        ? await Genre.findOne({
+            where: { title: genreValue },
+            attributes: ['id'],
+            raw: true,
+          })
+        : null;
+
+      if (genreValue && !genreRecord) {
         throw new Error('Genre not found');
       }
 
-      const { id: genre_id } = genreRecord;
-      console.log('Genre Id:', genreRecord);
+      const genre_id = genreRecord ? genreRecord.id : null;
+      console.log(`Genre ID is: ${genre_id}`);
 
       const actorRecords = await Promise.all(
         actors.map(async (full_name) => {
@@ -190,7 +194,18 @@ class MovieController {
         storyline,
       };
 
-      const newMovie = await Movie.create(newBody, {
+      const replaceEmptyStringsWithNull = (obj) => {
+        return Object.fromEntries(
+          Object.entries(obj).map(([key, value]) => [
+            key,
+            value === '' ? null : value,
+          ])
+        );
+      };
+
+      const processedBody = replaceEmptyStringsWithNull(newBody);
+
+      const newMovie = await Movie.create(processedBody, {
         returning: ['id'],
         transaction: t,
       });
@@ -221,16 +236,11 @@ class MovieController {
         const { id } = newMovie;
         return res.status(201).json({
           id,
-          title,
-          genre_id,
-          release_year,
-          poster,
-          trailer,
-          storyline,
+          ...processedBody,
         });
       } else {
         await t.rollback();
-        console.log(`Bad request.`);
+        console.log(`The movie has not been created!`);
         next(createError(400, 'The movie has not been created!'));
       }
     } catch (error) {
@@ -357,7 +367,7 @@ class MovieController {
         return res.status(200).json(updatedMovie);
       } else {
         await t.rollback();
-        console.log(`Bad request.`);
+        console.log(`The movie has not been updated!`);
         next(createError(400, 'The movie has not been updated!'));
       }
     } catch (error) {
@@ -499,8 +509,8 @@ class MovieController {
         return res.status(200).json(updatedMovie);
       } else {
         await t.rollback();
-        console.log('Movie not found');
-        next(createError(404, 'Movie not found'));
+        console.log('The movie has not been updated!');
+        next(createError(404, 'The movie has not been updated!'));
       }
     } catch (error) {
       console.log(error.message);
@@ -529,7 +539,7 @@ class MovieController {
         res.sendStatus(res.statusCode);
       } else {
         await t.rollback();
-        console.log(`Bad request.`);
+        console.log(`The movie has not been deleted!`);
         next(createError(400, 'The movie has not been deleted!'));
       }
     } catch (error) {

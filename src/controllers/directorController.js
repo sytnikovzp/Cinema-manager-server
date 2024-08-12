@@ -82,8 +82,12 @@ class DirectorController {
           biography: directorData.biography || '',
           country: directorData.Country ? directorData.Country.title : '',
           movies: directorData.Movies || [],
-          createdAt: moment(directorData.createdAt).format('YYYY-MM-DD HH:mm:ss'),
-          updatedAt: moment(directorData.updatedAt).format('YYYY-MM-DD HH:mm:ss'),
+          createdAt: moment(directorData.createdAt).format(
+            'YYYY-MM-DD HH:mm:ss'
+          ),
+          updatedAt: moment(directorData.updatedAt).format(
+            'YYYY-MM-DD HH:mm:ss'
+          ),
         };
 
         delete formattedDirector.Country;
@@ -107,19 +111,21 @@ class DirectorController {
       const { full_name, country, birth_date, death_date, photo, biography } =
         req.body;
 
-      const countryRecord = await Country.findOne({
-        where: {
-          title: country,
-        },
-        attributes: ['id'],
-        raw: true,
-      });
+      const countryValue = country === '' ? null : country;
 
-      if (!countryRecord) {
+      const countryRecord = countryValue
+        ? await Country.findOne({
+            where: { title: countryValue },
+            attributes: ['id'],
+            raw: true,
+          })
+        : null;
+
+      if (countryValue && !countryRecord) {
         throw new Error('Country not found');
       }
 
-      const { id: country_id } = countryRecord;
+      const country_id = countryRecord ? countryRecord.id : null;
       console.log(`Country ID is: ${country_id}`);
 
       const newBody = {
@@ -131,7 +137,18 @@ class DirectorController {
         biography,
       };
 
-      const newDirector = await Director.create(newBody, {
+      const replaceEmptyStringsWithNull = (obj) => {
+        return Object.fromEntries(
+          Object.entries(obj).map(([key, value]) => [
+            key,
+            value === '' ? null : value,
+          ])
+        );
+      };
+
+      const processedBody = replaceEmptyStringsWithNull(newBody);
+
+      const newDirector = await Director.create(processedBody, {
         returning: ['id'],
         transaction: t,
       });
@@ -141,16 +158,11 @@ class DirectorController {
         const { id } = newDirector;
         return res.status(201).json({
           id,
-          full_name,
-          country_id,
-          birth_date,
-          death_date,
-          photo,
-          biography,
+          ...processedBody,
         });
       } else {
         await t.rollback();
-        console.log(`Bad request.`);
+        console.log(`The director has not been created!`);
         next(createError(400, 'The director has not been created!'));
       }
     } catch (error) {
@@ -220,7 +232,7 @@ class DirectorController {
         res.status(201).json(updatedDirector);
       } else {
         await t.rollback();
-        console.log(`Bad request.`);
+        console.log(`The director has not been updated!`);
         next(createError(400, 'The director has not been updated!'));
       }
     } catch (error) {
@@ -287,8 +299,8 @@ class DirectorController {
         res.status(200).json(updatedDirectors);
       } else {
         await t.rollback();
-        console.log('Director not found');
-        next(createError(404, 'Director not found'));
+        console.log('The director has not been updated!');
+        next(createError(404, 'The director has not been updated!'));
       }
     } catch (error) {
       console.log(error.message);

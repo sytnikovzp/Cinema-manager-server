@@ -70,18 +70,35 @@ class CountryController {
 
     try {
       const { title, flag } = req.body;
+
       const newBody = { title, flag };
-      const newCountry = await Country.create(newBody, {
+
+      const replaceEmptyStringsWithNull = (obj) => {
+        return Object.fromEntries(
+          Object.entries(obj).map(([key, value]) => [
+            key,
+            value === '' ? null : value,
+          ])
+        );
+      };
+
+      const processedBody = replaceEmptyStringsWithNull(newBody);
+
+      const newCountry = await Country.create(processedBody, {
         returning: ['id'],
         transaction: t,
       });
 
       if (newCountry) {
         await t.commit();
-        res.status(201).json(newCountry);
+        const { id } = newCountry;
+        return res.status(201).json({
+          id,
+          ...processedBody,
+        });
       } else {
         await t.rollback();
-        console.log(`Bad request.`);
+        console.log(`The country has not been created!`);
         next(createError(400, 'The country has not been created!'));
       }
     } catch (error) {
@@ -110,7 +127,7 @@ class CountryController {
         res.status(201).json(updatedCountry);
       } else {
         await t.rollback();
-        console.log(`Bad request.`);
+        console.log(`The country has not been updated!`);
         next(createError(400, 'The country has not been updated!'));
       }
     } catch (error) {
@@ -147,8 +164,8 @@ class CountryController {
         res.status(200).json(updatedCountry);
       } else {
         await t.rollback();
-        console.log('Country not found');
-        next(createError(400, 'The country has not been updated!'));
+        console.log('The country has not been updated!');
+        next(createError(404, 'The country has not been updated!'));
       }
     } catch (error) {
       console.log(error.message);
@@ -177,7 +194,7 @@ class CountryController {
         res.sendStatus(res.statusCode);
       } else {
         await t.rollback();
-        console.log(`Bad request.`);
+        console.log(`The country has not been deleted!`);
         next(createError(400, 'The country has not been deleted!'));
       }
     } catch (error) {

@@ -82,7 +82,7 @@ Sequelize is used for database interaction, with models, migrations, and seeders
 
 ## Config .env variables
 
-Use the `.env.example` as reference to create your configuration file `.env`
+Create your configuration file `.env`
 
 ```yaml
 PORT=5000

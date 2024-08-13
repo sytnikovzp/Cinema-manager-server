@@ -1,18 +1,19 @@
 {
   "name": "cinema_manager_server",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "main": "index.js",
   "private": true,
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon ./index.js",
+    "start": "node ./index.js",
+    "dev": "nodemon ./index.js",
+    "initial": "npm run seeduna && npm run miguna && npm run dbdrop && npm run dbcreate && npm run mig && npm run seedall && npm start",
     "dbcreate": "npx sequelize db:create",
     "dbdrop": "npx sequelize db:drop",
     "mig": "npx sequelize db:migrate",
     "miguna": "npx sequelize db:migrate:undo:all",
     "seedall": "npx sequelize db:seed:all",
-    "seeduna": "npx sequelize db:seed:undo:all",
-    "initial": "npm run seeduna && npm run miguna && npm run dbdrop && npm run dbcreate && npm run mig && npm run seedall && npm start"
+    "seeduna": "npx sequelize db:seed:undo:all"
   },
   "author": "Alexandr Sytnikov",
   "license": "ISC",

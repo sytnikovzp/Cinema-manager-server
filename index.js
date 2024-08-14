@@ -1,4 +1,5 @@
-const http = require('http');
+const https = require('https');
+const fs = require('fs');
 // ============================
 require('dotenv').config();
 // ============================
@@ -9,7 +10,12 @@ const app = require('./src/app');
 const HOST_NAME = process.env.DB_HOST;
 
 const PORT = process.env.PORT || 5000;
-const server = http.createServer(app);
+const server = https.createServer(app);
+
+const options = {
+  key: fs.readFileSync('/etc/letsencrypt/live/sytnikov.site/privkey.pem'),
+  cert: fs.readFileSync('/etc/letsencrypt/live/sytnikov.site/fullchain.pem'),
+};
 
 // ==================== DB CHECK =======================
 const dbCheck = async () => {
@@ -25,7 +31,7 @@ const dbCheck = async () => {
 
 dbCheck();
 
-server.listen(PORT, HOST_NAME, () =>
+server(options).listen(PORT, HOST_NAME, () =>
   console.log(`Server running at http://${HOST_NAME}:${PORT}`)
 );
 

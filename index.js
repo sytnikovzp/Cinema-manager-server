@@ -31,8 +31,8 @@ const dbCheck = async () => {
 
 dbCheck();
 
-server.listen(PORT, HOST_NAME, () =>
-  console.log(`Server running at http://${HOST_NAME}:${PORT}`)
+server.listen(PORT, () =>
+  console.log(`Server running at https://sytnikov.site:${PORT}`)
 );
 
 console.log('Server is started!');

@@ -5,7 +5,8 @@
   "private": true,
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node ./index.js",
+    "dev": "node ./index.js",
+    "nodemon": "nodemon ./index.js",
     "initial": "npm run seeduna && npm run miguna && npm run dbdrop && npm run dbcreate && npm run mig && npm run seedall && npm start",
     "dbcreate": "npx sequelize db:create",
     "dbdrop": "npx sequelize db:drop",
@@ -14,9 +15,9 @@
     "seedall": "npx sequelize db:seed:all",
     "seeduna": "npx sequelize db:seed:undo:all"
   },
-  "author": "Alexandr Sytnikov",
+  "description": "> TODO: description",
+  "author": "Alexandr Sytnikov <sytnikov.zp@gmail.com>",
   "license": "ISC",
-  "description": "",
   "dependencies": {
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",

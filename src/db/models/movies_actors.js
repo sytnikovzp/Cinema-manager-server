@@ -3,11 +3,11 @@ module.exports = (sequelize, DataTypes) => {
   class MovieActor extends Model {
     static associate(models) {
       MovieActor.belongsTo(models.Movie, {
-        foreignKey: 'movie_id',
+        foreignKey: 'movieId',
       });
 
       MovieActor.belongsTo(models.Actor, {
-        foreignKey: 'actor_id',
+        foreignKey: 'actorId',
       });
     }
   }

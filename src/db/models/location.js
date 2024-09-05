@@ -20,8 +20,8 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         unique: true,
       },
-      country_id: DataTypes.INTEGER,
-      coat_of_arms: DataTypes.TEXT,
+      countryId: DataTypes.INTEGER,
+      coatOfArms: DataTypes.TEXT,
     },
     {
       sequelize,

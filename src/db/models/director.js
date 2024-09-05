@@ -14,14 +14,14 @@ module.exports = (sequelize, DataTypes) => {
   }
   Director.init(
     {
-      full_name: {
+      fullName: {
         type: DataTypes.STRING(100),
         allowNull: false,
         unique: true,
       },
-      country_id: DataTypes.INTEGER,
-      birth_date: DataTypes.DATEONLY,
-      death_date: DataTypes.DATEONLY,
+      countryId: DataTypes.INTEGER,
+      birthDate: DataTypes.DATEONLY,
+      deathDate: DataTypes.DATEONLY,
       photo: DataTypes.TEXT,
       biography: DataTypes.TEXT,
       createdAt: {

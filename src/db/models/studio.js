@@ -19,8 +19,8 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         unique: true,
       },
-      location_id: DataTypes.INTEGER,
-      foundation_year: DataTypes.INTEGER,
+      locationId: DataTypes.INTEGER,
+      foundationYear: DataTypes.INTEGER,
       logo: DataTypes.TEXT,
       about: DataTypes.TEXT,
       createdAt: {

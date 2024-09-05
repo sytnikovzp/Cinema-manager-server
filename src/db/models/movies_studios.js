@@ -13,8 +13,8 @@ module.exports = (sequelize, DataTypes) => {
   }
   MovieStudio.init(
     {
-      movie_id: DataTypes.INTEGER,
-      studio_id: DataTypes.INTEGER,
+      movieId: DataTypes.INTEGER,
+      studioId: DataTypes.INTEGER,
     },
     {
       sequelize,

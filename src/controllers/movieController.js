@@ -240,7 +240,7 @@ class MovieController {
         });
       } else {
         await t.rollback();
-        console.log(`The movie has not been created!`);
+        console.log('The movie has not been created!');
         next(createError(400, 'The movie has not been created!'));
       }
     } catch (error) {
@@ -382,7 +382,7 @@ class MovieController {
         res.status(201).json(updatedMovie);
       } else {
         await t.rollback();
-        console.log(`The movie has not been updated!`);
+        console.log('The movie has not been updated!');
         next(createError(400, 'The movie has not been updated!'));
       }
     } catch (error) {
@@ -570,7 +570,7 @@ class MovieController {
         res.sendStatus(res.statusCode);
       } else {
         await t.rollback();
-        console.log(`The movie has not been deleted!`);
+        console.log('The movie has not been deleted!');
         next(createError(400, 'The movie has not been deleted!'));
       }
     } catch (error) {

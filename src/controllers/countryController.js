@@ -98,7 +98,7 @@ class CountryController {
         });
       } else {
         await t.rollback();
-        console.log(`The country has not been created!`);
+        console.log('The country has not been created!');
         next(createError(400, 'The country has not been created!'));
       }
     } catch (error) {
@@ -141,7 +141,7 @@ class CountryController {
         res.status(201).json(updatedCountry);
       } else {
         await t.rollback();
-        console.log(`The country has not been updated!`);
+        console.log('The country has not been updated!');
         next(createError(400, 'The country has not been updated!'));
       }
     } catch (error) {
@@ -220,7 +220,7 @@ class CountryController {
         res.sendStatus(res.statusCode);
       } else {
         await t.rollback();
-        console.log(`The country has not been deleted!`);
+        console.log('The country has not been deleted!');
         next(createError(400, 'The country has not been deleted!'));
       }
     } catch (error) {

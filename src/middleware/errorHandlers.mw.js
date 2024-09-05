@@ -14,7 +14,7 @@ module.exports.validationErrorHandler = (err, req, res, next) => {
   next(err);
 };
 
-module.exports.errorHandler = (err, req, res, next) => {
+module.exports.errorHandler = (err, req, res) => {
   if (res.headerSent) {
     return;
   }

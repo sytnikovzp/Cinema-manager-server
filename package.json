@@ -6,8 +6,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "node ./index.js",
+    "lint": "eslint .",
     "nodemon": "nodemon ./index.js",
-    "initial": "npm run seeduna && npm run miguna && npm run dbdrop && npm run dbcreate && npm run mig && npm run seedall && npm start",
+    "initialdb": "npm run seeduna && npm run miguna && npm run dbdrop && npm run dbcreate && npm run mig && npm run seedall",
     "dbcreate": "npx sequelize db:create",
     "dbdrop": "npx sequelize db:drop",
     "mig": "npx sequelize db:migrate",
@@ -30,6 +31,11 @@
     "yup": "^1.4.0"
   },
   "devDependencies": {
+    "@eslint/js": "^9.9.1",
+    "eslint": "^9.9.1",
+    "eslint-plugin-promise": "^7.1.0",
+    "eslint-plugin-security": "^3.0.1",
+    "eslint-plugin-sequelize": "^1.0.4",
     "morgan": "^1.10.0",
     "sequelize-cli": "^6.6.2"
   }

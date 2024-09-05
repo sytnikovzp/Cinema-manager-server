@@ -95,7 +95,7 @@ class GenreController {
         });
       } else {
         await t.rollback();
-        console.log(`The genre has not been created!`);
+        console.log('The genre has not been created!');
         next(createError(400, 'The genre has not been created!'));
       }
     } catch (error) {
@@ -135,7 +135,7 @@ class GenreController {
         res.status(201).json(updatedGenre);
       } else {
         await t.rollback();
-        console.log(`The genre has not been updated!`);
+        console.log('The genre has not been updated!');
         next(createError(400, 'The genre has not been updated!'));
       }
     } catch (error) {
@@ -211,7 +211,7 @@ class GenreController {
         res.sendStatus(res.statusCode);
       } else {
         await t.rollback();
-        console.log(`The genre has not been deleted!`);
+        console.log('The genre has not been deleted!');
         next(createError(400, 'The genre has not been deleted!'));
       }
     } catch (error) {

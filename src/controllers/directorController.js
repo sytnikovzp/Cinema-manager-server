@@ -158,7 +158,7 @@ class DirectorController {
         });
       } else {
         await t.rollback();
-        console.log(`The director has not been created!`);
+        console.log('The director has not been created!');
         next(createError(400, 'The director has not been created!'));
       }
     } catch (error) {
@@ -241,7 +241,7 @@ class DirectorController {
         res.status(201).json(updatedDirector);
       } else {
         await t.rollback();
-        console.log(`The director has not been updated!`);
+        console.log('The director has not been updated!');
         next(createError(400, 'The director has not been updated!'));
       }
     } catch (error) {
@@ -355,7 +355,7 @@ class DirectorController {
         res.sendStatus(res.statusCode);
       } else {
         await t.rollback();
-        console.log(`Bad request.`);
+        console.log('Bad request');
         next(createError(400, 'The director has not been deleted!'));
       }
     } catch (error) {

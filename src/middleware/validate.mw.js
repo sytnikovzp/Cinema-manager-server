@@ -1,5 +1,3 @@
-const yup = require('yup');
-
 const {
   NEW_GENRE_VALIDATION_SCHEMA,
   PATCH_GENRE_VALIDATION_SCHEMA,

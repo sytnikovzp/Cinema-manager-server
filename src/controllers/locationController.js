@@ -135,7 +135,7 @@ class LocationController {
         });
       } else {
         await t.rollback();
-        console.log(`The location has not been created!`);
+        console.log('The location has not been created!');
         next(createError(400, 'The location has not been created!'));
       }
     } catch (error) {
@@ -195,7 +195,7 @@ class LocationController {
         res.status(201).json(updatedLocation);
       } else {
         await t.rollback();
-        console.log(`The location has not been updated!`);
+        console.log('The location has not been updated!');
         next(createError(400, 'The location has not been updated!'));
       }
     } catch (error) {
@@ -298,7 +298,7 @@ class LocationController {
         res.sendStatus(res.statusCode);
       } else {
         await t.rollback();
-        console.log(`The location has not been deleted!`);
+        console.log('The location has not been deleted!');
         next(createError(400, 'The location has not been deleted!'));
       }
     } catch (error) {

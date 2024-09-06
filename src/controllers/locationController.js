@@ -41,7 +41,7 @@ class LocationController {
       }
     } catch (error) {
       console.log(error.message);
-      next(error.message);
+      next(error);
     }
   }
 

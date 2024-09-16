@@ -1,38 +1,36 @@
-'use strict';
-/** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('movies', {
+    await queryInterface.createTable('actors', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      title: {
+      full_name: {
         type: Sequelize.STRING(100),
         allowNull: false,
         unique: true,
       },
-      genre_id: {
+      country_id: {
         type: Sequelize.INTEGER,
         references: {
-          model: 'genres',
+          model: 'countries',
           key: 'id',
         },
         onDelete: 'SET NULL',
         onUpdate: 'CASCADE',
       },
-      release_year: {
-        type: Sequelize.INTEGER,
+      birth_date: {
+        type: Sequelize.DATEONLY,
       },
-      poster: {
+      death_date: {
+        type: Sequelize.DATEONLY,
+      },
+      photo: {
         type: Sequelize.TEXT,
       },
-      trailer: {
-        type: Sequelize.STRING,
-      },
-      storyline: {
+      biography: {
         type: Sequelize.TEXT,
       },
       created_at: {
@@ -47,7 +45,7 @@ module.exports = {
       },
     });
   },
-  async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('movies');
+  async down(queryInterface) {
+    await queryInterface.dropTable('actors');
   },
 };

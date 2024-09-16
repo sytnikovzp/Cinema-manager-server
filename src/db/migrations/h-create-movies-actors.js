@@ -1,5 +1,3 @@
-'use strict';
-/** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable('movies_actors', {
@@ -29,7 +27,7 @@ module.exports = {
       name: 'movies_actors_pkey',
     });
   },
-  async down(queryInterface, Sequelize) {
+  async down(queryInterface) {
     await queryInterface.dropTable('movies_actors');
   },
 };

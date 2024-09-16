@@ -1,7 +1,6 @@
-const path = require('path');
-// ============================
 const express = require('express');
 const cors = require('cors');
+const logger = require('morgan');
 // ============================
 const {
   errorHandlers: { validationErrorHandler, errorHandler },
@@ -23,9 +22,9 @@ app.use(
 
 app.use(express.json());
 
-app.use(express.static(path.resolve('public')));
-
 app.use(getTime, showTime);
+
+app.use(logger('dev'));
 
 // ============================
 //  Cinema manager APP

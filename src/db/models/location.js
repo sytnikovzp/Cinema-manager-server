@@ -1,15 +1,10 @@
-'use strict';
 const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class Location extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
     static associate(models) {
-      // define association here
-      Location.belongsTo(models.Country, { foreignKey: 'countryId' });
+      Location.belongsTo(models.Country, {
+        foreignKey: 'countryId',
+      });
 
       Location.hasMany(models.Studio, {
         foreignKey: 'locationId',
@@ -25,8 +20,8 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         unique: true,
       },
-      country_id: DataTypes.INTEGER,
-      coat_of_arms: DataTypes.TEXT,
+      countryId: DataTypes.INTEGER,
+      coatOfArms: DataTypes.TEXT,
     },
     {
       sequelize,

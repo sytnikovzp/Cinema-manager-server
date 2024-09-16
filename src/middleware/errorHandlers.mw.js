@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 const { ValidationError } = require('yup');
 
 module.exports.validationErrorHandler = (err, req, res, next) => {

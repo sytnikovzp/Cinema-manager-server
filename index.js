@@ -7,8 +7,6 @@ const db = require('./src/db/models');
 const app = require('./src/app');
 
 // =========== Create server with HTTP module ===========
-const HOST_NAME = process.env.DB_HOST;
-
 const options = {
   key: fs.readFileSync('/etc/letsencrypt/live/sytnikov.site/privkey.pem'),
   cert: fs.readFileSync('/etc/letsencrypt/live/sytnikov.site/fullchain.pem'),

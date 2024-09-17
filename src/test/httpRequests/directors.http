@@ -12,10 +12,10 @@ POST http://localhost:5000/api/directors HTTP/1.1
 content-type: application/json
 
 {
-  "full_name": "New director",
+  "fullName": "New director",
   "country": "United States of America",
-  "birth_date": "2000-01-01",
-  "death_date": "",
+  "birthDate": "2000-01-01",
+  "deathDate": "",
   "photo": "",
   "biography": ""
 }
@@ -26,10 +26,10 @@ content-type: application/json
 
 {
   "id": 29,
-  "full_name": "Updated director",
+  "fullName": "Updated director",
   "country": "Georgia",
-  "birth_date": "",
-  "death_date": "",
+  "birthDate": "",
+  "deathDate": "",
   "photo": "",
   "biography": ""
 }
@@ -39,10 +39,10 @@ PATCH http://localhost:5000/api/directors/29 HTTP/1.1
 content-type: application/json
 
 {
-  "full_name": "Patched director",
+  "fullName": "Patched director",
   "country": "",
-  "birth_date": "",
-  "death_date": "",
+  "birthDate": "",
+  "deathDate": "",
   "photo": "",
   "biography": ""
 }

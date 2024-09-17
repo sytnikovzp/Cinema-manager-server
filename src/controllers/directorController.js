@@ -8,7 +8,7 @@ class DirectorController {
     try {
       const { limit, offset } = req.pagination;
       const directors = await Director.findAll({
-        attributes: ['id', 'full_name', 'photo'],
+        attributes: ['id', 'fullName', 'photo'],
         include: [
           {
             model: Country,
@@ -26,7 +26,7 @@ class DirectorController {
       const formattedDirectors = directors.map((director) => {
         return {
           id: director.id,
-          full_name: director.full_name || '',
+          fullName: director.fullName || '',
           photo: director.photo || '',
           country: director['Country.title'] || '',
         };
@@ -54,7 +54,7 @@ class DirectorController {
 
       const directorById = await Director.findByPk(directorId, {
         attributes: {
-          exclude: ['countryId', 'country_id'],
+          exclude: ['countryId'],
         },
         include: [
           {
@@ -75,9 +75,9 @@ class DirectorController {
         const directorData = directorById.toJSON();
         const formattedDirector = {
           ...directorData,
-          full_name: directorData.full_name || '',
-          birth_date: directorData.birth_date || '',
-          death_date: directorData.death_date || '',
+          fullName: directorData.fullName || '',
+          birthDate: directorData.birthDate || '',
+          deathDate: directorData.deathDate || '',
           photo: directorData.photo || '',
           biography: directorData.biography || '',
           country: directorData.Country ? directorData.Country.title : '',
@@ -104,7 +104,7 @@ class DirectorController {
     const t = await sequelize.transaction();
 
     try {
-      const { full_name, country, birth_date, death_date, photo, biography } =
+      const { fullName, country, birthDate, deathDate, photo, biography } =
         req.body;
 
       const countryValue = country === '' ? null : country;
@@ -121,14 +121,13 @@ class DirectorController {
         throw new Error('Country not found');
       }
 
-      const country_id = countryRecord ? countryRecord.id : null;
-      console.log(`Country ID is: ${country_id}`);
+      const countryId = countryRecord ? countryRecord.id : null;
 
       const newBody = {
-        full_name,
-        country_id,
-        birth_date,
-        death_date,
+        fullName,
+        countryId,
+        birthDate,
+        deathDate,
         photo,
         biography,
       };
@@ -158,7 +157,7 @@ class DirectorController {
         });
       } else {
         await t.rollback();
-        console.log(`The director has not been created!`);
+        console.log('The director has not been created!');
         next(createError(400, 'The director has not been created!'));
       }
     } catch (error) {
@@ -172,15 +171,8 @@ class DirectorController {
     const t = await sequelize.transaction();
 
     try {
-      const {
-        id,
-        full_name,
-        country,
-        birth_date,
-        death_date,
-        photo,
-        biography,
-      } = req.body;
+      const { id, fullName, country, birthDate, deathDate, photo, biography } =
+        req.body;
 
       const countryValue = country === '' ? null : country;
 
@@ -196,14 +188,13 @@ class DirectorController {
         throw new Error('Country not found');
       }
 
-      const country_id = countryRecord ? countryRecord.id : null;
-      console.log(`Country ID is: ${country_id}`);
+      const countryId = countryRecord ? countryRecord.id : null;
 
       const newBody = {
-        full_name,
-        country_id,
-        birth_date,
-        death_date,
+        fullName,
+        countryId,
+        birthDate,
+        deathDate,
         photo,
         biography,
       };
@@ -223,15 +214,7 @@ class DirectorController {
         processedBody,
         {
           where: { id },
-          returning: [
-            'id',
-            'full_name',
-            'country_id',
-            'birth_date',
-            'death_date',
-            'photo',
-            'biography',
-          ],
+          returning: true,
           transaction: t,
         }
       );
@@ -241,7 +224,7 @@ class DirectorController {
         res.status(201).json(updatedDirector);
       } else {
         await t.rollback();
-        console.log(`The director has not been updated!`);
+        console.log('The director has not been updated!');
         next(createError(400, 'The director has not been updated!'));
       }
     } catch (error) {
@@ -257,10 +240,10 @@ class DirectorController {
     try {
       const {
         params: { directorId },
-        body: { full_name, country, birth_date, death_date, photo, biography },
+        body: { fullName, country, birthDate, deathDate, photo, biography },
       } = req;
 
-      let country_id = null;
+      let countryId = null;
       if (country !== undefined) {
         if (country !== '') {
           const countryRecord = await Country.findOne({
@@ -275,16 +258,15 @@ class DirectorController {
             throw new Error('Country not found');
           }
 
-          country_id = countryRecord.id;
-          console.log(`Country ID is: ${country_id}`);
+          countryId = countryRecord.id;
         }
       }
 
       const newBody = {
-        full_name,
-        country_id,
-        birth_date,
-        death_date,
+        fullName,
+        countryId,
+        birthDate,
+        deathDate,
         photo,
         biography,
       };
@@ -306,15 +288,7 @@ class DirectorController {
           where: {
             id: directorId,
           },
-          returning: [
-            'id',
-            'full_name',
-            'country_id',
-            'birth_date',
-            'death_date',
-            'photo',
-            'biography',
-          ],
+          returning: true,
           transaction: t,
         }
       );
@@ -355,7 +329,7 @@ class DirectorController {
         res.sendStatus(res.statusCode);
       } else {
         await t.rollback();
-        console.log(`Bad request.`);
+        console.log('Bad request');
         next(createError(400, 'The director has not been deleted!'));
       }
     } catch (error) {

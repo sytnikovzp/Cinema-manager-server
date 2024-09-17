@@ -23,7 +23,7 @@ const dbCheck = async () => {
       `Connection with DB ${process.env.DB_NAME.toUpperCase()} has been successfully done!`
     );
   } catch (error) {
-    console.log(`Can't connect to DB: `, error.message);
+    console.log('Can not connect to DB: ', error.message);
   }
 };
 
@@ -51,9 +51,9 @@ const syncModel = async (model) => {
 const syncModels = async () => {
   try {
     await db.sequelize.sync({ alter: true });
-    console.log(`Sync all models has been done successfully!`);
+    console.log('Sync all models has been done successfully!');
   } catch (error) {
-    console.log(`Can't sync all models: `, error.message);
+    console.log('Can not sync all models: ', error.message);
   }
 };
 

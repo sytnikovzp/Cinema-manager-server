@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable('locations', {

@@ -14,7 +14,7 @@ content-type: application/json
 {
   "title": "New studio",
   "location": "Los Angeles",
-  "foundation_year": 2024,
+  "foundationYear": 2024,
   "logo": "",
   "about": ""
 }
@@ -27,7 +27,7 @@ content-type: application/json
   "id": 37,
   "title": "Updated studio",
   "location": "Sydney",
-  "foundation_year": 2000,
+  "foundationYear": 2000,
   "logo": "",
   "about": ""
 }
@@ -39,7 +39,7 @@ content-type: application/json
 {
   "title": "Patched studio",
   "location": "",
-  "foundation_year": "",
+  "foundationYear": "",
   "logo": "",
   "about": ""
 }

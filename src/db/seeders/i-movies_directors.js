@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 const { movies_directors } = require('../../constants');
 
 module.exports = {

@@ -6,7 +6,7 @@ module.exports.validationErrorHandler = (err, req, res, next) => {
     return res.status(400).send({
       errors: [
         {
-          title: 'Validation error',
+          title: 'Validation error!',
           details: err.errors,
         },
       ],
@@ -20,11 +20,8 @@ module.exports.errorHandler = (err, req, res, next) => {
     return;
   }
 
-  res.status(err?.status ?? 500).send({
-    errors: [
-      {
-        title: err?.message ?? 'Internal server error',
-      },
-    ],
-  });
+  const statusCode = err.status || 500;
+  const message = err.message || 'Server Error';
+
+  res.status(statusCode).send(message);
 };

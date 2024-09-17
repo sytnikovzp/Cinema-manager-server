@@ -8,7 +8,7 @@ class StudioController {
     try {
       const { limit, offset } = req.pagination;
       const studios = await Studio.findAll({
-        attributes: ['id', 'title', 'foundation_year', 'logo'],
+        attributes: ['id', 'title', 'foundationYear', 'logo'],
         raw: true,
         limit,
         offset,
@@ -21,7 +21,7 @@ class StudioController {
         return {
           id: studio.id,
           title: studio.title || '',
-          foundation_year: studio.foundation_year || '',
+          foundationYear: studio.foundationYear || '',
           logo: studio.logo || '',
         };
       });
@@ -48,7 +48,7 @@ class StudioController {
 
       const studioById = await Studio.findByPk(studioId, {
         attributes: {
-          exclude: ['locationId', 'location_id'],
+          exclude: ['locationId'],
         },
         include: [
           {
@@ -78,7 +78,7 @@ class StudioController {
           title: studioData.title || '',
           location: studioData.Location ? studioData.Location.title : '',
           country: studioData.Location ? studioData.Location.Country.title : '',
-          foundation_year: studioData.foundation_year || '',
+          foundationYear: studioData.foundationYear || '',
           logo: studioData.logo || '',
           about: studioData.about || '',
           movies: studioData.Movies || [],
@@ -104,7 +104,7 @@ class StudioController {
     const t = await sequelize.transaction();
 
     try {
-      const { title, location, foundation_year, logo, about } = req.body;
+      const { title, location, foundationYear, logo, about } = req.body;
 
       const locationValue = location === '' ? null : location;
 
@@ -120,13 +120,12 @@ class StudioController {
         throw new Error('Location not found');
       }
 
-      const location_id = locationRecord ? locationRecord.id : null;
-      console.log(`Location ID is: ${location_id}`);
+      const locationId = locationRecord ? locationRecord.id : null;
 
       const newBody = {
         title,
-        location_id,
-        foundation_year,
+        locationId,
+        foundationYear,
         logo,
         about,
       };
@@ -156,7 +155,7 @@ class StudioController {
         });
       } else {
         await t.rollback();
-        console.log(`The studio has not been created!`);
+        console.log('The studio has not been created!');
         next(createError(400, 'The studio has not been created!'));
       }
     } catch (error) {
@@ -170,7 +169,7 @@ class StudioController {
     const t = await sequelize.transaction();
 
     try {
-      const { id, title, location, foundation_year, logo, about } = req.body;
+      const { id, title, location, foundationYear, logo, about } = req.body;
 
       const locationValue = location === '' ? null : location;
 
@@ -186,13 +185,12 @@ class StudioController {
         throw new Error('Location not found');
       }
 
-      const location_id = locationRecord ? locationRecord.id : null;
-      console.log(`Location ID is: ${location_id}`);
+      const locationId = locationRecord ? locationRecord.id : null;
 
       const newBody = {
         title,
-        location_id,
-        foundation_year,
+        locationId,
+        foundationYear,
         logo,
         about,
       };
@@ -212,14 +210,7 @@ class StudioController {
         processedBody,
         {
           where: { id },
-          returning: [
-            'id',
-            'title',
-            'location_id',
-            'foundation_year',
-            'logo',
-            'about',
-          ],
+          returning: true,
           transaction: t,
         }
       );
@@ -229,7 +220,7 @@ class StudioController {
         res.status(201).json(updatedStudio);
       } else {
         await t.rollback();
-        console.log(`The studio has not been updated!`);
+        console.log('The studio has not been updated!');
         next(createError(400, 'The studio has not been updated!'));
       }
     } catch (error) {
@@ -245,10 +236,10 @@ class StudioController {
     try {
       const {
         params: { studioId },
-        body: { title, location, foundation_year, logo, about },
+        body: { title, location, foundationYear, logo, about },
       } = req;
 
-      let location_id = null;
+      let locationId = null;
       if (location !== undefined) {
         if (location !== '') {
           const locationRecord = await Location.findOne({
@@ -263,15 +254,14 @@ class StudioController {
             throw new Error('Location not found');
           }
 
-          location_id = locationRecord.id;
-          console.log(`Location ID is: ${location_id}`);
+          locationId = locationRecord.id;
         }
       }
 
       const newBody = {
         title,
-        location_id,
-        foundation_year,
+        locationId,
+        foundationYear,
         logo,
         about,
       };
@@ -293,14 +283,7 @@ class StudioController {
           where: {
             id: studioId,
           },
-          returning: [
-            'id',
-            'title',
-            'location_id',
-            'foundation_year',
-            'logo',
-            'about',
-          ],
+          returning: true,
           transaction: t,
         }
       );
@@ -341,7 +324,7 @@ class StudioController {
         res.sendStatus(res.statusCode);
       } else {
         await t.rollback();
-        console.log(`The studio has not been deleted!`);
+        console.log('The studio has not been deleted!');
         next(createError(400, 'The studio has not been deleted!'));
       }
     } catch (error) {

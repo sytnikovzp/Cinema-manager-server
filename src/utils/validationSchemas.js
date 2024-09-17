@@ -43,46 +43,46 @@ const PATCH_COUNTRY_VALIDATION_SCHEMA = yup.object().shape({
 
 const NEW_LOCATION_VALIDATION_SCHEMA = yup.object().shape({
   title: TITLE_NAME_SCHEMA.required(),
-  country_id: ID_SCHEMA,
-  coat_of_arms: URL_RESOURCE_SCHEMA,
+  countryId: ID_SCHEMA,
+  coatOfArms: URL_RESOURCE_SCHEMA,
 });
 
 const PATCH_LOCATION_VALIDATION_SCHEMA = yup.object().shape({
   title: TITLE_NAME_SCHEMA,
-  country_id: ID_SCHEMA,
-  coat_of_arms: URL_RESOURCE_SCHEMA,
+  countryId: ID_SCHEMA,
+  coatOfArms: URL_RESOURCE_SCHEMA,
 });
 
 const NEW_PERSON_VALIDATION_SCHEMA = yup.object().shape({
-  full_name: TITLE_NAME_SCHEMA.required(),
-  country_id: ID_SCHEMA,
-  birth_date: STRING_NULLABLE_SCHEMA,
-  death_date: STRING_NULLABLE_SCHEMA,
+  fullName: TITLE_NAME_SCHEMA.required(),
+  countryId: ID_SCHEMA,
+  birthDate: STRING_NULLABLE_SCHEMA,
+  deathDate: STRING_NULLABLE_SCHEMA,
   photo: URL_RESOURCE_SCHEMA,
   biography: STRING_NULLABLE_SCHEMA,
 });
 
 const PATCH_PERSON_VALIDATION_SCHEMA = yup.object().shape({
-  full_name: TITLE_NAME_SCHEMA,
-  country_id: ID_SCHEMA,
-  birth_date: STRING_NULLABLE_SCHEMA,
-  death_date: STRING_NULLABLE_SCHEMA,
+  fullName: TITLE_NAME_SCHEMA,
+  countryId: ID_SCHEMA,
+  birthDate: STRING_NULLABLE_SCHEMA,
+  deathDate: STRING_NULLABLE_SCHEMA,
   photo: URL_RESOURCE_SCHEMA,
   biography: STRING_NULLABLE_SCHEMA,
 });
 
 const NEW_MOVIE_VALIDATION_SCHEMA = yup.object().shape({
   title: TITLE_NAME_SCHEMA.required(),
-  genre_id: ID_SCHEMA,
-  release_year: STRING_NULLABLE_SCHEMA,
+  genreId: ID_SCHEMA,
+  releaseYear: STRING_NULLABLE_SCHEMA,
   poster: URL_RESOURCE_SCHEMA,
   trailer: URL_RESOURCE_SCHEMA,
 });
 
 const PATCH_MOVIE_VALIDATION_SCHEMA = yup.object().shape({
   title: TITLE_NAME_SCHEMA,
-  genre_id: ID_SCHEMA,
-  release_year: STRING_NULLABLE_SCHEMA,
+  genreId: ID_SCHEMA,
+  releaseYear: STRING_NULLABLE_SCHEMA,
   poster: URL_RESOURCE_SCHEMA,
   trailer: URL_RESOURCE_SCHEMA,
   storyline: STRING_NULLABLE_SCHEMA,
@@ -90,16 +90,16 @@ const PATCH_MOVIE_VALIDATION_SCHEMA = yup.object().shape({
 
 const NEW_STUDIO_VALIDATION_SCHEMA = yup.object().shape({
   title: TITLE_NAME_SCHEMA.required(),
-  location_id: ID_SCHEMA,
-  foundation_year: STRING_NULLABLE_SCHEMA,
+  locationId: ID_SCHEMA,
+  foundationYear: STRING_NULLABLE_SCHEMA,
   logo: URL_RESOURCE_SCHEMA,
   about: STRING_NULLABLE_SCHEMA,
 });
 
 const PATCH_STUDIO_VALIDATION_SCHEMA = yup.object().shape({
   title: TITLE_NAME_SCHEMA,
-  location_id: ID_SCHEMA,
-  foundation_year: STRING_NULLABLE_SCHEMA,
+  locationId: ID_SCHEMA,
+  foundationYear: STRING_NULLABLE_SCHEMA,
   logo: URL_RESOURCE_SCHEMA,
   about: STRING_NULLABLE_SCHEMA,
 });

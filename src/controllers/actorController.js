@@ -8,7 +8,7 @@ class ActorController {
     try {
       const { limit, offset } = req.pagination;
       const actors = await Actor.findAll({
-        attributes: ['id', 'full_name', 'photo'],
+        attributes: ['id', 'fullName', 'photo'],
         include: [
           {
             model: Country,
@@ -26,7 +26,7 @@ class ActorController {
       const formattedActors = actors.map((actor) => {
         return {
           id: actor.id,
-          full_name: actor.full_name || '',
+          fullName: actor.fullName || '',
           photo: actor.photo || '',
           country: actor['Country.title'] || '',
         };
@@ -51,7 +51,7 @@ class ActorController {
 
       const actorById = await Actor.findByPk(actorId, {
         attributes: {
-          exclude: ['countryId', 'country_id'],
+          exclude: ['countryId'],
         },
         include: [
           {
@@ -72,9 +72,9 @@ class ActorController {
         const actorData = actorById.toJSON();
         const formattedActor = {
           ...actorData,
-          full_name: actorData.full_name || '',
-          birth_date: actorData.birth_date || '',
-          death_date: actorData.death_date || '',
+          fullName: actorData.fullName || '',
+          birthDate: actorData.birthDate || '',
+          deathDate: actorData.deathDate || '',
           photo: actorData.photo || '',
           biography: actorData.biography || '',
           country: actorData.Country ? actorData.Country.title : '',
@@ -101,7 +101,7 @@ class ActorController {
     const t = await sequelize.transaction();
 
     try {
-      const { full_name, country, birth_date, death_date, photo, biography } =
+      const { fullName, country, birthDate, deathDate, photo, biography } =
         req.body;
 
       const countryValue = country === '' ? null : country;
@@ -118,14 +118,13 @@ class ActorController {
         throw new Error('Country not found');
       }
 
-      const country_id = countryRecord ? countryRecord.id : null;
-      console.log(`Country ID is: ${country_id}`);
+      const countryId = countryRecord ? countryRecord.id : null;
 
       const newBody = {
-        full_name,
-        country_id,
-        birth_date,
-        death_date,
+        fullName,
+        countryId,
+        birthDate,
+        deathDate,
         photo,
         biography,
       };
@@ -155,7 +154,7 @@ class ActorController {
         });
       } else {
         await t.rollback();
-        console.log(`The actor has not been created!`);
+        console.log('The actor has not been created!');
         next(createError(400, 'The actor has not been created!'));
       }
     } catch (error) {
@@ -169,15 +168,8 @@ class ActorController {
     const t = await sequelize.transaction();
 
     try {
-      const {
-        id,
-        full_name,
-        country,
-        birth_date,
-        death_date,
-        photo,
-        biography,
-      } = req.body;
+      const { id, fullName, country, birthDate, deathDate, photo, biography } =
+        req.body;
 
       const countryValue = country === '' ? null : country;
 
@@ -193,14 +185,13 @@ class ActorController {
         throw new Error('Country not found');
       }
 
-      const country_id = countryRecord ? countryRecord.id : null;
-      console.log(`Country ID is: ${country_id}`);
+      const countryId = countryRecord ? countryRecord.id : null;
 
       const newBody = {
-        full_name,
-        country_id,
-        birth_date,
-        death_date,
+        fullName,
+        countryId,
+        birthDate,
+        deathDate,
         photo,
         biography,
       };
@@ -218,15 +209,7 @@ class ActorController {
 
       const [affectedRows, [updatedActor]] = await Actor.update(processedBody, {
         where: { id },
-        returning: [
-          'id',
-          'full_name',
-          'country_id',
-          'birth_date',
-          'death_date',
-          'photo',
-          'biography',
-        ],
+        returning: true,
         transaction: t,
       });
 
@@ -235,7 +218,7 @@ class ActorController {
         res.status(201).json(updatedActor);
       } else {
         await t.rollback();
-        console.log(`The actor has not been updated!`);
+        console.log('The actor has not been updated!');
         next(createError(400, 'The actor has not been updated!'));
       }
     } catch (error) {
@@ -251,10 +234,10 @@ class ActorController {
     try {
       const {
         params: { actorId },
-        body: { full_name, country, birth_date, death_date, photo, biography },
+        body: { fullName, country, birthDate, deathDate, photo, biography },
       } = req;
 
-      let country_id = null;
+      let countryId = null;
       if (country !== undefined) {
         if (country !== '') {
           const countryRecord = await Country.findOne({
@@ -269,16 +252,15 @@ class ActorController {
             throw new Error('Country not found');
           }
 
-          country_id = countryRecord.id;
-          console.log(`Country ID is: ${country_id}`);
+          countryId = countryRecord.id;
         }
       }
 
       const newBody = {
-        full_name,
-        country_id,
-        birth_date,
-        death_date,
+        fullName,
+        countryId,
+        birthDate,
+        deathDate,
         photo,
         biography,
       };
@@ -298,15 +280,7 @@ class ActorController {
         where: {
           id: actorId,
         },
-        returning: [
-          'id',
-          'full_name',
-          'country_id',
-          'birth_date',
-          'death_date',
-          'photo',
-          'biography',
-        ],
+        returning: true,
         transaction: t,
       });
       console.log(`Count of patched rows: ${affectedRows}`);
@@ -346,7 +320,7 @@ class ActorController {
         res.sendStatus(res.statusCode);
       } else {
         await t.rollback();
-        console.log(`The actor has not been deleted!`);
+        console.log('The actor has not been deleted!');
         next(createError(400, 'The actor has not been deleted!'));
       }
     } catch (error) {

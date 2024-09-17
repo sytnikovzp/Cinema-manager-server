@@ -14,7 +14,7 @@ content-type: application/json
 {
   "title": "New movie",
   "genre": "Action",
-  "release_year": 2024,
+  "releaseYear": 2024,
   "poster": null,
   "trailer": null,
   "storyline": null,
@@ -31,7 +31,7 @@ content-type: application/json
   "id": 51,
   "title": "Updated movie",
   "genre": "Documentary",
-  "release_year": 2000,
+  "releaseYear": 2000,
   "poster": "",
   "trailer": "",
   "storyline": "",
@@ -47,7 +47,7 @@ content-type: application/json
 {
   "title": "Patched movie",
   "genre": "",
-  "release_year": "",
+  "releaseYear": "",
   "poster": "",
   "trailer": "",
   "storyline": "",

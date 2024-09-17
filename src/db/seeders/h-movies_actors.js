@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 const { movies_actors } = require('../../constants');
 
 module.exports = {

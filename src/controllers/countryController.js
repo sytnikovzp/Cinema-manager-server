@@ -131,7 +131,7 @@ class CountryController {
         processedBody,
         {
           where: { id },
-          returning: ['id', 'title', 'flag'],
+          returning: true,
           transaction: t,
         }
       );

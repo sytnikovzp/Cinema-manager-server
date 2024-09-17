@@ -29,7 +29,7 @@ module.exports = [
       sequelize,
     },
     rules: {
-      'camelcase': ['off', { properties: 'always' }],
+      'camelcase': ['warn', { properties: 'always' }],
       'comma-dangle': ['off', 'always-multiline'],
       'comma-spacing': [
         'warn',
@@ -54,7 +54,7 @@ module.exports = [
       'object-curly-spacing': ['error', 'always'],
       'object-shorthand': ['error'],
       'prefer-const': ['error'],
-      'quotes': ['off', 'single'],
+      'quotes': ['warn', 'single'],
       'semi': ['error', 'always'],
       'space-in-parens': ['error', 'never'],
       'strict': ['error', 'never'],

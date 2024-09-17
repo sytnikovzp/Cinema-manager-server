@@ -14,7 +14,7 @@ content-type: application/json
 {
   "title": "New location",
   "country": "United States of America",
-  "coat_of_arms": ""
+  "coatOfArms": ""
 }
 
 ### Update location
@@ -25,7 +25,7 @@ content-type: application/json
   "id": 11,
   "title": "Updated location",
   "country": "France",
-  "coat_of_arms": ""
+  "coatOfArms": ""
 }
 
 ### Patch location
@@ -35,7 +35,7 @@ content-type: application/json
 {
   "title": "Patched location",
   "country": "",
-  "coat_of_arms": ""
+  "coatOfArms": ""
 }
 
 ### Delete location

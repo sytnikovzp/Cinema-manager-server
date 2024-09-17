@@ -15,7 +15,7 @@ class MovieController {
     try {
       const { limit, offset } = req.pagination;
       const movies = await Movie.findAll({
-        attributes: ['id', 'title', 'release_year', 'poster'],
+        attributes: ['id', 'title', 'releaseYear', 'poster'],
         raw: true,
         limit,
         offset,
@@ -28,7 +28,7 @@ class MovieController {
         return {
           id: movie.id,
           title: movie.title || '',
-          release_year: movie.release_year || '',
+          releaseYear: movie.releaseYear || '',
           poster: movie.poster || '',
         };
       });
@@ -52,7 +52,7 @@ class MovieController {
 
       const movieById = await Movie.findByPk(movieId, {
         attributes: {
-          exclude: ['genreId', 'genre_id'],
+          exclude: ['genreId'],
         },
         include: [
           {
@@ -61,14 +61,14 @@ class MovieController {
           },
           {
             model: Actor,
-            attributes: ['id', 'full_name'],
+            attributes: ['id', 'fullName'],
             through: {
               attributes: [],
             },
           },
           {
             model: Director,
-            attributes: ['id', 'full_name'],
+            attributes: ['id', 'fullName'],
             through: {
               attributes: [],
             },
@@ -88,7 +88,7 @@ class MovieController {
         const formattedMovie = {
           ...movieData,
           title: movieData.title || '',
-          release_year: movieData.release_year || '',
+          releaseYear: movieData.releaseYear || '',
           poster: movieData.poster || '',
           trailer: movieData.trailer || '',
           storyline: movieData.storyline || '',
@@ -123,7 +123,7 @@ class MovieController {
       const {
         title,
         genre,
-        release_year,
+        releaseYear,
         poster,
         trailer,
         storyline,
@@ -146,13 +146,12 @@ class MovieController {
         throw new Error('Genre not found');
       }
 
-      const genre_id = genreRecord ? genreRecord.id : null;
-      console.log(`Genre ID is: ${genre_id}`);
+      const genreId = genreRecord ? genreRecord.id : null;
 
       const actorRecords = await Promise.all(
-        actors.map(async (full_name) => {
+        actors.map(async (fullName) => {
           const actor = await Actor.findOne({
-            where: { full_name },
+            where: { fullName },
             attributes: ['id'],
             raw: true,
           });
@@ -162,9 +161,9 @@ class MovieController {
       console.log('Actors Id`s:', actorRecords);
 
       const directorRecords = await Promise.all(
-        directors.map(async (full_name) => {
+        directors.map(async (fullName) => {
           const director = await Director.findOne({
-            where: { full_name },
+            where: { fullName },
             attributes: ['id'],
             raw: true,
           });
@@ -187,8 +186,8 @@ class MovieController {
 
       const newBody = {
         title,
-        genre_id,
-        release_year,
+        genreId,
+        releaseYear,
         poster,
         trailer,
         storyline,
@@ -258,7 +257,7 @@ class MovieController {
         id,
         title,
         genre,
-        release_year,
+        releaseYear,
         poster,
         trailer,
         storyline,
@@ -281,13 +280,12 @@ class MovieController {
         throw new Error('Genre not found');
       }
 
-      const genre_id = genreRecord ? genreRecord.id : null;
-      console.log(`Genre ID is: ${genre_id}`);
+      const genreId = genreRecord ? genreRecord.id : null;
 
       const actorRecords = await Promise.all(
-        actors.map(async (full_name) => {
+        actors.map(async (fullName) => {
           const actor = await Actor.findOne({
-            where: { full_name },
+            where: { fullName },
             attributes: ['id'],
             raw: true,
           });
@@ -297,9 +295,9 @@ class MovieController {
       console.log('Actors Id`s:', actorRecords);
 
       const directorRecords = await Promise.all(
-        directors.map(async (full_name) => {
+        directors.map(async (fullName) => {
           const director = await Director.findOne({
-            where: { full_name },
+            where: { fullName },
             attributes: ['id'],
             raw: true,
           });
@@ -322,8 +320,8 @@ class MovieController {
 
       const newBody = {
         title,
-        genre_id,
-        release_year,
+        genreId,
+        releaseYear,
         poster,
         trailer,
         storyline,
@@ -342,15 +340,7 @@ class MovieController {
 
       const [affectedRows, [updatedMovie]] = await Movie.update(processedBody, {
         where: { id },
-        returning: [
-          'id',
-          'title',
-          'genre_id',
-          'release_year',
-          'poster',
-          'trailer',
-          'storyline',
-        ],
+        returning: true,
         transaction: t,
       });
 
@@ -401,7 +391,7 @@ class MovieController {
         body: {
           title,
           genre,
-          release_year,
+          releaseYear,
           poster,
           trailer,
           storyline,
@@ -411,7 +401,7 @@ class MovieController {
         },
       } = req;
 
-      let genre_id = null;
+      let genreId = null;
       if (genre !== undefined) {
         if (genre !== '') {
           const genreRecord = await Genre.findOne({
@@ -426,16 +416,15 @@ class MovieController {
             throw new Error('Genre not found');
           }
 
-          genre_id = genreRecord.id;
-          console.log(`Genre ID is: ${genre_id}`);
+          genreId = genreRecord.id;
         }
       }
 
       const actorRecords = actors
         ? await Promise.all(
-            actors.map(async (full_name) => {
+            actors.map(async (fullName) => {
               const actor = await Actor.findOne({
-                where: { full_name },
+                where: { fullName },
                 attributes: ['id'],
                 raw: true,
               });
@@ -448,9 +437,9 @@ class MovieController {
 
       const directorRecords = directors
         ? await Promise.all(
-            directors.map(async (full_name) => {
+            directors.map(async (fullName) => {
               const director = await Director.findOne({
-                where: { full_name },
+                where: { fullName },
                 attributes: ['id'],
                 raw: true,
               });
@@ -478,8 +467,8 @@ class MovieController {
 
       const newBody = {
         title,
-        genre_id,
-        release_year,
+        genreId,
+        releaseYear,
         poster,
         trailer,
         storyline,
@@ -498,15 +487,7 @@ class MovieController {
 
       const [affectedRows, [updatedMovie]] = await Movie.update(processedBody, {
         where: { id: movieId },
-        returning: [
-          'id',
-          'title',
-          'genre_id',
-          'release_year',
-          'poster',
-          'trailer',
-          'storyline',
-        ],
+        returning: true,
         transaction: t,
       });
 

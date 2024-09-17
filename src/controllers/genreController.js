@@ -126,7 +126,7 @@ class GenreController {
 
       const [affectedRows, [updatedGenre]] = await Genre.update(processedBody, {
         where: { id },
-        returning: ['id', 'title', 'logo'],
+        returning: true,
         transaction: t,
       });
 

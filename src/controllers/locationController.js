@@ -7,7 +7,7 @@ class LocationController {
     try {
       const { limit, offset } = req.pagination;
       const locations = await Location.findAll({
-        attributes: ['id', 'title', 'coat_of_arms'],
+        attributes: ['id', 'title', 'coatOfArms'],
         include: [
           {
             model: Country,
@@ -26,7 +26,7 @@ class LocationController {
         return {
           id: location.id,
           title: location.title || '',
-          coat_of_arms: location.coat_of_arms || '',
+          coatOfArms: location.coatOfArms || '',
           country: location['Country.title'] || '',
         };
       });
@@ -53,7 +53,7 @@ class LocationController {
 
       const locationById = await Location.findByPk(locationId, {
         attributes: {
-          exclude: ['countryId', 'country_id'],
+          exclude: ['countryId'],
         },
         include: [
           {
@@ -68,7 +68,7 @@ class LocationController {
         const formattedLocation = {
           ...locationData,
           title: locationData.title || '',
-          coat_of_arms: locationData.coat_of_arms || '',
+          coatOfArms: locationData.coatOfArms || '',
           country: locationData.Country ? locationData.Country.title : '',
         };
 
@@ -89,7 +89,7 @@ class LocationController {
     const t = await sequelize.transaction();
 
     try {
-      const { title, country, coat_of_arms } = req.body;
+      const { title, country, coatOfArms } = req.body;
 
       const countryValue = country === '' ? null : country;
 
@@ -105,10 +105,9 @@ class LocationController {
         throw new Error('Country not found');
       }
 
-      const country_id = countryRecord ? countryRecord.id : null;
-      console.log(`Country ID is: ${country_id}`);
+      const countryId = countryRecord ? countryRecord.id : null;
 
-      const newBody = { title, country_id, coat_of_arms };
+      const newBody = { title, countryId, coatOfArms };
 
       const replaceEmptyStringsWithNull = (obj) => {
         return Object.fromEntries(
@@ -149,7 +148,7 @@ class LocationController {
     const t = await sequelize.transaction();
 
     try {
-      const { id, title, country, coat_of_arms } = req.body;
+      const { id, title, country, coatOfArms } = req.body;
 
       const countryValue = country === '' ? null : country;
 
@@ -165,10 +164,9 @@ class LocationController {
         throw new Error('Country not found');
       }
 
-      const country_id = countryRecord ? countryRecord.id : null;
-      console.log(`Country ID is: ${country_id}`);
+      const countryId = countryRecord ? countryRecord.id : null;
 
-      const newBody = { title, country_id, coat_of_arms };
+      const newBody = { title, countryId, coatOfArms };
 
       const replaceEmptyStringsWithNull = (obj) => {
         return Object.fromEntries(
@@ -185,7 +183,7 @@ class LocationController {
         processedBody,
         {
           where: { id },
-          returning: ['id', 'title', 'country_id', 'coat_of_arms'],
+          returning: true,
           transaction: t,
         }
       );
@@ -211,10 +209,10 @@ class LocationController {
     try {
       const {
         params: { locationId },
-        body: { title, country, coat_of_arms },
+        body: { title, country, coatOfArms },
       } = req;
 
-      let country_id = null;
+      let countryId = null;
       if (country !== undefined) {
         if (country !== '') {
           const countryRecord = await Country.findOne({
@@ -229,15 +227,14 @@ class LocationController {
             throw new Error('Country not found');
           }
 
-          country_id = countryRecord.id;
-          console.log(`Country ID is: ${country_id}`);
+          countryId = countryRecord.id;
         }
       }
 
       const newBody = {
         title,
-        country_id,
-        coat_of_arms,
+        countryId,
+        coatOfArms,
       };
 
       const replaceEmptyStringsWithNull = (obj) => {
